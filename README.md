@@ -1,6 +1,5 @@
 # Project_FIFO
 Repo for GameBuilders 2025 project at UIUC
 
-Made by:
-Rocky Daehler
-Ethan Ran
+Made by: <br />
+Rocky Daehler, Ethan Ran, Kara Lu
