@@ -23,6 +23,8 @@ public class Level_manager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        // FIXME: Setting up the Patterns List should be move to gameconstants when one exists.
+        //Create lists for all of the Patterns
         List<(int, string)> Temp_1 = new List<(int, string)>();
         List<(int, string)> Temp_2 = new List<(int, string)>() {
             (11, "Pair")
@@ -31,6 +33,7 @@ public class Level_manager : MonoBehaviour
             (121, "Sandwich"), (111, "Three of a kind")
         };
         
+        //Add all of the Patterns to the Patterns double list
         Patterns.Add(Temp_1);
         Patterns.Add(Temp_2);
         Patterns.Add(Temp_3);
@@ -63,7 +66,8 @@ public class Level_manager : MonoBehaviour
     }
 
     void UpdatePattern(string type){
-        //Adds a type to the pattern record. Should be called whenever an enemy is killed.
+        // Adds a type to the pattern record. Should be called whenever an enemy is killed.
+        // This then checks the Pattern Record to see if any Patterns have occurred.
         AddToPattern(type);
         int Cur_Pattern = TypeToChar();
         print(Cur_Pattern);
@@ -76,11 +80,9 @@ public class Level_manager : MonoBehaviour
     void AddToPattern(string type){
         //Add the passed type to the pattern_record
         Pattern_record.Add(type);
-
         if(Pattern_record.Count > Max_pattern_len){
             Pattern_record.Remove(Pattern_record[0]);
         }
-
         int temp = TypeToChar();
     }
 
@@ -113,7 +115,7 @@ public class Level_manager : MonoBehaviour
                     return Patterns[l][i].Item2;
                 }
             }
-            //No pattern of size l found
+            //Go to smaller pattern if no pattern found in that list.
             Seq = (int)(Seq/10);
         }
 
