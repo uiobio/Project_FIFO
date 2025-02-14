@@ -37,8 +37,6 @@ public class Player_input_manager : MonoBehaviour
 
         rb = GetComponent<Rigidbody>();
         rb.freezeRotation = true;
-
-        DashScalar = 8;
     }
 
     
@@ -46,7 +44,8 @@ public class Player_input_manager : MonoBehaviour
     {
         //Called once per frame. Reads input & updates vars
         GetInput();
-        if (DashInput)
+        //If dash input pressed and the dash is not on cooldown, execute the dash
+        if (DashInput && !Cooldown_manager.instance.getIsDashOnCooldown())
         {
             Dash(MoveDirection.normalized);
         }
@@ -86,5 +85,6 @@ public class Player_input_manager : MonoBehaviour
     {   
         // Dashes a with a speed specified by DashScalar and direction specified by Orientation
         rb.AddForce(Orientation * DashScalar, ForceMode.VelocityChange);
+        Cooldown_manager.instance.UpdateDashCooldown();
     }
 }
