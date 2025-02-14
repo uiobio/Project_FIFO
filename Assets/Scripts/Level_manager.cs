@@ -13,11 +13,7 @@ public class Level_manager : MonoBehaviour
     List<string> Pattern_record = new List<string>();
 
     //FIXME: Add this to a game_constants file
-    List<(int, string)> Patterns = new List<(int, string)>() {
-        (121, "Sandwich"), (0, "Reduce"),
-        (11, "Pair")
-    };
-    List<int> Pattern_bounds = new List<int>();
+    List<List<(int, string)>> Patterns = new List<List<(int, string)>>();
 
     private void Awake() //Makes levelmanager callable in any script: Level_manager.instance.[]
     {
@@ -27,22 +23,17 @@ public class Level_manager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        //record the index of each 0 in Patterns
-        Pattern_bounds.Add(-1); //length 1 doesn't exist
-        for (int i = 0; i < Patterns.Count; i++){
-            if(Patterns[i].Item1 == 0){
-                Pattern_bounds.Add(i-1);
-            }
-        }
-        Pattern_bounds.Add(Patterns.Count-1); //Check all for max length
-
-
-        // Print to Check
-        print("PB<");
-        for (int i = 0; i < Pattern_bounds.Count; i++){
-            print(Pattern_bounds[i]);
-        }
-        print(">");
+        List<(int, string)> Temp_1 = new List<(int, string)>();
+        List<(int, string)> Temp_2 = new List<(int, string)>() {
+            (11, "Pair")
+        };
+        List<(int, string)> Temp_3 = new List<(int, string)>() {
+            (121, "Sandwich"), (111, "Three of a kind")
+        };
+        
+        Patterns.Add(Temp_1);
+        Patterns.Add(Temp_2);
+        Patterns.Add(Temp_3);
     }
 
     // Update is called once per frame
@@ -54,21 +45,32 @@ public class Level_manager : MonoBehaviour
 
         // Key inputs for testing patterns- feel free to delete/ignore
         if(Input.GetKeyDown("1")){
-            AddToPattern("Earth");
+            UpdatePattern("Earth");
         }
         if(Input.GetKeyDown("2")){
-            AddToPattern("Fire");
+            UpdatePattern("Fire");
         }
         if(Input.GetKeyDown("3")){
-            AddToPattern("Ice");
+            UpdatePattern("Ice");
         }
         if(Input.GetKeyDown("4")){
-            AddToPattern("Wind");
+            UpdatePattern("Wind");
         }
     }
 
     void Dummy(){
         Debug.Log("Dummy key pressed");
+    }
+
+    void UpdatePattern(string type){
+        //Adds a type to the pattern record. Should be called whenever an enemy is killed.
+        AddToPattern(type);
+        int Cur_Pattern = TypeToChar();
+        print(Cur_Pattern);
+        string success = CheckPatterns(Cur_Pattern);
+        if (success != null){
+            print(success);
+        }
     }
 
     void AddToPattern(string type){
@@ -98,27 +100,23 @@ public class Level_manager : MonoBehaviour
             }
             ret += (int)(Mathf.Pow(10, i) * Translations[t]);
         }
-        print(ret);
-        CheckPatterns(ret);
         return ret;
     }
 
-    int CheckPatterns(int Seq){
-        int s = Pattern_bounds[Pattern_record.Count];
+    string CheckPatterns(int Seq){
+        int s = Pattern_record.Count -1;
         //Loop through all patterns of size and smaller
-        for (int i=s; i>=0; i--){ //FIXME: bounds of this
-            if (Patterns[i].Item1 == 0){
-                //If hit a bound, reduce seq by 1
-                Seq = (int)(Seq/10);
+        for (int l=s; l>=0; l--){ //Loop through pattern sizes
+            for (int i=0; i < Patterns[l].Count; i++) {
+                if (Patterns[l][i].Item1 == Seq){
+                    //Found Matching Pattern! Return the name
+                    return Patterns[l][i].Item2;
+                }
             }
-            else if (Patterns[i].Item1 == Seq){
-                //Found Matching Pattern! Print the name
-                print(Patterns[i].Item2);
-                return 1;
-            }
+            //No pattern of size l found
+            Seq = (int)(Seq/10);
         }
 
-        print("None");
-        return -1;
+        return null;
     }
 }
