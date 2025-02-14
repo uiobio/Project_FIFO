@@ -6,14 +6,21 @@ using System;
 public class Player_input_manager : MonoBehaviour
 {
     [Header("Movement")]
+    // Player's movespeed
     [SerializeField]
     private float MoveSpeed;
+    // The amount of force that is multiplied to the orientation vector when dashing
+    [SerializeField]
+    private float DashScalar;
 
+    // From InputManager
     float HorizontalInput;
     float VerticalInput;
     bool DashInput;
-
+    
+    // Dynamically updated movement direction; Set to the zero vector when not moving
     Vector3 MoveDirection;
+    // Effectively the same as the MoveDirection, except when not moving, the orientation remembers the last stored direction to allow dashing while stationary.
     Vector3 Orientation = new Vector3(0, 0, 1);
 
     Rigidbody rb;
@@ -31,6 +38,7 @@ public class Player_input_manager : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         rb.freezeRotation = true;
 
+        DashScalar = 8;
     }
 
     
@@ -65,6 +73,7 @@ public class Player_input_manager : MonoBehaviour
     {
         //Moves the player rigidBody
         MoveDirection = Up * VerticalInput + Right * HorizontalInput;
+        // If the player becomes stationary, store the last moved direction as the orientation
         if (!MoveDirection.Equals(new Vector3(0, 0, 0))) {
             Orientation = MoveDirection.normalized;
         }
@@ -74,7 +83,8 @@ public class Player_input_manager : MonoBehaviour
     }
 
     void Dash(Vector3 vect)
-    {
-        rb.AddForce(Orientation * 8, ForceMode.VelocityChange);
+    {   
+        // Dashes a with a speed specified by DashScalar and direction specified by Orientation
+        rb.AddForce(Orientation * DashScalar, ForceMode.VelocityChange);
     }
 }
