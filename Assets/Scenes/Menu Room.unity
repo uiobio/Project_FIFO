@@ -1206,6 +1206,7 @@ GameObject:
   - component: {fileID: 1803580478}
   - component: {fileID: 1803580477}
   - component: {fileID: 1803580482}
+  - component: {fileID: 1803580483}
   m_Layer: 0
   m_Name: OtherRoomDoor
   m_TagString: Untagged
@@ -1308,8 +1309,8 @@ Transform:
   m_GameObject: {fileID: 1803580476}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 4.26, y: 2.3, z: -6.22}
-  m_LocalScale: {x: 2, y: 4, z: 0.1}
+  m_LocalPosition: {x: 0.99, y: 2.3, z: -2.72}
+  m_LocalScale: {x: 0.1, y: 4, z: 2}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -1321,12 +1322,25 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1803580476}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1b8057d3c71af4a65a31ba2c1d879ad6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   isQuitDoor: 0
+--- !u!114 &1803580483
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1803580476}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b3d17465a3c764e1c9531e80cb584350, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sceneName: Menu Room
 --- !u!1001 &1503330727282712868
 PrefabInstance:
   m_ObjectHideFlags: 0
