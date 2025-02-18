@@ -23,10 +23,16 @@ public class GameState : MonoBehaviour
 
     public int count;
 
-    // Start is called before the first frame update
-    void Start()
+    // Use this for intiialization logic instead of Start(), because Start() may be called
+    // too late for other scripts to see data in this object.
+    private static void Initialize()
     {
-        count = 7;
+        instance = new GameObject().AddComponent<GameState>();
+        instance.name = "Game State";
+
+        instance.count = 7;
+
+        DontDestroyOnLoad(instance.gameObject);
     }
 
     // Update is called once per frame
@@ -35,15 +41,4 @@ public class GameState : MonoBehaviour
 
     }
 
-    // Use this for intiialization logic instead of Start(), because Start() may be called
-    // too late for other scripts to see data in this object.
-    private static void Initialize()
-    {
-        instance = new GameObject().AddComponent<GameState>();
-        instance.name = "Game State";
-
-
-
-        DontDestroyOnLoad(instance.gameObject);
-    }
 }
