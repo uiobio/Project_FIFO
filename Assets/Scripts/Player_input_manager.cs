@@ -5,6 +5,13 @@ using System;
 
 public class Player_input_manager : MonoBehaviour
 {
+    public static Player_input_manager instance;
+
+    private void Awake() //Makes Player_input_manager callable in any script: Player_input_manager.instance.[]
+    {
+        instance = this;
+    }
+
     [Header("Movement")]
     // Player's movespeed
     [SerializeField]
@@ -17,6 +24,8 @@ public class Player_input_manager : MonoBehaviour
     float HorizontalInput;
     float VerticalInput;
     bool DashInput;
+    bool InteractInput;
+    private GameObject interactable;
     
     // Dynamically updated movement direction; Set to the zero vector when not moving
     Vector3 MoveDirection;
@@ -49,8 +58,10 @@ public class Player_input_manager : MonoBehaviour
         {
             Dash(MoveDirection.normalized);
         }
-
         DashInput = false;
+        if (InteractInput && interactable) {
+            Interact(interactable);
+        }
     }
 
     void FixedUpdate()
@@ -65,7 +76,7 @@ public class Player_input_manager : MonoBehaviour
         HorizontalInput = Input.GetAxisRaw("Horizontal");
         VerticalInput = Input.GetAxisRaw("Vertical");
         DashInput = Input.GetButtonDown("Dash");
-        
+        InteractInput = Input.GetButtonDown("Interact");
     }
 
     void MovePlayer()
@@ -78,7 +89,6 @@ public class Player_input_manager : MonoBehaviour
         }
         rb.AddForce(MoveDirection.normalized * MoveSpeed, ForceMode.Force);
         
-
     }
 
     void Dash(Vector3 vect)
@@ -86,5 +96,16 @@ public class Player_input_manager : MonoBehaviour
         // Dashes a with a speed specified by DashScalar and direction specified by Orientation
         rb.AddForce(Orientation * DashScalar, ForceMode.VelocityChange);
         Cooldown_manager.instance.UpdateDashCooldown();
+    }
+
+    void Interact(GameObject interactable) {
+        Debug.Log("Interaction attempted with " + interactable.name);
+        if (interactable.tag == "ShopItem" && interactable.GetComponent<Shop_interaction_manager>().getIsShopActive()) {
+            interactable.GetComponent<Shop_interaction_manager>().buy();
+        }
+    }
+
+    public void setInteractable(GameObject setInteractable) { 
+        interactable = setInteractable;
     }
 }
