@@ -14,26 +14,13 @@ public class GameState : MonoBehaviour
             if (instance == null)
             {
                 Initialize();
-                Debug.Log("GameState singleton initialized");
             }
 
             return instance;
         }
     }
 
-    public int count;
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        count = 7;
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
+    public int roomCount;
 
     // Use this for intiialization logic instead of Start(), because Start() may be called
     // too late for other scripts to see data in this object.
@@ -42,8 +29,29 @@ public class GameState : MonoBehaviour
         instance = new GameObject().AddComponent<GameState>();
         instance.name = "Game State";
 
-
+        instance.roomCount = 0;
 
         DontDestroyOnLoad(instance.gameObject);
+
+        Debug.Log("Game State Singleton Initialized");
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+
+    }
+
+    void Awake()
+    {
+        // if (Instance != null && Instance != this)
+        // {
+        //     // if there's an instance other than this, destroy it
+        //     Destroy(this);
+        // }
+        // else
+        // {
+        //     DontDestroyOnLoad(this);
+        // }
     }
 }
