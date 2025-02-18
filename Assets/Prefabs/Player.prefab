@@ -150,8 +150,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e7fe5300ffdd552469da6f5a17406430, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MoveSpeed: 30
-  DashScalar: 8
+  moveSpeed: 30
+  dashScalar: 8
 --- !u!114 &-5633399821039483507
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -164,8 +164,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ac9b4ec5b39b90947a2b7a8cbe8db39a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  DashCooldownLength: 3
-  IsDashOnCooldown: 0
+  dashCooldownLength: 3
 --- !u!1 &2526909672888894419
 GameObject:
   m_ObjectHideFlags: 0
