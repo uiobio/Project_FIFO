@@ -1282,6 +1282,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Spawnee: {fileID: 328789305087572588, guid: 6a120e85c4b8215448cb02a44cba1de9, type: 3}
+  ShopItem: {fileID: 684560450688701559, guid: ed619964653b1ee4eae10833d2ec936d, type: 3}
 --- !u!1 &1012206582
 GameObject:
   m_ObjectHideFlags: 0
