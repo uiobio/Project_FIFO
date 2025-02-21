@@ -19,16 +19,20 @@ public class Player_input_manager : MonoBehaviour
     // The amount of force that is multiplied to the orientation vector when dashing
     [SerializeField]
     private float dashScalar;
+    // Projectile prefab for the FireProjectile action
+    [SerializeField]
+    private GameObject projectilePrefab;
 
     // From InputManager
     private float horizontalInput;
     private float verticalInput;
     private bool dashInput;
     private bool interactInput;
+    private bool fireProjectileInput;
 
     // Other GameObject, set when the player attempts to interact with them
     private GameObject interactable;
-    
+
     // Dynamically updated movement direction; Set to the zero vector when not moving
     private Vector3 moveDirection;
 
@@ -69,6 +73,11 @@ public class Player_input_manager : MonoBehaviour
         {
             Interact(interactable);
         }
+
+        if (fireProjectileInput && !Cooldown_manager.instance.IsFireProjectileOnCooldown) 
+        {
+            FireProjectile();    
+        }
     }
 
     void FixedUpdate()
@@ -84,6 +93,7 @@ public class Player_input_manager : MonoBehaviour
         verticalInput = Input.GetAxisRaw("Vertical");
         dashInput = Input.GetButtonDown("Dash");
         interactInput = Input.GetButtonDown("Interact");
+        fireProjectileInput = Input.GetButtonDown("Fire2");
     }
 
     void MovePlayer()
@@ -119,6 +129,13 @@ public class Player_input_manager : MonoBehaviour
             interactable.GetComponent<Shop_interaction_manager>().buy();
         }
     }
+
+    void FireProjectile()
+    { 
+        GameObject projectile = Instantiate(projectilePrefab, transform.position, Quaternion.LookRotation(orientation.normalized));
+        projectile.layer = 7; // Set to PlayerProjectiles layer, this makes it so it can only hit enemies and obstacles, but not the player.
+        Cooldown_manager.instance.UpdateFireProjectileCooldown();
+    } 
 
     // Getters, Setters
     public GameObject Interactable

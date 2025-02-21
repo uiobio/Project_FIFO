@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 1718782577937982832}
   - component: {fileID: 7519172017648344361}
   - component: {fileID: 7392597869070050735}
+  - component: {fileID: 3455292112439987067}
   m_Layer: 5
   m_Name: FloatingText
   m_TagString: FloatingText
@@ -54,6 +55,9 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -95,9 +99,21 @@ TextMesh:
   m_Alignment: 1
   m_TabSize: 4
   m_FontSize: 32
-  m_FontStyle: 0
+  m_FontStyle: 1
   m_RichText: 1
   m_Font: {fileID: 0}
   m_Color:
     serializedVersion: 2
-    rgba: 4278190080
+    rgba: 4294967295
+--- !u!114 &3455292112439987067
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8193600949555722764}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: acdfdba6cfc5ab5428dc49a1bff1c2d4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
