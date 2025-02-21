@@ -13,11 +13,12 @@ public class Respawn_Point : MonoBehaviour
     void Start()
     {
         Spawn();
+        Camera_manager.instance.Player = Spawnee;
     }
 
     void Spawn()
     {
-        Instantiate(Spawnee, transform.position, Quaternion.identity);
+        Spawnee = Instantiate(Spawnee, transform.position, Quaternion.identity);
         Instantiate(ShopItem, new Vector3(5.85f, 0.4f, 0.6f), Quaternion.identity);
     }
 }
