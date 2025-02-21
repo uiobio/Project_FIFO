@@ -27,6 +27,8 @@ public class Projectile : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        // Very simple straight-line movement
+        // Post MVP: maybe implement different, complex moving patterns (homing, spiraling, etc.)
         transform.position += transform.forward * speed * Time.deltaTime;
     }
 }

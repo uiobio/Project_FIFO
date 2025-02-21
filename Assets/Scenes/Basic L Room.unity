@@ -131,7 +131,7 @@ GameObject:
   - component: {fileID: 88756146}
   - component: {fileID: 88756145}
   - component: {fileID: 88756148}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Main Camera
   m_TagString: MainCamera
   m_Icon: {fileID: 0}
@@ -348,7 +348,7 @@ GameObject:
   m_Component:
   - component: {fileID: 221525590}
   - component: {fileID: 221525591}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Hidden Wall Left
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -404,7 +404,7 @@ GameObject:
   - component: {fileID: 318095459}
   - component: {fileID: 318095458}
   - component: {fileID: 318095457}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Exit Wall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -630,7 +630,7 @@ GameObject:
   m_Component:
   - component: {fileID: 474651245}
   - component: {fileID: 474651246}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Hidden Wall right
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -730,7 +730,7 @@ GameObject:
   - component: {fileID: 607267440}
   - component: {fileID: 607267439}
   - component: {fileID: 607267438}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Entrance Wall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -948,7 +948,7 @@ GameObject:
   - component: {fileID: 636323769}
   - component: {fileID: 636323768}
   - component: {fileID: 636323767}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Wall 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1333,7 +1333,7 @@ GameObject:
   - component: {fileID: 1012206586}
   - component: {fileID: 1012206585}
   - component: {fileID: 1012206584}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Wall 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}

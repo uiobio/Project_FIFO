@@ -17,8 +17,12 @@ public class Player_input_manager : MonoBehaviour
     [SerializeField]
     private float moveSpeed;
     // The amount of force that is multiplied to the orientation vector when dashing
+    [Header("Dash")]
     [SerializeField]
-    private float dashScalar;
+    private float dashSpeed;
+    [SerializeField]
+    private float dashDistance;
+    private float dashCompleteTime = -1;
     // Projectile prefab for the FireProjectile action
     [SerializeField]
     private GameObject projectilePrefab;
@@ -58,15 +62,21 @@ public class Player_input_manager : MonoBehaviour
     
     void Update()
     {
-        // Called once per frame. Reads input & updates vars
-        GetInput();
-
+        if (Time.time < dashCompleteTime)
+        {
+            rb.linearVelocity = orientation * dashSpeed;
+        }
+        else 
+        {
+            // Called once per frame. Reads input & updates vars
+            GetInput();
+        }
+        
         // If dash input pressed and the dash is not on cooldown, execute the dash
         if (dashInput && !Cooldown_manager.instance.IsDashOnCooldown)
         {
-            Dash(moveDirection.normalized);
+            StartDash(moveDirection.normalized);
         }
-        dashInput = false;
 
         // If interact input pressed and an interactable object has been set, execute interaction behavior with it.
         if (interactInput && interactable) 
@@ -112,11 +122,12 @@ public class Player_input_manager : MonoBehaviour
         
     }
 
-    void Dash(Vector3 vect)
-    {   
+    void StartDash(Vector3 vect)
+    {
         // Dashes a with a speed specified by dashScalar and direction specified by orientation
-        rb.AddForce(orientation * dashScalar, ForceMode.VelocityChange);
         Cooldown_manager.instance.UpdateDashCooldown();
+        rb.linearVelocity = orientation * dashSpeed;
+        dashCompleteTime = Time.time + (dashDistance / dashSpeed);
     }
 
     void Interact(GameObject interactable)

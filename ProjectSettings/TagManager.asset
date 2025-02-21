@@ -18,9 +18,9 @@ TagManager:
   - Enemy
   - PlayerProjectiles
   - EnemyProjectiles
-  - 
-  - 
-  - 
+  - Wall
+  - HiddenWall
+  - MainCamera
   - 
   - 
   - 
