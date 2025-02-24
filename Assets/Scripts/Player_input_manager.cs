@@ -24,8 +24,11 @@ public class Player_input_manager : MonoBehaviour
     private float dashDistance;
     private float dashCompleteTime = -1;
     // Projectile prefab for the FireProjectile action
+    [Header("Projectile")]
     [SerializeField]
     private GameObject projectilePrefab;
+    [SerializeField]
+    private float ProjectilePlaneY;
 
     // From InputManager
     private float horizontalInput;
@@ -39,24 +42,27 @@ public class Player_input_manager : MonoBehaviour
 
     // Dynamically updated movement direction; Set to the zero vector when not moving
     private Vector3 moveDirection;
-
     // Effectively the same as the moveDirection, except when not moving, the orientation stores the last non-zero moveDirection to allow dashing while stationary.
     private Vector3 orientation = new Vector3(0, 0, 1);
-
-    private Rigidbody rb;
-
     private Vector3 up = new Vector3(-1, 0, -1);
     private Vector3 right = new Vector3(-1, 0, 1);
+    private Vector3 aimPoint = new Vector3(0, 0, 0);
+
+    private Rigidbody rb;
+    private Camera cam;
+
 
     // Start is called before the first frame update
     void Start()
     {
-        // Disable and hide Cursor
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
 
         rb = GetComponent<Rigidbody>();
         rb.freezeRotation = true;
+
+        cam = Camera.main;
+      
+        AimToMousePoint();
+        aimPoint.y = ProjectilePlaneY;
     }
 
     
@@ -70,6 +76,7 @@ public class Player_input_manager : MonoBehaviour
         {
             // Called once per frame. Reads input & updates vars
             GetInput();
+            AimToMousePoint();
         }
         
         // If dash input pressed and the dash is not on cooldown, execute the dash
@@ -86,8 +93,13 @@ public class Player_input_manager : MonoBehaviour
 
         if (fireProjectileInput && !Cooldown_manager.instance.IsFireProjectileOnCooldown) 
         {
-            FireProjectile();    
+            FireProjectile();
         }
+
+        Vector3 direction = new Vector3(aimPoint.x, transform.position.y, aimPoint.z);
+        direction = direction - transform.position;
+        Quaternion targetRotation = Quaternion.LookRotation(direction);
+        transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * 20f);
     }
 
     void FixedUpdate()
@@ -143,15 +155,33 @@ public class Player_input_manager : MonoBehaviour
 
     void FireProjectile()
     { 
-        GameObject projectile = Instantiate(projectilePrefab, transform.position, Quaternion.LookRotation(orientation.normalized));
+        GameObject projectile = Instantiate(projectilePrefab, new Vector3(transform.position.x, ProjectilePlaneY, transform.position.z), transform.rotation);
+        projectile.transform.LookAt(aimPoint);
         projectile.layer = 7; // Set to PlayerProjectiles layer, this makes it so it can only hit enemies and obstacles, but not the player.
         Cooldown_manager.instance.UpdateFireProjectileCooldown();
-    } 
+    }
+
+    void AimToMousePoint()
+    {
+        float hit;
+        Plane plane = new Plane(Vector3.up, -1 * ProjectilePlaneY);
+        Ray ray = cam.ScreenPointToRay(Input.mousePosition);
+        if (plane.Raycast(ray, out hit))
+        {
+            aimPoint = ray.GetPoint(hit);
+        }
+    }
 
     // Getters, Setters
     public GameObject Interactable
     {
         get { return interactable; }
         set { interactable = value; }
+    }
+
+    public Vector3 AimPoint
+    { 
+        get { return aimPoint; } 
+        set { aimPoint = value; } 
     }
 }
