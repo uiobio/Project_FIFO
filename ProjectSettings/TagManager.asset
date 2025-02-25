@@ -6,9 +6,8 @@ TagManager:
   tags:
   - Undefined
   - ShopItem
-  - FloatingText
   - Projectile
-  - MouseRayColliderPlane
+  - ItemLabel
   layers:
   - Default
   - TransparentFX
@@ -22,7 +21,7 @@ TagManager:
   - Wall
   - HiddenWall
   - MainCamera
-  - MouseRayCollider
+  - 
   - 
   - 
   - 
