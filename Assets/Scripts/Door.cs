@@ -12,3 +12,6 @@ public class Door : MonoBehaviour
         SceneManager.LoadScene("Basic L Room");
     }
 }
+
+
+

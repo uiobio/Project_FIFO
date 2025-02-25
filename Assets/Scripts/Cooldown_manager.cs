@@ -6,7 +6,7 @@ public class Cooldown_manager : MonoBehaviour
 {
     public static Cooldown_manager instance;
 
-    private void Awake() //Makes Cooldown_manager callable in any script: Cooldown_manager.instance.[]
+    private void Awake() // makes Cooldown_manager callable in any script: Cooldown_manager.instance.[]
     {
         instance = this;
     }
@@ -14,10 +14,11 @@ public class Cooldown_manager : MonoBehaviour
     [Header("Cooldowns")]
     // Units are seconds
     [SerializeField]
-    private float DashCooldownLength;
+    private float dashCooldownLength;
 
-    private bool IsDashOnCooldown;
-    private float DashCooldownCompleteTime;
+    private float dashCooldownCompleteTime;
+    private bool isDashOnCooldown;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -27,8 +28,8 @@ public class Cooldown_manager : MonoBehaviour
     void Update()
     {
         // If dash is on cooldown and the cooldown timer is over, take the dash off cooldown
-        if (IsDashOnCooldown && Time.time >= DashCooldownCompleteTime) {
-            IsDashOnCooldown = false;
+        if (isDashOnCooldown && Time.time >= dashCooldownCompleteTime) {
+            isDashOnCooldown = false;
         }
     }
 
@@ -36,35 +37,26 @@ public class Cooldown_manager : MonoBehaviour
     public void UpdateDashCooldown()
     {   
         // Put the dash on cooldown and set the time for when it should come off cooldown
-        IsDashOnCooldown = true;
-        DashCooldownCompleteTime = Time.time + DashCooldownLength;
+        isDashOnCooldown = true;
+        dashCooldownCompleteTime = Time.time + dashCooldownLength;
     }
 
     // Getters, setters
-    public bool getIsDashOnCooldown() {
-        return IsDashOnCooldown;
-    }
-
-    public void setIsDashOnCooldown(bool setIsDashOnCooldown)
+    public float DashCooldownLength
     {
-        IsDashOnCooldown = setIsDashOnCooldown;
+        get { return dashCooldownLength; }
+        set { dashCooldownLength = value; }
     }
 
-    public float getDashCooldownLength() { 
-        return DashCooldownLength;
-    }
-
-    public void setDashCooldownLength(float setDashCooldownLength) { 
-        DashCooldownLength = setDashCooldownLength;
-    }
-
-    public float getDashCooldownCompleteTime()
+    public float DashCooldownCompleteTime
     {
-        return DashCooldownLength;
+        get { return dashCooldownCompleteTime; }
+        set { dashCooldownCompleteTime = value; }
     }
 
-    public void setDashCooldownCompleteTime(float setDashCooldownCompleteTime)
+    public bool IsDashOnCooldown
     {
-        DashCooldownCompleteTime = setDashCooldownCompleteTime;
+        get { return isDashOnCooldown; }
+        set { isDashOnCooldown = value; }
     }
 }
