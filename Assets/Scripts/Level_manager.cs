@@ -73,7 +73,7 @@ public class Level_manager : MonoBehaviour
         print(Cur_Pattern);
         string success = CheckPatterns(Cur_Pattern);
         if (success != null){
-            print(success);
+            Debug.Log(success);
         }
     }
 
@@ -83,7 +83,7 @@ public class Level_manager : MonoBehaviour
         if(Pattern_record.Count > Max_pattern_len){
             Pattern_record.Remove(Pattern_record[0]);
         }
-        int temp = TypeToChar();
+        //int temp = TypeToChar();
     }
 
     int TypeToChar(){
@@ -102,6 +102,7 @@ public class Level_manager : MonoBehaviour
             }
             ret += (int)(Mathf.Pow(10, i) * Translations[t]);
         }
+        Debug.Log(ret);
         return ret;
     }
 
