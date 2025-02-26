@@ -9,7 +9,7 @@ public class Deal_damage : MonoBehaviour
 
     private void OnTriggerEnter(Collider c)
     {
-        if (c.gameObject.tag.Equals("Enemy"))
+        if (c.GetComponent<Health>() != null)
         {
             Health health = c.gameObject.GetComponent<Health>();
             health.TakeDamage(damage);

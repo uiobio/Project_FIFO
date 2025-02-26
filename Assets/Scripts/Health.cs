@@ -13,7 +13,12 @@ public class Health : MonoBehaviour
         isDead = (health < 0) ? true : false;
     }
 
-    private void Heal(float heal)
+    public void SetMaxHealth(float health)
+    {
+        maxHealth = health;
+    }
+
+    public void Heal(float heal)
     {
         if (health < maxHealth)
         {
