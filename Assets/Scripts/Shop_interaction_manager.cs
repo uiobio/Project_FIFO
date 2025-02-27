@@ -193,4 +193,28 @@ public class Shop_interaction_manager : MonoBehaviour
         get { return isShopActive; }
         set { isShopActive = value; }
     }
+
+    public string LabelTextHotkeyInfo
+    {
+        get { return labelTextHotkeyInfo; }
+        set { labelTextHotkeyInfo = value; }
+    }
+
+    public string LabelTextHotkeyInfoColor
+    {
+        get { return labelTextHotkeyInfoColor; }
+        set { labelTextHotkeyInfoColor = value; }
+    }
+
+    public string LabelTextItemName
+    {
+        get { return labelTextItemName; }
+        set { labelTextItemName = value; }
+    }
+
+    public string LabelTextItemDesc
+    {
+        get { return labelTextItemDesc; }
+        set { labelTextItemDesc = value; }
+    }
 }
