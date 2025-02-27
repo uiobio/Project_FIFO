@@ -55,28 +55,32 @@ public class Player_input_manager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-
         rb = GetComponent<Rigidbody>();
         rb.freezeRotation = true;
 
         cam = Camera.main;
-      
-        AimToMousePoint();
+
+        // Set the initial rotation and projectile aim of the player
         aimPoint.y = ProjectilePlaneY;
+        AimToMousePoint();
+        RotatePlayerToMousePoint();
     }
 
     
     void Update()
     {
+        // If the player is dashing, continue with fixed velocity, reject new player inputs
+        // Otherwise, read inputs
         if (Time.time < dashCompleteTime)
         {
-            rb.linearVelocity = orientation * dashSpeed;
+            rb.linearVelocity = orientation.normalized * dashSpeed;
         }
         else 
         {
             // Called once per frame. Reads input & updates vars
             GetInput();
             AimToMousePoint();
+            RotatePlayerToMousePoint();
         }
         
         // If dash input pressed and the dash is not on cooldown, execute the dash
@@ -91,15 +95,11 @@ public class Player_input_manager : MonoBehaviour
             Interact(interactable);
         }
 
+        // If fireProjectile input pressed and the projectile is not on cooldown, fire the projectile
         if (fireProjectileInput && !Cooldown_manager.instance.IsFireProjectileOnCooldown) 
         {
             FireProjectile();
         }
-
-        Vector3 direction = new Vector3(aimPoint.x, transform.position.y, aimPoint.z);
-        direction = direction - transform.position;
-        Quaternion targetRotation = Quaternion.LookRotation(direction);
-        transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * 20f);
     }
 
     void FixedUpdate()
@@ -144,8 +144,6 @@ public class Player_input_manager : MonoBehaviour
 
     void Interact(GameObject interactable)
     {
-        Debug.Log("Interaction attempted with " + interactable.name);
-
         // If the other GameObject is a ShopItem and the shop is active, buy the item.
         if (interactable.tag == "ShopItem" && interactable.GetComponent<Shop_interaction_manager>().IsShopActive) 
         {
@@ -153,14 +151,17 @@ public class Player_input_manager : MonoBehaviour
         }
     }
 
+    // Instantiates a projectile that moves toward the position defined by aimPoint at the time of firing
     void FireProjectile()
     { 
-        GameObject projectile = Instantiate(projectilePrefab, new Vector3(transform.position.x, ProjectilePlaneY, transform.position.z), transform.rotation);
+        // Projectile starts at the position of the "nose" of the player
+        GameObject projectile = Instantiate(projectilePrefab, new Vector3(transform.Find("Forward").position.x, ProjectilePlaneY, transform.Find("Forward").position.z), transform.rotation);
         projectile.transform.LookAt(aimPoint);
         projectile.layer = 7; // Set to PlayerProjectiles layer, this makes it so it can only hit enemies and obstacles, but not the player.
         Cooldown_manager.instance.UpdateFireProjectileCooldown();
     }
 
+    // Calculates the world position on the projectile firing plane to which the mouse is pointing
     void AimToMousePoint()
     {
         float hit;
@@ -170,6 +171,15 @@ public class Player_input_manager : MonoBehaviour
         {
             aimPoint = ray.GetPoint(hit);
         }
+    }
+
+    // Rotates the player towards the aimPoint
+    void RotatePlayerToMousePoint()
+    {
+        Vector3 direction = new Vector3(aimPoint.x, transform.position.y, aimPoint.z);
+        direction = direction - transform.position;
+        Quaternion targetRotation = Quaternion.LookRotation(direction);
+        transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * 20f);
     }
 
     // Getters, Setters

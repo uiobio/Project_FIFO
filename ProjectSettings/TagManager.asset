@@ -8,6 +8,7 @@ TagManager:
   - ShopItem
   - Projectile
   - ItemLabel
+  - ShopItemLabelLines
   layers:
   - Default
   - TransparentFX
