@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
+
 
 
 public class Level_manager : MonoBehaviour
@@ -156,10 +158,9 @@ public class Level_manager : MonoBehaviour
         Time.timeScale = 1f; // Reset before quitting
         Application.Quit(); // Quit game (Only works in build)
     }
-
     void GoToMainMenu()
     {
-        Time.timeScale = 1f; // Reset time before loading new scene
-        SceneManager.LoadScene("Menu Room"); // Replace with your actual menu scene name
+        Time.timeScale = 1f; // Reset before loading new scene
+        SceneManager.LoadScene("Menu Room"); // Replace with actual Main Menu scene name
     }
 }
