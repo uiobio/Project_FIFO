@@ -5,9 +5,8 @@ using UnityEngine;
 public class Respawn_Point : MonoBehaviour
 {
     [SerializeField]
-    GameObject Spawnee;
-    [SerializeField]
-    GameObject ShopItem;
+    private GameObject SpawneePrefab;
+    private GameObject spawnee;
 
     // Start is called before the first frame update
     void Start()
@@ -17,7 +16,6 @@ public class Respawn_Point : MonoBehaviour
 
     void Spawn()
     {
-        Instantiate(Spawnee, transform.position, Quaternion.identity);
-        Instantiate(ShopItem, new Vector3(5.85f, 0.4f, 0.6f), Quaternion.identity);
+        spawnee = Instantiate(SpawneePrefab, transform.position, Quaternion.identity);
     }
 }
