@@ -8,14 +8,14 @@ public class Level_manager : MonoBehaviour
 {
     public static Level_manager instance;
     private bool isPaused = false;
-
-    private void Awake()
+  
+     private void Awake()
     {
         if (instance == null)
             instance = this;
         else
             Destroy(gameObject);
-    }
+     }
 
     void Update()
     {
