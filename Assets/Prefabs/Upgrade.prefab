@@ -97,6 +97,7 @@ GameObject:
   - component: {fileID: 8218501963136236304}
   - component: {fileID: 3411093123718074291}
   - component: {fileID: 1209070365853259932}
+  - component: {fileID: 2665806030097088833}
   m_Layer: 5
   m_Name: UpgradeUIIcon
   m_TagString: Untagged
@@ -161,6 +162,18 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!210 &2665806030097088833
+SortingGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3144405016006255148}
+  m_Enabled: 1
+  m_SortingLayerID: -1333516583
+  m_SortingLayer: 1
+  m_SortingOrder: 0
+  m_SortAtRoot: 0
 --- !u!1 &4524767290060870829
 GameObject:
   m_ObjectHideFlags: 0
@@ -208,4 +221,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   upgradePrefab: {fileID: 4524767290060870829}
-  mainUI: {fileID: 6993848563969293405, guid: 4b21b0de48a90fa44a02f7e65060e2f3, type: 3}
+  upgradeIndex: 0

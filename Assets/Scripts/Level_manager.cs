@@ -14,6 +14,7 @@ public class Level_manager : MonoBehaviour
 
     [Header("UI")]
     [SerializeField] private GameObject mainUIPrefab;
+    [SerializeField] private GameObject upgradePrefab;
 
     //FIXME: Add this list to a game_constants file
     [System.NonSerialized]
@@ -85,6 +86,9 @@ public class Level_manager : MonoBehaviour
 
         // Sets which upgrades the player has based on the Id array
         setPlayerHeldUpgradesFromIds();
+
+        // Instantiate the UI icons of those held upgrades
+        InstantiateIcons();
     }
 
     // Update is called once per frame
@@ -180,6 +184,20 @@ public class Level_manager : MonoBehaviour
             {
                 PlayerHeldUpgrades.Add(Upgrades[PlayerHeldUpgradeIds[i]]); 
             }
+        }
+    }
+
+    // Instantiates upgrade UI icons according to the PlayerHeldUpgrades list
+    void InstantiateIcons() 
+    { 
+        for (int i = 0; i < PlayerHeldUpgrades.Count; i++)
+        {
+            GameObject uiIcon = Instantiate(upgradePrefab);
+            uiIcon.name = uiIcon.name + "_" + i.ToString();
+            uiIcon.GetComponent<Upgrade_manager>().upgrade = PlayerHeldUpgrades[i];
+            uiIcon.GetComponent<Upgrade_manager>().upgradeIndex = i;
+            uiIcon.GetComponent<Upgrade_manager>().upgrade.UIOrShopItem = "UI";
+            uiIcon.GetComponent<Upgrade_manager>().CreateGameObjects();
         }
     }
 }

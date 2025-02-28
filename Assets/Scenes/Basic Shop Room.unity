@@ -413,7 +413,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mainUIPrefab: {fileID: 6993848563969293405, guid: 4b21b0de48a90fa44a02f7e65060e2f3, type: 3}
-  PlayerHeldUpgradeIds: 00000000ffffffffffffffffffffffffffffffff
+  upgradePrefab: {fileID: 4524767290060870829, guid: a7ed141474d227344ac9614b1cd31c3a, type: 3}
+  PlayerHeldUpgradeIds: 00000000010000000000000001000000ffffffff
 --- !u!4 &544785817
 Transform:
   m_ObjectHideFlags: 0

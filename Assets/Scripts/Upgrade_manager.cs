@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 using System.IO;
 
 public class Upgrade_manager : MonoBehaviour
@@ -7,7 +8,7 @@ public class Upgrade_manager : MonoBehaviour
     public GameObject upgradePrefab;
 
     // UI panel where the upgrade-related things will go
-    private Transform mainCanvasPanel;
+    private Transform upgradeSlotsPanel;
 
     // The upgrade this gameObject is working with 
     public Upgrade upgrade;
@@ -15,9 +16,13 @@ public class Upgrade_manager : MonoBehaviour
     // The transform of the shopItem this upgrade is associated with, if it exists (unused if this upgrade is a UI icon)
     [System.NonSerialized]
     public Transform shopItem;
+
     // The wall the shopItems are placed on (unused if this upgrade is a UI icon)
     [System.NonSerialized]
     public string wallDirection;
+
+    // The index of this upgrade within the PlayerHeldUpgrades list in the Level manager (unused if this upgrade is a ShopItem)
+    public int upgradeIndex;
 
     // Update is called once per frame
     void Update()
@@ -39,14 +44,33 @@ public class Upgrade_manager : MonoBehaviour
         }
     }
 
-    // TODO: implement with main UI
+    // Renders the upgrade UI 
+    // All magic numbers are positions relative to a 1920 x 1080 resolution.
     private void InstantiateUpgradeUIIcon()
-    {
+    {   
+        // Icons are children of the MainCanvas
         GameObject mainUI = GameObject.Find("UI");
-        mainCanvasPanel = mainUI.transform.Find("MainCanvas").Find("UpgradeUI");
+        upgradeSlotsPanel = mainUI.transform.Find("MainCanvas").Find("UpgradeUISlots");
         GameObject upgradeUIIcon = Instantiate(upgradePrefab.transform.GetChild(1).gameObject);
-        upgradeUIIcon.transform.SetParent(mainCanvasPanel);
+        upgradeUIIcon.transform.SetParent(mainUI.transform.Find("MainCanvas"));
         upgradeUIIcon.gameObject.name = upgradeUIIcon.gameObject.name + "_" + gameObject.name.Substring(gameObject.name.Length - 1, 1);
+
+        // Icons render on bottom layer
+        upgradeUIIcon.transform.SetSiblingIndex(0);
+
+        // Get the image data from the file path, convert to a Sprite, and set the Image to the Sprite.
+        byte[] imageBytes = GetImageBytes(upgrade.SpriteFilePath);
+        Texture2D tex = new Texture2D(2, 2, TextureFormat.RGBA32, false);
+        ImageConversion.LoadImage(tex, imageBytes);
+        Texture2D scaledTex = new Texture2D(150, 102, TextureFormat.RGBA32, false);
+        Graphics.ConvertTexture(tex, scaledTex);
+        Sprite sprite = Sprite.Create(scaledTex, new Rect(0, 0, scaledTex.width, scaledTex.height), new Vector2(0.5f, 0.5f));
+        Image uiImage = upgradeUIIcon.GetComponent<Image>();
+        uiImage.sprite = sprite;
+
+        // Set the position based on which upgrade this is, set the size according to a 1920 x 1080 resolution
+        upgradeUIIcon.GetComponent<RectTransform>().anchoredPosition = new Vector2(108, 761 - (108) * upgradeIndex);
+        upgradeUIIcon.GetComponent<RectTransform>().sizeDelta = new Vector2(150, 102);
     }
 
     // Instantiates an upgrade and draws it on top of a ShopItem

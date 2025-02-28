@@ -48,5 +48,8 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: Upgrade UI
+    uniqueID: 2961450713
+    locked: 0
   m_RenderingLayers:
   - Default
