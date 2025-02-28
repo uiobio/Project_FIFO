@@ -76,6 +76,12 @@ public class Shop_room_setup : MonoBehaviour
     void GenerateUpgrades()
     {
         int[] generatedIds = new int[numShopItems];
+
+        // Make sure that none of the initial elements are 0s
+        for (int i = 0; i < generatedIds.Length; i++)
+        {
+            generatedIds[i] = -1;
+        }
         int id = -1;
         for (int i = 0; i < numShopItems; i++)
         {

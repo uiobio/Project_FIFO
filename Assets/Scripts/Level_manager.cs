@@ -66,16 +66,16 @@ public class Level_manager : MonoBehaviour
 
         // Add all upgrades to the Upgrade list; move to game_constants when one exists
         // Only one upgrade sprite asset is finished (Precision, as of 02/28), so all others will use the default
-        Upgrades.Add(new Upgrade("Precision", "Deal [X] extra damage on every hit", 10.0f, 0.0f, "", 0, "Assets/Sprites/Upgrades/dmgUpgrade.png"));
-        Upgrades.Add(new Upgrade("Hardware Acceleration", "Increase dash range by [X]%", 10.0f, 0.0f, "", 0, "Assets/Sprites/Upgrades/upgradeBlank.png"));
-        Upgrades.Add(new Upgrade("Two Birds", "Your attacks hit twice, second attack does [X]% and also applies on-hit effects", 10.0f, 0.0f, "", 0, "Assets/Sprites/Upgrades/upgradeBlank.png"));
-        Upgrades.Add(new Upgrade("Fortified", "Enemy projectiles deal [X]% less damage", 10.0f, 0.0f, "", 0, "Assets/Sprites/Upgrades/upgradeBlank.png"));
-        Upgrades.Add(new Upgrade("Boot Up", "Gain a [X]% speed boost for the first [N] sec of each room", 10.0f, 15.0f, "", 0, "Assets/Sprites/Upgrades/upgradeBlank.png"));
-        Upgrades.Add(new Upgrade("Spice of Life", "Gain [X]% additional damage for each unique combo used this run", 1.0f, 0.0f, "", 0, "Assets/Sprites/Upgrades/upgradeBlank.png"));
-        Upgrades.Add(new Upgrade("git restore", "When entering a new non-shop room, restore [X]% of max health", 10.0f, 0.0f, "", 0, "Assets/Sprites/Upgrades/upgradeBlank.png"));
-        Upgrades.Add(new Upgrade("Bloodthirsty", "Gain [X] health upon killing [N] enemies", 1.0f, 5.0f, "", 0, "Assets/Sprites/Upgrades/upgradeBlank.png"));
-        Upgrades.Add(new Upgrade("Greedy", "Gain [X]% more gold from enemy kills", 5.0f, 0.0f, "", 0, "Assets/Sprites/Upgrades/upgradeBlank.png"));
-        Upgrades.Add(new Upgrade("Thorns", "When you take damage, deal [X]% to the enemy that hit you", 10.0f, 0.0f, "", 0, "Assets/Sprites/Upgrades/upgradeBlank.png"));
+        Upgrades.Add(new Upgrade("Precision", "Deal [X] extra damage on every hit", 10.0f, 0.0f, "", 0, 5, "Assets/Sprites/Upgrades/dmgUpgrade.png"));
+        Upgrades.Add(new Upgrade("Hardware Acceleration", "Increase dash range by [X]%", 10.0f, 0.0f, "", 0, 5, "Assets/Sprites/Upgrades/upgradeBlank.png"));
+        Upgrades.Add(new Upgrade("Two Birds", "Your attacks hit twice, second attack does [X]% and also applies on-hit effects", 10.0f, 0.0f, "", 0, 5, "Assets/Sprites/Upgrades/upgradeBlank.png"));
+        Upgrades.Add(new Upgrade("Fortified", "Enemy projectiles deal [X]% less damage", 10.0f, 0.0f, "", 0, 5, "Assets/Sprites/Upgrades/upgradeBlank.png"));
+        Upgrades.Add(new Upgrade("Boot Up", "Gain a [X]% speed boost for the first [N] sec of each room", 10.0f, 15.0f, "", 0, 5, "Assets/Sprites/Upgrades/upgradeBlank.png"));
+        Upgrades.Add(new Upgrade("Spice of Life", "Gain [X]% additional damage for each unique combo used this run", 1.0f, 0.0f, "", 0, 5, "Assets/Sprites/Upgrades/upgradeBlank.png"));
+        Upgrades.Add(new Upgrade("git restore", "When entering a new non-shop room, restore [X]% of max health", 10.0f, 0.0f, "", 0, 5, "Assets/Sprites/Upgrades/upgradeBlank.png"));
+        Upgrades.Add(new Upgrade("Bloodthirsty", "Gain [X] health upon killing [N] enemies", 1.0f, 5.0f, "", 0, 5, "Assets/Sprites/Upgrades/upgradeBlank.png"));
+        Upgrades.Add(new Upgrade("Greedy", "Gain [X]% more gold from enemy kills", 5.0f, 0.0f, "", 0, 5, "Assets/Sprites/Upgrades/upgradeBlank.png"));
+        Upgrades.Add(new Upgrade("Thorns", "When you take damage, deal [X]% to the enemy that hit you", 10.0f, 0.0f, "", 0, 5, "Assets/Sprites/Upgrades/upgradeBlank.png"));
 
         // Id should always = index in Upgrades list
         for (int i = 0; i < Upgrades.Count; i++)

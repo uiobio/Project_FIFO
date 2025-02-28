@@ -110,6 +110,7 @@ public class Upgrade
     private float n;
     private string type;
     private int id;
+    private int cost;
     private string spriteFilePath;
 
     // "UI" for the upgrade manager to instantiate a UI icon. "ShopItem" for the upgrade manager to instantiate a ShopItem upgrade.
@@ -123,8 +124,9 @@ public class Upgrade
     //  float n: some scalar that controls the power of the upgrade. Set to 0.0f if not used.
     //  string type: the type of enemy that the upgrade affects. Set to "" if not used.
     //  int id: index of upgrade in game_constants array. Must be unique to this upgrade.
+    //  int cost: cost of upgrade
     //  string spriteFilePath: file path of the sprite of this Upgrade.
-    public Upgrade(string name, string desc, float x, float n, string type, int id, string spriteFilePath)
+    public Upgrade(string name, string desc, float x, float n, string type, int id, int cost, string spriteFilePath)
     {
         this.upgrade_name = name;
         this.desc = desc;
@@ -132,6 +134,7 @@ public class Upgrade
         this.n = n;
         this.type = type;
         this.id = id;
+        this.cost = cost;
         this.spriteFilePath = spriteFilePath;
 
         this.desc = desc.Replace("[x]", ((int)this.x).ToString());
@@ -190,5 +193,11 @@ public class Upgrade
     {
         get { return spriteFilePath; }
         set { spriteFilePath = value; }
+    }
+
+    public int Cost
+    { 
+        get { return cost; }
+        set { cost = value; }
     }
 }

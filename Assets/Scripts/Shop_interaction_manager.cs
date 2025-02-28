@@ -18,12 +18,15 @@ public class Shop_interaction_manager : MonoBehaviour
     [SerializeField]
     private string labelTextHotkeyInfo = "(E) Buy";
     [SerializeField]
-    private string labelTextHotkeyInfoColor = "#F0FFFF";
+    private string labelTextHotkeyInfoColor = "#F0FFFF"; // Pale, electric blue
+    [SerializeField]
+    private int labelTextItemCost = 0;
+    [SerializeField]
+    private string labelTextItemCostColor = "#FFDF00"; // Gold yellow
     [SerializeField]
     private string labelTextItemName = "Default Name";
     [SerializeField]
     private string labelTextItemDesc = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla facilisi. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Donec eget justo at ligula vehicula tincidunt. Sed auctor, velit nec efficitur, nunc sapien";
-    
     // Position and rotation of UI label
     [SerializeField]
     private float[] labelRotationXYZ;
@@ -69,6 +72,7 @@ public class Shop_interaction_manager : MonoBehaviour
         if (upgrade != null) { 
             labelTextItemName = upgrade.Name;
             labelTextItemDesc = upgrade.Desc;
+            labelTextItemCost = upgrade.Cost;
         }
         // Instantiate the UI label with some text, rotation, and position
         label = Instantiate(labelPrefab, transform.position, Quaternion.identity);
@@ -162,8 +166,9 @@ public class Shop_interaction_manager : MonoBehaviour
     public string MakeFullFormattedTextString()
     {
         string text = string.Empty;
-        text += "<line-height=120%><b><color=" + labelTextHotkeyInfoColor + ">" + labelTextHotkeyInfo + "</color></b>\n";
-        text += "<line-height=90%><b>" + labelTextItemName + "</b>\n";
+        text += "<line-height=90%><b><color=" + labelTextHotkeyInfoColor + ">" + labelTextHotkeyInfo + "</color></b>\n";
+        text += "<line-height=125%><b><size=75%><color=" + labelTextItemCostColor + "> Cost: " + labelTextItemCost.ToString() + " Coins</color></size></b>\n";
+        text += "<line-height=95%><b>" + labelTextItemName + "</b>\n";
         text += "<i><size=75%>" + labelTextItemDesc + "</size></i>";
         return text;
     }
