@@ -155,9 +155,14 @@ public class Level_manager : MonoBehaviour
 
     void QuitGame()
     {
-        Time.timeScale = 1f; // Reset before quitting
-        Application.Quit(); // Quit game (Only works in build)
+    Time.timeScale = 1f; // Reset before quitting
+    Application.Quit(); // Works only in a built game
+
+    #if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false; // ✅ Stops play mode in the Unity Editor
+    #endif
     }
+
     void GoToMainMenu()
     {
         Time.timeScale = 1f; // Reset before loading new scene
