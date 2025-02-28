@@ -1,10 +1,18 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+
 
 public class Level_manager : MonoBehaviour
 {
     public static Level_manager instance;
+    private bool isPaused = false;
+    public GameObject pauseMenuUI; // Assign in Inspector
+    public Button resumeButton;
+    public Button pauseButton;
+    public Button quitButton;
+    public Button menuButton;
 
     //FIXME: Add this list to a game_constants file
     List<string> types = new List<string>() {"Earth", "Fire", "Ice", "Wind"};
@@ -17,7 +25,10 @@ public class Level_manager : MonoBehaviour
 
     private void Awake() //Makes levelmanager callable in any script: Level_manager.instance.[]
     {
-        instance = this;
+        if (instance == null)
+            instance = this;
+        else
+            Destroy(gameObject);
     }
 
     // Start is called before the first frame update
@@ -37,27 +48,21 @@ public class Level_manager : MonoBehaviour
         Patterns.Add(Temp_1);
         Patterns.Add(Temp_2);
         Patterns.Add(Temp_3);
+
+        pauseMenuUI.SetActive(false); // Ensure menu is hidden at start
+
+        resumeButton.onClick.AddListener(ResumeGame);
+        pauseButton.onClick.AddListener(PauseGame);
+        quitButton.onClick.AddListener(QuitGame);
+        menuButton.onClick.AddListener(GoToMainMenu); 
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(Input.GetButtonDown("Dummy")){
-            Dummy();
-        }
-
-        // Key inputs for testing patterns- feel free to delete/ignore
-        if(Input.GetKeyDown("1")){
-            UpdatePattern("Earth");
-        }
-        if(Input.GetKeyDown("2")){
-            UpdatePattern("Fire");
-        }
-        if(Input.GetKeyDown("3")){
-            UpdatePattern("Ice");
-        }
-        if(Input.GetKeyDown("4")){
-            UpdatePattern("Wind");
+        if (Input.GetKeyDown(KeyCode.P)) // Press 'P' to toggle pause
+        {
+            TogglePause();
         }
     }
 
@@ -121,5 +126,40 @@ public class Level_manager : MonoBehaviour
         }
 
         return null;
+    }
+    // Pause menu
+
+    void TogglePause()
+    {
+        if (!isPaused)
+            PauseGame();
+        else
+            ResumeGame();
+    }
+
+    void PauseGame()
+    {
+        isPaused = true;
+        pauseMenuUI.SetActive(true); // Show menu
+        Time.timeScale = 0f; // Pause game
+    }
+
+    void ResumeGame()
+    {
+        isPaused = false;
+        pauseMenuUI.SetActive(false); // Hide menu
+        Time.timeScale = 1f; // Resume game
+    }
+
+    void QuitGame()
+    {
+        Time.timeScale = 1f; // Reset before quitting
+        Application.Quit(); // Quit game (Only works in build)
+    }
+
+    void GoToMainMenu()
+    {
+        Time.timeScale = 1f; // Reset time before loading new scene
+        SceneManager.LoadScene("Menu Room"); // Replace with your actual menu scene name
     }
 }
