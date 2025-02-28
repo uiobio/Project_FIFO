@@ -2,30 +2,42 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+using UnityEngine;
+
 public class Level_manager : MonoBehaviour
 {
     public static Level_manager instance;
+    private bool isPaused = false;
 
-    private void Awake() //Makes levelmanager callable in any script: Level_manager.instance.[]
+    private void Awake()
     {
-        instance = this;
+        if (instance == null)
+            instance = this;
+        else
+            Destroy(gameObject);
     }
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
     void Update()
     {
-        if(Input.GetButtonDown("Dummy")){
-            Dummy();
+        if (Input.GetKeyDown(KeyCode.P)) // Press 'P' to toggle pause
+        {
+            TogglePause();
         }
     }
 
-    void Dummy(){
-        Debug.Log("Dummy key pressed");
+    void TogglePause()
+    {
+        isPaused = !isPaused;
+
+        if (isPaused)
+        {
+            Time.timeScale = 0f; // Pause game
+            Debug.Log("Game Paused");
+        }
+        else
+        {
+            Time.timeScale = 1f; // Resume game
+            Debug.Log("Game Resumed");
+        }
     }
 }
