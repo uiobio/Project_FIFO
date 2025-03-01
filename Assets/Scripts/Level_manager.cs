@@ -15,6 +15,9 @@ public class Level_manager : MonoBehaviour
     //FIXME: Add this to a game_constants file
     List<List<(int, string)>> Patterns = new List<List<(int, string)>>();
 
+    [SerializeField]
+    int Currency;
+
     private void Awake() //Makes levelmanager callable in any script: Level_manager.instance.[]
     {
         instance = this;
@@ -65,6 +68,11 @@ public class Level_manager : MonoBehaviour
         Debug.Log("Dummy key pressed");
     }
 
+    public void GainCoin(int val){
+        Currency += val;
+    }
+
+    //---------------------------------Functions for Patterns----------------------------
     void UpdatePattern(string type){
         // Adds a type to the pattern record. Should be called whenever an enemy is killed.
         // This then checks the Pattern Record to see if any Patterns have occurred.
