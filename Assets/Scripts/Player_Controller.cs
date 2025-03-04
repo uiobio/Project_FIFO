@@ -3,6 +3,7 @@ using System.Collections;
 
 public class Player_Controller : MonoBehaviour
 {
+    
     public float normalSpeed = 5f; // Default movement speed
     public float boostedSpeed = 7.5f; // 1.5x speed boost
     public float boostDuration = 30f; // 30 seconds duration
