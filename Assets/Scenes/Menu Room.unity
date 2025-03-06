@@ -573,6 +573,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5f48463adec31594a8874bd568381b6f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Currency: 0
 --- !u!4 &542018350
 Transform:
   m_ObjectHideFlags: 0
@@ -985,7 +986,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 018b788d1a60a254fa651c1f680e51a0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Spawnee: {fileID: 328789305087572588, guid: 6a120e85c4b8215448cb02a44cba1de9, type: 3}
+  SpawneePrefab: {fileID: 0}
 --- !u!1 &1012206582
 GameObject:
   m_ObjectHideFlags: 0
@@ -1340,7 +1341,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b3d17465a3c764e1c9531e80cb584350, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sceneName: Menu Room
+  sceneName: Basic L Room
 --- !u!1001 &1503330727282712868
 PrefabInstance:
   m_ObjectHideFlags: 0

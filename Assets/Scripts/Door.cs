@@ -5,6 +5,9 @@ using UnityEngine.SceneManagement;
 
 public class Door : MonoBehaviour
 {
+    [SerializeField]
+    string room_name;
+
     void OnTriggerEnter(Collider other)
     {
         // Load the Basic L Room scene when this is entered
@@ -12,7 +15,7 @@ public class Door : MonoBehaviour
         // Bugfix: made it so only the player can trigger the door.
         if (other.tag == "Player")
         {
-            SceneManager.LoadScene("Basic L Room");
+            SceneManager.LoadScene(room_name);
         }
     }
 }
