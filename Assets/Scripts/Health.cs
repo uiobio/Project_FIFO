@@ -4,8 +4,13 @@ using UnityEngine;
 
 public class Health : MonoBehaviour
 {
+    [SerializeField]
     private float maxHealth = 100;
+
+    [SerializeField]
     private float health = 100;
+
+    [SerializeField]
     private bool isDead = false;
 
     void Update()
