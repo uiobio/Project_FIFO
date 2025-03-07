@@ -65,6 +65,7 @@ public class Level_manager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.P)) // Press 'P' to toggle pause
         {
             TogglePause();
+        }
 
         if (Input.GetButtonDown("Dummy"))
         {
