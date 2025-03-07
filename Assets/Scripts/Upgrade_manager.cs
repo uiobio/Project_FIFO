@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 using System.IO;
 
 public class Upgrade_manager : MonoBehaviour
@@ -24,15 +25,22 @@ public class Upgrade_manager : MonoBehaviour
     // The index of this upgrade within the PlayerHeldUpgrades list in the Level manager (unused if this upgrade is a ShopItem)
     public int upgradeIndex;
 
+    // The GameObject that will be instantiated if this upgrade is a UI icon
+    public GameObject upgradeUIIcon;
+
+    void Start()
+    {
+        gameObject.SetActive(false);
+    }
+
     // Update is called once per frame
     void Update()
     {
-        // Destroy this game object immediately post-start as it does nothing, it is only used to pass data down to children
-        Destroy(gameObject);
+
     }
 
     // Makes different GameObjects depending on whether the upgrade is supposed to be a UI icon or ShopItem.
-    public void CreateGameObjects() 
+    public void CreateGameObjects()
     {
         if (upgrade.UIOrShopItem.Equals("UI"))
         {
@@ -51,7 +59,7 @@ public class Upgrade_manager : MonoBehaviour
         // Icons are children of the MainCanvas
         GameObject mainUI = GameObject.Find("UI");
         upgradeSlotsPanel = mainUI.transform.Find("MainCanvas").Find("UpgradeUISlots");
-        GameObject upgradeUIIcon = Instantiate(upgradePrefab.transform.GetChild(1).gameObject);
+        upgradeUIIcon = Instantiate(upgradePrefab.transform.GetChild(1).gameObject);
         upgradeUIIcon.transform.SetParent(mainUI.transform.Find("MainCanvas"));
         upgradeUIIcon.gameObject.name = upgradeUIIcon.gameObject.name + "_" + gameObject.name.Substring(gameObject.name.Length - 1, 1);
 
@@ -71,6 +79,7 @@ public class Upgrade_manager : MonoBehaviour
         // Set the position based on which upgrade this is, set the size according to a 1920 x 1080 resolution
         upgradeUIIcon.GetComponent<RectTransform>().anchoredPosition = new Vector2(108, 761 - (108) * upgradeIndex);
         upgradeUIIcon.GetComponent<RectTransform>().sizeDelta = new Vector2(150, 102);
+        upgradeUIIcon.gameObject.SetActive(true);
     }
 
     // Instantiates an upgrade and draws it on top of a ShopItem
@@ -107,6 +116,7 @@ public class Upgrade_manager : MonoBehaviour
             }
         }
         upgradeShopItem.localScale = new Vector3(0.0900000036f, 0.765000045f, 0.0612000041f);
+        upgradeShopItem.gameObject.SetActive(true);
     }
 
     // Helper method to convert image as path to byte array.
@@ -121,6 +131,12 @@ public class Upgrade_manager : MonoBehaviour
             Debug.LogError("File not found at: " + path);
             return null;
         }
+    }
+
+    // When the UI icon for this upgrade is clicked, update the index of the currently selected upgrade in the player held upgrades list in the level manager to reflect this.
+    public void OnUIIconClick() {
+        Debug.Log("Upgrade with name: " + upgrade.Name + " clicked! (Upgrade slot index " + upgradeIndex + ")");
+        Level_manager.instance.CurrentlySelectedUpgradeIndex = upgradeIndex;
     }
 }
 

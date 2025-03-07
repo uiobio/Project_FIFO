@@ -149,7 +149,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   labelPrefab: {fileID: 1013203243436421646, guid: cc2029d4bce78204bab7dd4a9b5749eb, type: 3}
   labelTextHotkeyInfo: (E) Buy
+  labelTextHotkeyInfoSoldOut: (E) Replace
+  labelTextHotkeyInfoLevelUp: (E) Level Up
   labelTextHotkeyInfoColor: '#87CEEB'
+  labelTextHotkeyInfoSoldOutColor: '#FF2800'
+  labelTextItemCost: 0
+  labelTextItemCostColor: '#FFDF00'
   labelTextItemName: Default Name
   labelTextItemDesc: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla
     facilisi. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere

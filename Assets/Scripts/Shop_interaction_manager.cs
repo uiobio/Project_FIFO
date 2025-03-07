@@ -1,4 +1,5 @@
 using System.Collections;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
@@ -9,24 +10,32 @@ using UnityEngine.UI;
 public class Shop_interaction_manager : MonoBehaviour
 {
     [Header("Shop")]
-
     // UI label prefab that pops up when player comes near
     [SerializeField]
     private GameObject labelPrefab;
 
     // Text to display within UI label
     [SerializeField]
-    private string labelTextHotkeyInfo = "(E) Buy";
+    private string labelTextHotkeyInfo = "(E) Buy"; // Displays when player's ugprade slots are not full and the player does not currently hold the labeled upgrade
     [SerializeField]
-    private string labelTextHotkeyInfoColor = "#F0FFFF"; // Pale, electric blue
+    private string labelTextHotkeyInfoSoldOut = "(E) Replace Current"; // Displays when player's upgrade slots are full and the player does not currently hold the labeled upgrade
     [SerializeField]
-    private int labelTextItemCost = 0;
+    private string labelTextHotkeyInfoLevelUp = "(E) Level Up"; // Displays when the player currently holds the labeled upgrade REGARDLESS of whether the slots are full
+    [SerializeField]
+    private string labelTextHotkeyInfoColor = "#F0FFFF"; // Pale, electric blue, used for the "BUY" and "LEVEL UP" text.
+    [SerializeField]
+    private string labelTextHotkeyInfoSoldOutColor = "#FF2800"; // Bright ish red, used for the "ALL SLOTS FILLED" text.
+    private string activeLabelTextHotkeyInfo = "(E) Buy"; // The currently displayed hotkey info text
+    private string activeLabelTextHotkeyInfoColor = "F0FFFF"; // The currently displayed hotkey info text color
+    [SerializeField]
+    private int labelTextItemCost = 0; // How much the upgrade costs
     [SerializeField]
     private string labelTextItemCostColor = "#FFDF00"; // Gold yellow
     [SerializeField]
-    private string labelTextItemName = "Default Name";
+    private string labelTextItemName = "Default Name"; // The name of the upgrade
     [SerializeField]
-    private string labelTextItemDesc = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla facilisi. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Donec eget justo at ligula vehicula tincidunt. Sed auctor, velit nec efficitur, nunc sapien";
+    private string labelTextItemDesc = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla facilisi. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Donec eget justo at ligula vehicula tincidunt. Sed auctor, velit nec efficitur, nunc sapien"; // Description of the upgrade
+    
     // Position and rotation of UI label
     [SerializeField]
     private float[] labelRotationXYZ;
@@ -59,6 +68,9 @@ public class Shop_interaction_manager : MonoBehaviour
     private Vector3 labelTopRight;
     private Vector3 labelBottomRight;
 
+    // The TextMeshPro component of the label
+    private TextMeshProUGUI tmpText;
+
     // The position of the center point of the top face of this ShopItem
     private Vector3 topFaceCenterPos;
 
@@ -75,16 +87,18 @@ public class Shop_interaction_manager : MonoBehaviour
             labelTextItemCost = upgrade.Cost;
         }
         // Instantiate the UI label with some text, rotation, and position
+        activeLabelTextHotkeyInfo = labelTextHotkeyInfo;
+        activeLabelTextHotkeyInfoColor = labelTextHotkeyInfoColor;
         label = Instantiate(labelPrefab, transform.position, Quaternion.identity);
         label.name = label.name + "_" + gameObject.name.Substring(gameObject.name.Length - 1, 1);
-        TextMeshProUGUI tmpText = label.transform.Find("Panel").gameObject.transform.Find("TMP").gameObject.GetComponent<TextMeshProUGUI>();
-        tmpText.text = MakeFullFormattedTextString();
+        tmpText = label.transform.Find("Panel").gameObject.transform.Find("TMP").gameObject.GetComponent<TextMeshProUGUI>();
+        MakeFullFormattedTextString();
         label.transform.rotation = Quaternion.Euler(labelRotationXYZ[0], labelRotationXYZ[1], labelRotationXYZ[2]);
         label.transform.position += new Vector3(labelPositionOffsetXYZ[0], labelPositionOffsetXYZ[1], labelPositionOffsetXYZ[2]);
         label.transform.SetParent(gameObject.transform);
 
         // Resize the label's panel accordingly
-        Item_label_resize.instance.UpdateSize();
+        label.GetComponent<Item_label_resize>().UpdateSize();
 
         // Assign the positions of the label's corners
         Vector3[] corners = new Vector3[4];
@@ -127,10 +141,38 @@ public class Shop_interaction_manager : MonoBehaviour
     private void OnTriggerEnter(Collider other) 
     {
         // If the other collider is the player, and the item has not already been bought:
-        // Make the UI label visible and allow the player to interact with this instance's gameObject; draw the lines
-        if (other.gameObject.tag == "Player" && !bought) 
+        // Make the UI label visible, allow the player to interact with this instance's gameObject, draw the lines
+        // Update the text to reflect changes in game state
+        if (other.gameObject.tag == "Player" && !bought)
         {
+            // If the player does not currently hold this upgrade, then...
+            if (Array.IndexOf(Level_manager.instance.PlayerHeldUpgradeIds, upgrade.Id) <= -1) 
+            {
+                // If the player is at or exceeding the upgrade slot limit
+                if (Level_manager.instance.PlayerHeldUpgrades.Count >= Level_manager.MAX_PLAYER_UPGRADES)
+                {
+                    // Set the text to indicate the slots are full, set the text color to match
+                    activeLabelTextHotkeyInfoColor = labelTextHotkeyInfoSoldOutColor;
+                    activeLabelTextHotkeyInfo = labelTextHotkeyInfoSoldOut;
+                }
+                else {
+                    // Set the text to inform the player of the hotkey and the action ("(E) Buy"), set the color to match
+                    activeLabelTextHotkeyInfoColor = labelTextHotkeyInfoColor;
+                    activeLabelTextHotkeyInfo = labelTextHotkeyInfo;
+                }
+            }
+            // Otherwise (if the player currently holds this upgrade), then...
+            else
+            {
+                // Set the text to inform the player of the hotkey and the action ("(E) Level Up"), set color to match.
+                activeLabelTextHotkeyInfoColor = labelTextHotkeyInfoColor;
+                activeLabelTextHotkeyInfo = labelTextHotkeyInfoLevelUp;
+                
+            }
             label.SetActive(true);
+            // Update the TextMeshPro component according to the new active text
+            MakeFullFormattedTextString();
+
             Player_input_manager.instance.Interactable = gameObject;
             isShopActive = true;
             DrawLinesToLabelCorners();
@@ -153,6 +195,17 @@ public class Shop_interaction_manager : MonoBehaviour
     // Called when the player interacts with this instance's gameObject
     public void buy()
     {
+        // Attempts to add the upgrade to the player's list. If this fails, cancel the buy.
+        if (!Level_manager.instance.AddPlayerUpgrade(upgrade, gameObject))
+        {
+            return;
+        }
+        destroyChildren();
+    }
+
+    // Destroys the children of this ShopItem (the upgrade, label, and lines)
+    public void destroyChildren()
+    {
         // Stops this gameObject's attempts to interact with the label
         bought = true;
         // Destroys all children of this instance's gameObject
@@ -166,10 +219,15 @@ public class Shop_interaction_manager : MonoBehaviour
     public string MakeFullFormattedTextString()
     {
         string text = string.Empty;
-        text += "<line-height=90%><b><color=" + labelTextHotkeyInfoColor + ">" + labelTextHotkeyInfo + "</color></b>\n";
+        text += "<line-height=90%><b><color=" + activeLabelTextHotkeyInfoColor + ">" + activeLabelTextHotkeyInfo + "</color></b>\n";
         text += "<line-height=125%><b><size=75%><color=" + labelTextItemCostColor + "> Cost: " + labelTextItemCost.ToString() + " Coins</color></size></b>\n";
         text += "<line-height=95%><b>" + labelTextItemName + "</b>\n";
         text += "<i><size=75%>" + labelTextItemDesc + "</size></i>";
+        tmpText.text = text;
+        if (label != null)
+        {
+            label.GetComponent<Item_label_resize>().UpdateSize();
+        }
         return text;
     }
 
@@ -219,21 +277,51 @@ public class Shop_interaction_manager : MonoBehaviour
         set { labelTextHotkeyInfo = value; }
     }
 
+    public string LabelTextHotkeyInfoSoldOut
+    {
+        get { return labelTextHotkeyInfoSoldOut; }
+        set { labelTextHotkeyInfoSoldOut = value; }
+    }
+
+    public string LabelTextHotkeyInfoLevelUp
+    {
+        get { return labelTextHotkeyInfoLevelUp; }
+        set { labelTextHotkeyInfoLevelUp = value; }
+    }
+
     public string LabelTextHotkeyInfoColor
     {
         get { return labelTextHotkeyInfoColor; }
         set { labelTextHotkeyInfoColor = value; }
     }
 
-    public string LabelTextItemName
+    public string LabelTextHotkeyInfoSoldOutColor
     {
-        get { return labelTextItemName; }
-        set { labelTextItemName = value; }
+        get { return labelTextHotkeyInfoSoldOutColor; }
+        set { labelTextHotkeyInfoSoldOutColor = value; }
     }
 
-    public string LabelTextItemDesc
+    public string ActiveLabelTextHotkeyInfo
     {
-        get { return labelTextItemDesc; }
-        set { labelTextItemDesc = value; }
+        get { return activeLabelTextHotkeyInfo; }
+        set { activeLabelTextHotkeyInfo = value; }
+    }
+
+    public string ActiveLabelTextHotkeyInfoColor
+    {
+        get { return activeLabelTextHotkeyInfoColor; }
+        set { activeLabelTextHotkeyInfoColor = value; }
+    }
+
+    public TextMeshProUGUI TmpText
+    {
+        get { return tmpText; }
+        set { tmpText = value; }
+    }
+
+    public GameObject Label 
+    { 
+        get { return label; }
+        set { label  = value; }
     }
 }
