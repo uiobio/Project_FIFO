@@ -182,6 +182,36 @@ public class Player_input_manager : MonoBehaviour
         transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * 20f);
     }
 
+    // Waits until the player a) confirms that they want to replace the selected upgrade with some shopItem upgrade or b) leaves from the radius of the shopItem.
+    // If the player confirms they want to replace, then swap out the upgrade. If not, do nothing.
+    // While loop is so the player can make live selections with the upgrade slot UI to choose which upgrade to swap. The text will thus update in real time.
+    // It's a coroutine and not a function so it can run alongside Update() blocks, without interrupting core game processes.
+    public IEnumerator SelectAndConfirmReplace(Upgrade newUpgrade, GameObject shop)
+    {
+        yield return null; // Wait one frame so no extraneous inputs can leak through
+        while (true)
+        {
+            int tempIndex = Level_manager.instance.CurrentlySelectedUpgradeIndex;
+            shop.GetComponent<Shop_interaction_manager>().ActiveLabelTextHotkeyInfo = "(E) Confirm \n (MB1) Select \n<size=80%><color=" + shop.GetComponent<Shop_interaction_manager>().LabelTextHotkeyInfoColor + "> Replace [<i>" + Level_manager.instance.PlayerHeldUpgrades[Level_manager.instance.CurrentlySelectedUpgradeIndex].Name + "</i>] with the following upgrade?</color><size=100%>";
+            shop.GetComponent<Shop_interaction_manager>().MakeFullFormattedTextString();
+
+            // Waits until one and only one of three things happens:
+            // a) the player interacts with the ShopItem, confirming the replacement
+            // b) the player leaves the radius of the ShopItem's trigger collider, cancelling the replacement
+            // c) the player clicks on a new upgrade icon in the upgrade slot UI, thus continuing the while loop and reloading the text to show the newly selected upgrade to swap.
+            yield return new WaitUntil(() => interactInput ^ !shop.GetComponent<Shop_interaction_manager>().IsShopActive ^ tempIndex != Level_manager.instance.CurrentlySelectedUpgradeIndex);
+            if (interactInput)
+            {
+                Level_manager.instance.swapOutUpgrade(newUpgrade, shop);
+                break;
+            }
+            if (!shop.GetComponent<Shop_interaction_manager>().IsShopActive)
+            {
+                break;
+            }
+        }
+    }
+
     // Getters, Setters
     public GameObject Interactable
     {
