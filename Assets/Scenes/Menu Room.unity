@@ -1038,6 +1038,9 @@ MonoBehaviour:
   pauseButton: {fileID: 838301762}
   quitButton: {fileID: 892836157}
   menuButton: {fileID: 794839170}
+  mainUIPrefab: {fileID: 6993848563969293405, guid: 4b21b0de48a90fa44a02f7e65060e2f3, type: 3}
+  upgradePrefab: {fileID: 4524767290060870829, guid: a7ed141474d227344ac9614b1cd31c3a, type: 3}
+  PlayerHeldUpgradeIds: 0000000000000000000000000000000000000000
   Currency: 0
 --- !u!4 &542018350
 Transform:
