@@ -270,7 +270,6 @@ public class Level_manager : MonoBehaviour
         Time.timeScale = 1f; // Reset before loading new scene
         SceneManager.LoadScene("Menu Room"); // Replace with actual Main Menu scene name
     }
-}
 
     // Adds upgrades to the PlayerHeldUpgrades list based on the array of upgrade Ids
     void setPlayerHeldUpgradesFromIds()
