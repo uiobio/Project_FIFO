@@ -196,8 +196,8 @@ public class Player_input_manager : MonoBehaviour
             shop.GetComponent<Shop_interaction_manager>().MakeFullFormattedTextString();
 
             // Waits until one and only one of three things happens:
-            // a) the player interacts with the ShopItem, confirming the replacement
-            // b) the player leaves the radius of the ShopItem's trigger collider, cancelling the replacement
+            // a) the player interacts with the ShopItem, confirming the replacement, calling the function to swap the old in-slot upgrade with the incoming shop upgrade, and breaking out of the loop 
+            // b) the player leaves the radius of the ShopItem's trigger collider, cancelling the replacement and breaking out of the loop
             // c) the player clicks on a new upgrade icon in the upgrade slot UI, thus continuing the while loop and reloading the text to show the newly selected upgrade to swap.
             yield return new WaitUntil(() => interactInput ^ !shop.GetComponent<Shop_interaction_manager>().IsShopActive ^ tempIndex != Level_manager.instance.CurrentlySelectedUpgradeIndex);
             if (interactInput)
