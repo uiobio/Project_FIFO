@@ -30,12 +30,17 @@ public class Player_input_manager : MonoBehaviour
     [SerializeField]
     private float ProjectilePlaneY;
 
+    [Header("Slash")]
+    [SerializeField]
+    private GameObject slashPrefab;
+
     // From InputManager
     private float horizontalInput;
     private float verticalInput;
     private bool dashInput;
     private bool interactInput;
     private bool fireProjectileInput;
+    private bool attackInput;
 
     // Other GameObject, set when the player attempts to interact with them
     private GameObject interactable;
@@ -100,6 +105,10 @@ public class Player_input_manager : MonoBehaviour
         {
             FireProjectile();
         }
+
+        if (attackInput){
+            BasicAttack();
+        }
     }
 
     void FixedUpdate()
@@ -116,6 +125,7 @@ public class Player_input_manager : MonoBehaviour
         dashInput = Input.GetButtonDown("Dash");
         interactInput = Input.GetButtonDown("Interact");
         fireProjectileInput = Input.GetButtonDown("Fire2");
+        attackInput = Input.GetButtonDown("Fire1");
     }
 
     void MovePlayer()
@@ -159,6 +169,12 @@ public class Player_input_manager : MonoBehaviour
         projectile.transform.LookAt(aimPoint);
         projectile.layer = 7; // Set to PlayerProjectiles layer, this makes it so it can only hit enemies and obstacles, but not the player.
         Cooldown_manager.instance.UpdateFireProjectileCooldown();
+    }
+
+    void BasicAttack()
+    {
+        GameObject Slash = Instantiate(slashPrefab, new Vector3(transform.Find("Forward").position.x, transform.position.y, transform.Find("Forward").position.z), transform.rotation);
+        Slash.transform.parent = transform;
     }
 
     // Calculates the world position on the projectile firing plane to which the mouse is pointing
