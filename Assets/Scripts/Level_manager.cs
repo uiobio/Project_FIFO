@@ -49,7 +49,6 @@ public class Level_manager : MonoBehaviour
     public List<Upgrade> PlayerHeldUpgrades = new List<Upgrade>();
 
     // The UI icon gameObjects for the upgrades that the player currently has
-    [System.NonSerialized]
     public List<GameObject> PlayerHeldUpgradeIcons = new List<GameObject>();
 
     // The upgrade the player clicks on when replacing/selling
@@ -301,7 +300,7 @@ public class Level_manager : MonoBehaviour
     }
 
     // Adds upgrades to the PlayerHeldUpgrades list based on the array of upgrade Ids
-    void SetPlayerHeldUpgradesFromIds()
+    public void SetPlayerHeldUpgradesFromIds()
     {
         for (int i = 0; i < MAX_PLAYER_UPGRADES; i++)
         {
@@ -432,7 +431,8 @@ public class Level_manager : MonoBehaviour
                 break;
         }
         upgrade.UpdateDesc();
-        if (Shop_room_setup.instance != null) {
+        if (Shop_room_setup.instance != null) 
+        {
             Shop_room_setup.instance.UpdateShopItemLabel(upgrade);
         }
     }

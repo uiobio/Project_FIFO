@@ -8,9 +8,6 @@ public class Upgrade_manager : MonoBehaviour
     // This prefab is a self-reference to this gameObject's prefab. Used mostly for clarity.
     public GameObject upgradePrefab;
 
-    // UI panel where the upgrade-related things will go
-    private Transform upgradeSlotsPanel;
-
     // The upgrade this gameObject is working with 
     public Upgrade upgrade;
 
@@ -58,7 +55,7 @@ public class Upgrade_manager : MonoBehaviour
     {   
         // Icons are children of the MainCanvas
         GameObject mainUI = GameObject.Find("UI");
-        upgradeSlotsPanel = mainUI.transform.Find("MainCanvas").Find("UpgradeUISlots");
+        gameObject.transform.SetParent(GameObject.Find("LevelManager").transform);
         upgradeUIIcon = Instantiate(upgradePrefab.transform.GetChild(1).gameObject);
         upgradeUIIcon.transform.SetParent(mainUI.transform.Find("MainCanvas"));
         upgradeUIIcon.gameObject.name = upgradeUIIcon.gameObject.name + "_" + gameObject.name.Substring(gameObject.name.Length - 1, 1);

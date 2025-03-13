@@ -22,7 +22,7 @@ public class Shop_interaction_manager : MonoBehaviour
     [SerializeField]
     private string labelTextHotkeyInfoLevelUp = "(E) Level Up"; // Displays when the player currently holds the labeled upgrade REGARDLESS of whether the slots are full
     [SerializeField]
-    private string labelTextHotkeyInfoInsufficientFunds = "Not Enough Gold";
+    private string labelTextHotkeyInfoInsufficientFunds = "Not Enough Chips";
     [SerializeField]
     private string labelTextHotkeyInfoColor = "#F0FFFF"; // Pale, electric blue, used for the "BUY" and "LEVEL UP" text.
     [SerializeField]
@@ -232,7 +232,7 @@ public class Shop_interaction_manager : MonoBehaviour
     {
         string text = string.Empty;
         text += "<line-height=90%><b><color=" + activeLabelTextHotkeyInfoColor + ">" + activeLabelTextHotkeyInfo + "</color></b>\n";
-        text += "<line-height=125%><b><size=75%><color=" + labelTextItemCostColor + "> Cost: " + labelTextItemCost.ToString() + " Coins</color></size></b>\n";
+        text += "<line-height=125%><b><size=75%><color=" + labelTextItemCostColor + "> Cost: " + labelTextItemCost.ToString() + " Chips</color></size></b>\n";
         text += "<line-height=95%><b>" + labelTextItemName + "</b>\n";
         text += "<i><size=75%>" + labelTextItemDesc + "</size></i>";
         tmpText.text = text;
