@@ -335,7 +335,7 @@ public class Level_manager : MonoBehaviour
     public bool AddPlayerUpgrade(Upgrade upgrade, GameObject shop)
     {
         // If the upgrade is already held by the player, then...
-        if (Array.IndexOf(PlayerHeldUpgradeIds, upgrade.Id) > -1 && upgrade.Cost <= Currency)
+        if (Array.IndexOf(PlayerHeldUpgradeIds, upgrade.Id) > -1 && upgrade.Cost <= Currency && !IsCurrentlySelectingUpgrade)
         {
             // POST MVP FIXME: The player already holds this upgrade, so it won't be added to a new slot.
             // For now it doesn't do anything when you try to add an upgrade the player already has (i.e. it lets the add attempt go through without actually adding anything)
@@ -346,7 +346,7 @@ public class Level_manager : MonoBehaviour
             return true;
         }
         // Otherwise, if the player's max upgrade slots would be exceeded by adding this upgrade, then...
-        else if (PlayerHeldUpgrades.Count + 1 > MAX_PLAYER_UPGRADES && upgrade.Cost <= Currency)
+        else if (PlayerHeldUpgrades.Count + 1 > MAX_PLAYER_UPGRADES && upgrade.Cost <= Currency && !IsCurrentlySelectingUpgrade)
         {
             // Start the coroutine prompt to select/confirm/replace a currently held upgrade
             ReplacePlayerUpgrade(upgrade, shop);
@@ -354,7 +354,7 @@ public class Level_manager : MonoBehaviour
             return false;
         }
         // Otherwise (if the upgrade is not held by the player AND the max upgrade slots would not be exceeded by adding this upgrade), then...
-        else if (upgrade.Cost <= Currency)
+        else if (upgrade.Cost <= Currency && !IsCurrentlySelectingUpgrade)
         {
             // Upgrade addition succeeds and adds to the player upgrade list.
             PlayerHeldUpgrades.Add(upgrade);
@@ -393,7 +393,7 @@ public class Level_manager : MonoBehaviour
     // Called within the coroutine in Player_input_manager (structured this way to keep all player inputs inside that script... it's a bit clunky but it works
     // Updates all the necessary lists that track the player's currently held upgrades
     // Updates the UI with the new upgrade's icon and destroys the old upgrade's icon.
-    public void SwapOutUpgrade(Upgrade newUpgrade, GameObject shop)
+    public void SwapOutUpgrade(Upgrade newUpgrade, GameObject shop, Vector2 originalSlotPosition)
     {
         RemoveUpgradeModifiers(PlayerHeldUpgrades[CurrentlySelectedUpgradeIndex]);
         PlayerHeldUpgrades[CurrentlySelectedUpgradeIndex] = newUpgrade;
@@ -414,8 +414,9 @@ public class Level_manager : MonoBehaviour
 
         Debug.Log("Replacing upgrade: " + PlayerHeldUpgradeIcons[CurrentlySelectedUpgradeIndex].GetComponent<Upgrade_manager>().upgrade.Name + " (Upgrade slot index " + CurrentlySelectedUpgradeIndex + ")");
         PlayerHeldUpgradeIcons[CurrentlySelectedUpgradeIndex] = upgradeUIIcon;
-
-        shop.GetComponent<Shop_interaction_manager>().destroyChildren();   
+        upgradeUIIcon.GetComponent<Upgrade_manager>().upgradeUIIcon.GetComponent<RectTransform>().anchoredPosition = originalSlotPosition;
+        Currency -= newUpgrade.Cost;
+        shop.GetComponent<Shop_interaction_manager>().destroyChildren();
     }
 
     // Called when upgrades are added to the player held upgrades list, essentially applies the effects of upgrades.

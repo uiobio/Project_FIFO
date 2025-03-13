@@ -76,7 +76,7 @@ public class Upgrade_manager : MonoBehaviour
         Image uiImage = upgradeUIIcon.GetComponent<Image>();
         uiImage.sprite = sprite;
 
-        // Set the position based on which upgrade this is, set the size according to a 1920 x 1080 resolution
+        // Set the position based on which player held upgrade index this is, set the size according to a 1920 x 1080 resolution
         upgradeUIIcon.GetComponent<RectTransform>().anchoredPosition = new Vector2(108, 761 - (108) * upgradeIndex);
         upgradeUIIcon.GetComponent<RectTransform>().sizeDelta = new Vector2(150, 102);
         upgradeUIIcon.gameObject.SetActive(true);

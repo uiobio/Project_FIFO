@@ -1201,6 +1201,10 @@ PrefabInstance:
       value: LevelManager
       objectReference: {fileID: 0}
     - target: {fileID: 3203375570371492845, guid: 4201026a094fdde4786da0df2069e0c2, type: 3}
+      propertyPath: Currency
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 3203375570371492845, guid: 4201026a094fdde4786da0df2069e0c2, type: 3}
       propertyPath: menuButton
       value: 
       objectReference: {fileID: 0}
@@ -1224,6 +1228,22 @@ PrefabInstance:
       propertyPath: pauseMenuUIPrefab
       value: 
       objectReference: {fileID: 3825415695463233874, guid: 73fe6a16f8d22f84493bf8070f2dfb56, type: 3}
+    - target: {fileID: 3203375570371492845, guid: 4201026a094fdde4786da0df2069e0c2, type: 3}
+      propertyPath: 'PlayerHeldUpgradeIds.Array.data[1]'
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3203375570371492845, guid: 4201026a094fdde4786da0df2069e0c2, type: 3}
+      propertyPath: 'PlayerHeldUpgradeIds.Array.data[2]'
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3203375570371492845, guid: 4201026a094fdde4786da0df2069e0c2, type: 3}
+      propertyPath: 'PlayerHeldUpgradeIds.Array.data[3]'
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3203375570371492845, guid: 4201026a094fdde4786da0df2069e0c2, type: 3}
+      propertyPath: 'PlayerHeldUpgradeIds.Array.data[4]'
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
