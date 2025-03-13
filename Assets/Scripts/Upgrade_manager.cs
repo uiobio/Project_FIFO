@@ -169,7 +169,7 @@ public class Upgrade
     //  string spriteFilePath: file path of the sprite of this Upgrade.
     public Upgrade(string name, string desc, float x, float n, string type, int id, int cost, string spriteFilePath)
     {
-        this.upgrade_name = name;
+        upgrade_name = name;
         this.desc = desc;
         initDesc = desc;
         this.x = x;

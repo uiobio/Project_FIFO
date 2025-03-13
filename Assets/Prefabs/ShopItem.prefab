@@ -151,6 +151,7 @@ MonoBehaviour:
   labelTextHotkeyInfo: (E) Buy
   labelTextHotkeyInfoSoldOut: (E) Replace
   labelTextHotkeyInfoLevelUp: (E) Level Up
+  labelTextHotkeyInfoInsufficientFunds: Not Enough Gold
   labelTextHotkeyInfoColor: '#87CEEB'
   labelTextHotkeyInfoSoldOutColor: '#FF2800'
   labelTextItemCost: 0
@@ -165,9 +166,9 @@ MonoBehaviour:
   - -135
   - 0
   labelPositionOffsetXYZ:
-  - 3.2
-  - 3.4
-  - 0
+  - -1.1
+  - 2.5
+  - 1.5
   labelTriggerHitboxSize:
   - 2
   - 2
@@ -259,8 +260,8 @@ LineRenderer:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
-        time: 0.004840851
-        value: 0.04216729
+        time: 0
+        value: 0.049018487
         inSlope: -0.026749
         outSlope: -0.026749
         tangentMode: 0
@@ -269,7 +270,7 @@ LineRenderer:
         outWeight: 0.45255572
       - serializedVersion: 3
         time: 0.6438351
-        value: 0.024198912
+        value: 0.04474487
         inSlope: -0.046933874
         outSlope: -0.046933874
         tangentMode: 0
@@ -290,7 +291,7 @@ LineRenderer:
       m_RotationOrder: 4
     colorGradient:
       serializedVersion: 2
-      key0: {r: 0.48235297, g: 0.73333335, b: 0.8352942, a: 0.6862745}
+      key0: {r: 0.48235297, g: 0.73333335, b: 0.8352942, a: 0.7647059}
       key1: {r: 0.48235297, g: 0.73333335, b: 0.8352942, a: 0.654902}
       key2: {r: 0, g: 0, b: 0, a: 0}
       key3: {r: 0, g: 0, b: 0, a: 0}
@@ -721,22 +722,22 @@ LineRenderer:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
-        time: 0
-        value: 0.018073663
-        inSlope: 0
-        outSlope: 0
+        time: 0.00806427
+        value: 0.072867975
+        inSlope: -0.02174676
+        outSlope: -0.02174676
         tangentMode: 0
         weightedMode: 0
         inWeight: 0.33333334
-        outWeight: 0.33333334
+        outWeight: 0.5203253
       - serializedVersion: 3
         time: 1
-        value: 0
-        inSlope: 0
-        outSlope: 0
+        value: 0.027397156
+        inSlope: -0.00000036606247
+        outSlope: -0.00000036606247
         tangentMode: 0
         weightedMode: 0
-        inWeight: 0
+        inWeight: 0.28494626
         outWeight: 0
       m_PreInfinity: 2
       m_PostInfinity: 2

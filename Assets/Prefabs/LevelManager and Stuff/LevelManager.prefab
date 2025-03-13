@@ -48,6 +48,7 @@ MonoBehaviour:
   mainUIPrefab: {fileID: 6993848563969293405, guid: 4b21b0de48a90fa44a02f7e65060e2f3, type: 3}
   pauseMenuUIPrefab: {fileID: 3825415695463233874, guid: 73fe6a16f8d22f84493bf8070f2dfb56, type: 3}
   upgradePrefab: {fileID: 4524767290060870829, guid: a7ed141474d227344ac9614b1cd31c3a, type: 3}
-  PlayerHeldUpgradeIds: ffffffffffffffffffffffffffffffffffffffff
+  UpgradeIconUnplugOffset: 30
+  PlayerHeldUpgradeIds: 0000000002000000030000000400000005000000
   Currency: 5
   precisionUpgradeModifier: 0

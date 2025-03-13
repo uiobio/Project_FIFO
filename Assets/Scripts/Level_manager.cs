@@ -27,6 +27,7 @@ public class Level_manager : MonoBehaviour
     private Button quitButton;
     private Button menuButton;
     [SerializeField] private GameObject upgradePrefab;
+    public float UpgradeIconUnplugOffset; // how far the upgrade UI icons "unplug" when you select them
 
     //FIXME: Add this list to a game_constants file
     [System.NonSerialized]
@@ -54,6 +55,10 @@ public class Level_manager : MonoBehaviour
     // The upgrade the player clicks on when replacing/selling
     [System.NonSerialized]
     public int CurrentlySelectedUpgradeIndex = 0;
+
+    // If the player is currently selecting an upgrade to replace/sell
+    [System.NonSerialized]
+    public bool IsCurrentlySelectingUpgrade = false;
 
     [Header("Upgrades")]
     public int[] PlayerHeldUpgradeIds = new int[MAX_PLAYER_UPGRADES];
