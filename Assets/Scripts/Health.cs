@@ -15,7 +15,7 @@ public class Health : MonoBehaviour
 
     void Update()
     {
-        isDead = (health < 0) ? true : false;
+        isDead = (health <= 0) ? true : false;
     }
 
     public void SetMaxHealth(float health)
