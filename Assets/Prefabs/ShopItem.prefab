@@ -151,7 +151,7 @@ MonoBehaviour:
   labelTextHotkeyInfo: (E) Buy
   labelTextHotkeyInfoSoldOut: (E) Replace
   labelTextHotkeyInfoLevelUp: (E) Level Up
-  labelTextHotkeyInfoInsufficientFunds: Not Enough Gold
+  labelTextHotkeyInfoInsufficientFunds: Not Enough Chips
   labelTextHotkeyInfoColor: '#87CEEB'
   labelTextHotkeyInfoSoldOutColor: '#FF2800'
   labelTextItemCost: 0
