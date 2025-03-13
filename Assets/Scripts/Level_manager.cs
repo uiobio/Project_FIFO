@@ -4,7 +4,7 @@ using System;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
-
+using TMPro;
 
 
 public class Level_manager : MonoBehaviour
@@ -26,6 +26,8 @@ public class Level_manager : MonoBehaviour
     [Header("UI")]
     [SerializeField] private GameObject mainUIPrefab;
     [SerializeField] private GameObject upgradePrefab;
+    [SerializeField] private ProgressBar healthBar;
+    [SerializeField] private TMP_Text T_Currency;
 
     //FIXME: Add this list to a game_constants file
     [System.NonSerialized]
