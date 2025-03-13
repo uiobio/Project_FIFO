@@ -4,6 +4,7 @@ using System.Collections.Generic;
 
 public class Shop_room_setup : MonoBehaviour
 {
+    public static Shop_room_setup instance;
     [Header("Shop")]
     // The ShopItem prefab
     [SerializeField]
@@ -25,6 +26,14 @@ public class Shop_room_setup : MonoBehaviour
 
     // List of the 3 upgrades this shop room will display
     List<Upgrade> shopItemUpgrades = new List<Upgrade>();
+
+    // List of the 3 gameObjects associated with the upgrades
+    List<GameObject> shopItemUpgradeGameObjects = new List<GameObject>();
+
+    private void Awake()
+    {
+        instance = this;
+    }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -69,7 +78,10 @@ public class Shop_room_setup : MonoBehaviour
 
             // Append a number to the name of the gameObject
             shopItem.name = shopItem.name + "_" + i.ToString();
+
+            shopItemUpgradeGameObjects.Add(shopItem);
         }
+        Debug.Log("ShopRoom setup finished");
     }
 
     // Generate a list of 3 distinct, random upgrades to place on the shops
@@ -94,7 +106,6 @@ public class Shop_room_setup : MonoBehaviour
                     id = UnityEngine.Random.Range(0, Level_manager.instance.Upgrades.Count);
                 } while (Array.IndexOf(generatedIds, id) != -1);
                 generatedIds[i] = id;
-                id = -1;
             }
             else
             {
@@ -105,6 +116,18 @@ public class Shop_room_setup : MonoBehaviour
         for (int i = 0; i < generatedIds.Length; i++)
         {
             shopItemUpgrades.Add(Level_manager.instance.Upgrades[generatedIds[i]]);
+        }
+    }
+
+    // Update the shop item's label to reflect some upgrade's fields
+    public void UpdateShopItemLabel(Upgrade upgrade)
+    {
+        string nameToSearch = upgrade.Name;
+        for (int i = 0; i < shopItemUpgrades.Count; i++) {
+            if (shopItemUpgrades[i].Name.Equals(nameToSearch))
+            {
+                shopItemUpgradeGameObjects[i].GetComponent<Shop_interaction_manager>().MakeFullFormattedTextString();
+            }
         }
     }
 }

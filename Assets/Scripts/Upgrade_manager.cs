@@ -152,6 +152,7 @@ public class Upgrade
     private int id;
     private int cost;
     private string spriteFilePath;
+    private string initDesc;
 
     // "UI" for the upgrade manager to instantiate a UI icon. "ShopItem" for the upgrade manager to instantiate a ShopItem upgrade.
     private string uiOrShopItem;
@@ -170,20 +171,28 @@ public class Upgrade
     {
         this.upgrade_name = name;
         this.desc = desc;
+        initDesc = desc;
         this.x = x;
         this.n = n;
         this.type = type;
         this.id = id;
         this.cost = cost;
         this.spriteFilePath = spriteFilePath;
-
-        this.desc = desc.Replace("[x]", ((int)this.x).ToString());
+        this.desc = this.desc.Replace("[x]", ((int)this.x).ToString());
         this.desc = this.desc.Replace("[X]", ((int)this.x).ToString());
         this.desc = this.desc.Replace("[n]", ((int)this.n).ToString());
         this.desc = this.desc.Replace("[N]", ((int)this.n).ToString());
         this.desc = this.desc.Replace("[type]", this.type);
 
         this.uiOrShopItem = "ShopItem";
+    }
+    public void UpdateDesc() {
+        desc = initDesc;
+        desc = desc.Replace("[x]", ((int)x).ToString());
+        desc = desc.Replace("[X]", ((int)x).ToString());
+        desc = desc.Replace("[n]", ((int)n).ToString());
+        desc = desc.Replace("[N]", ((int)n).ToString());
+        desc = desc.Replace("[type]", type);
     }
 
     // Getters, Setters

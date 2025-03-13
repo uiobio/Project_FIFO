@@ -75,12 +75,12 @@ public class Player_input_manager : MonoBehaviour
     void Update()
     {
         // If the player is dashing, continue with fixed velocity, reject new player inputs
-        // Otherwise, read inputs
+        // Otherwise, read inputs as long as the game is not paused.
         if (Time.time < dashCompleteTime)
         {
             rb.linearVelocity = orientation.normalized * dashSpeed;
         }
-        else 
+        else if (!Level_manager.instance.isPaused)
         {
             // Called once per frame. Reads input & updates vars
             GetInput();
@@ -106,7 +106,7 @@ public class Player_input_manager : MonoBehaviour
             FireProjectile();
         }
 
-        if (attackInput){
+        if (attackInput && !Cooldown_manager.instance.IsSlashOnCooldown){
             BasicAttack();
         }
     }
@@ -155,7 +155,7 @@ public class Player_input_manager : MonoBehaviour
     void Interact(GameObject interactable)
     {
         // If the other GameObject is a ShopItem and the shop is active, buy the item.
-        if (interactable.tag == "ShopItem" && interactable.GetComponent<Shop_interaction_manager>().IsShopActive) 
+        if (interactable.CompareTag("ShopItem") && interactable.GetComponent<Shop_interaction_manager>().IsShopActive) 
         {
             interactable.GetComponent<Shop_interaction_manager>().buy();
         }
@@ -175,15 +175,15 @@ public class Player_input_manager : MonoBehaviour
     {
         GameObject Slash = Instantiate(slashPrefab, new Vector3(transform.Find("Forward").position.x, transform.position.y, transform.Find("Forward").position.z), transform.rotation);
         Slash.transform.parent = transform;
+        Cooldown_manager.instance.UpdateSlashCooldown();
     }
 
     // Calculates the world position on the projectile firing plane to which the mouse is pointing
     void AimToMousePoint()
     {
-        float hit;
         Plane plane = new Plane(Vector3.up, -1 * ProjectilePlaneY);
         Ray ray = cam.ScreenPointToRay(Input.mousePosition);
-        if (plane.Raycast(ray, out hit))
+        if (plane.Raycast(ray, out float hit))
         {
             aimPoint = ray.GetPoint(hit);
         }
@@ -218,7 +218,7 @@ public class Player_input_manager : MonoBehaviour
             yield return new WaitUntil(() => interactInput ^ !shop.GetComponent<Shop_interaction_manager>().IsShopActive ^ tempIndex != Level_manager.instance.CurrentlySelectedUpgradeIndex);
             if (interactInput)
             {
-                Level_manager.instance.swapOutUpgrade(newUpgrade, shop);
+                Level_manager.instance.SwapOutUpgrade(newUpgrade, shop);
                 break;
             }
             if (!shop.GetComponent<Shop_interaction_manager>().IsShopActive)

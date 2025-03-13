@@ -23,7 +23,10 @@ public class Cooldown_manager : MonoBehaviour
     private float fireProjectileCooldownCompleteTime;
     private bool isFireProjectileOnCooldown;
 
-    
+    [SerializeField]
+    private float slashCooldownLength;
+    private float slashCooldownCompleteTime;
+    private bool isSlashOnCooldown;
 
     // Start is called before the first frame update
     void Start()
@@ -41,6 +44,11 @@ public class Cooldown_manager : MonoBehaviour
         if (isFireProjectileOnCooldown && Time.time >= fireProjectileCooldownCompleteTime) { 
             isFireProjectileOnCooldown = false;
         }
+
+        if (isSlashOnCooldown && Time.time >= slashCooldownCompleteTime)
+        {
+            isSlashOnCooldown = false;
+        }
     }
 
     // Called when dash executed
@@ -55,6 +63,11 @@ public class Cooldown_manager : MonoBehaviour
     {
         isFireProjectileOnCooldown = true;
         fireProjectileCooldownCompleteTime = Time.time + fireProjectileCooldownLength;
+    }
+    public void UpdateSlashCooldown()
+    {
+        isSlashOnCooldown = true;
+        slashCooldownCompleteTime = Time.time + slashCooldownLength;
     }
 
     // Getters, setters
@@ -92,5 +105,23 @@ public class Cooldown_manager : MonoBehaviour
     {
         get { return isFireProjectileOnCooldown; }
         set { isFireProjectileOnCooldown = value; }
+    }
+
+    public float SlashCooldownLength
+    {
+        get { return slashCooldownLength; }
+        set { slashCooldownLength = value; }
+    }
+
+    public float SlashCooldownCompleteTime
+    {
+        get { return slashCooldownCompleteTime; }
+        set { slashCooldownCompleteTime = value; }
+    }
+
+    public bool IsSlashOnCooldown
+    {
+        get { return isSlashOnCooldown; }
+        set { isSlashOnCooldown = value; }
     }
 }

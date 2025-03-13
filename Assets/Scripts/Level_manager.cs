@@ -6,16 +6,11 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
 
-
 public class Level_manager : MonoBehaviour
 {
     public static Level_manager instance;
-    private bool isPaused = false;
-    public GameObject pauseMenuUI; // Assign in Inspector
-    public Button resumeButton;
-    public Button pauseButton;
-    public Button quitButton;
-    public Button menuButton;
+    public bool isPaused = false;
+    
 
     // Most upgrades the player can have at once
     public const int MAX_PLAYER_UPGRADES = 5;
@@ -25,25 +20,31 @@ public class Level_manager : MonoBehaviour
 
     [Header("UI")]
     [SerializeField] private GameObject mainUIPrefab;
+    [SerializeField] private GameObject pauseMenuUIPrefab;
+    private GameObject pauseMenuUI;
+    private Button resumeButton;
+    private Button pauseButton;
+    private Button quitButton;
+    private Button menuButton;
     [SerializeField] private GameObject upgradePrefab;
 
     //FIXME: Add this list to a game_constants file
     [System.NonSerialized]
-    public List<string> types = new List<string>() {"Earth", "Fire", "Ice", "Wind"};
+    public List<string> types = new List<string>() { "Earth", "Fire", "Ice", "Wind" };
 
     //FIXME: Add this to a game_constants file
     [System.NonSerialized]
     public List<List<(int, string)>> Patterns = new List<List<(int, string)>>();
 
     //FIXME: Add to game_constants
-    [System.NonSerialized] 
+    [System.NonSerialized]
     public List<Upgrade> Upgrades = new List<Upgrade>();
 
     [System.NonSerialized]
     public List<string> Pattern_record = new List<string>();
 
     // The upgrades the player currently has
-    [System.NonSerialized] 
+    [System.NonSerialized]
     public List<Upgrade> PlayerHeldUpgrades = new List<Upgrade>();
 
     // The UI icon gameObjects for the upgrades that the player currently has
@@ -56,24 +57,44 @@ public class Level_manager : MonoBehaviour
 
     [Header("Upgrades")]
     public int[] PlayerHeldUpgradeIds = new int[MAX_PLAYER_UPGRADES];
-    
 
-    [SerializeField]
-    int Currency;
+    public int Currency;
+
+    // Upgrade modifiers indicate the amount of effect an upgrade actually applies during runtime
+    public int precisionUpgradeModifier = 0;
+
+    // Upgrade values are the fixed amount that the upgrade should affect by
+    // FIXME: add all upgrade values to game_constants file
+    [System.NonSerialized]
+    public int precisionUpgradeModifierValue = 3;
 
     private void Awake() //Makes levelmanager callable in any script: Level_manager.instance.[]
     {
         if (instance == null)
+        {
             instance = this;
+            DontDestroyOnLoad(gameObject);
+
+            GameObject mainUI = Instantiate(mainUIPrefab);
+            mainUI.name = "UI";
+            DontDestroyOnLoad(mainUI);
+
+            pauseMenuUI = Instantiate(pauseMenuUIPrefab, transform);
+
+            resumeButton = pauseMenuUI.transform.Find("PauseMenu/ResumeButton").GetComponent<Button>();
+            pauseButton = pauseMenuUI.transform.Find("PauseMenu/PauseButton").GetComponent<Button>();
+            quitButton = pauseMenuUI.transform.Find("PauseMenu/QuitButton").GetComponent<Button>();
+            menuButton = pauseMenuUI.transform.Find("PauseMenu/MenuButton").GetComponent<Button>();
+        }
         else
-            Destroy(gameObject);
+        {
+            Destroy(gameObject); // Prevents duplicates on scene reload
+        }
     }
 
     // Start is called before the first frame update
     void Start()
-    {
-        GameObject mainUI = Instantiate(mainUIPrefab);
-        mainUI.name = "UI";
+    { 
         // FIXME: Setting up the Patterns List should be move to gameconstants when one exists.
         //Create lists for all of the Patterns
         List<(int, string)> Temp_1 = new List<(int, string)>();
@@ -89,19 +110,20 @@ public class Level_manager : MonoBehaviour
         Patterns.Add(Temp_2);
         Patterns.Add(Temp_3);
 
-        pauseMenuUI.SetActive(false); // Ensure menu is hidden at start
-
         resumeButton.onClick.AddListener(ResumeGame);
         pauseButton.onClick.AddListener(PauseGame);
         quitButton.onClick.AddListener(QuitGame);
-        menuButton.onClick.AddListener(GoToMainMenu); 
-        
+        menuButton.onClick.AddListener(GoToMainMenu);
+
+        pauseMenuUI.SetActive(false); // Ensure menu is hidden at start
+
+        // FIXME: add to game_constants
         // Add all upgrades to the Upgrade list; move to game_constants when one exists
         // See the constructor for the Upgrade class in 'Upgrade_manager.cs' to find detailed info about parameters.
         // Only one upgrade sprite asset is finished (Precision, as of 02/28), so all others will use the default
-        Upgrades.Add(new Upgrade("Precision", "Deal [X] extra damage on every hit", 10.0f, 0.0f, "", 0, 5, "Assets/Sprites/Upgrades/dmgUpgrade.png"));
+        Upgrades.Add(new Upgrade("Precision", "Deal +[X] extra damage on every hit (currently adding [N] damage)", (float)precisionUpgradeModifierValue, (float)precisionUpgradeModifier, "", 0, 5, "Assets/Sprites/Upgrades/dmgUpgrade.png"));
         Upgrades.Add(new Upgrade("Hardware Acceleration", "Increase dash range by [X]%", 10.0f, 0.0f, "", 0, 5, "Assets/Sprites/Upgrades/upgradeBlank.png"));
-        Upgrades.Add(new Upgrade("Two Birds", "Your attacks hit twice, second attack does [X]% and also applies on-hit effects", 10.0f, 0.0f, "", 0, 5, "Assets/Sprites/Upgrades/upgradeBlank.png"));
+        Upgrades.Add(new Upgrade("Two Birds", "Your attacks hit twice, second attack does [X]% and also applies on-hit effects", 10.0f, 0.0f, "", 0, 5, "Assets/Sprites/Upgrades/twobirdsApplied.png"));
         Upgrades.Add(new Upgrade("Fortified", "Enemy projectiles deal [X]% less damage", 10.0f, 0.0f, "", 0, 5, "Assets/Sprites/Upgrades/upgradeBlank.png"));
         Upgrades.Add(new Upgrade("Boot Up", "Gain a [X]% speed boost for the first [N] sec of each room", 10.0f, 15.0f, "", 0, 5, "Assets/Sprites/Upgrades/upgradeBlank.png"));
         Upgrades.Add(new Upgrade("Spice of Life", "Gain [X]% additional damage for each unique combo used this run", 1.0f, 0.0f, "", 0, 5, "Assets/Sprites/Upgrades/upgradeBlank.png"));
@@ -117,7 +139,7 @@ public class Level_manager : MonoBehaviour
         }
 
         // Sets which upgrades the player has based on the Id array
-        setPlayerHeldUpgradesFromIds();
+        SetPlayerHeldUpgradesFromIds();
 
         // Instantiate the UI icons of those held upgrades
         InstantiateIcons();
@@ -160,12 +182,12 @@ public class Level_manager : MonoBehaviour
         Debug.Log("Dummy key pressed");
     }
 
-    public void GainCoin(int val){
+    public void GainCoin(int val) {
         Currency += val;
     }
 
     //---------------------------------Functions for Patterns----------------------------
-    void UpdatePattern(string type){
+    void UpdatePattern(string type) {
         // Adds a type to the pattern record. Should be called whenever an enemy is killed.
         // This then checks the Pattern Record to see if any Patterns have occurred.
         AddToPattern(type);
@@ -182,7 +204,7 @@ public class Level_manager : MonoBehaviour
     {
         //Add the passed type to the pattern_record
         Pattern_record.Add(type);
-        if(Pattern_record.Count > MAX_PATTERN_LEN){
+        if (Pattern_record.Count > MAX_PATTERN_LEN) {
             Pattern_record.Remove(Pattern_record[0]);
         }
         //int temp = TypeToChar();
@@ -233,7 +255,7 @@ public class Level_manager : MonoBehaviour
     }
     // Pause menu
 
-    void TogglePause()
+    public void TogglePause()
     {
         if (!isPaused)
             PauseGame();
@@ -257,35 +279,40 @@ public class Level_manager : MonoBehaviour
 
     void QuitGame()
     {
-    Time.timeScale = 1f; // Reset before quitting
-    Application.Quit(); // Works only in a built game
+        Time.timeScale = 1f; // Reset before quitting
+        Application.Quit(); // Works only in a built game
 
-    #if UNITY_EDITOR
+#if UNITY_EDITOR
         UnityEditor.EditorApplication.isPlaying = false; // ✅ Stops play mode in the Unity Editor
-    #endif
+#endif
     }
 
     void GoToMainMenu()
     {
         Time.timeScale = 1f; // Reset before loading new scene
+        isPaused = false;
+        pauseMenuUI.SetActive(false); // Hide menu
         SceneManager.LoadScene("Menu Room"); // Replace with actual Main Menu scene name
     }
 
     // Adds upgrades to the PlayerHeldUpgrades list based on the array of upgrade Ids
-    void setPlayerHeldUpgradesFromIds()
+    void SetPlayerHeldUpgradesFromIds()
     {
         for (int i = 0; i < MAX_PLAYER_UPGRADES; i++)
         {
             if (PlayerHeldUpgradeIds[i] != -1)
             {
                 PlayerHeldUpgrades.Add(Upgrades[PlayerHeldUpgradeIds[i]]);
+                ApplyUpgradeModifiers(Upgrades[PlayerHeldUpgradeIds[i]]);
             }
         }
+
+
     }
 
     // Instantiates upgrade UI icons according to the PlayerHeldUpgrades list
-    void InstantiateIcons() 
-    { 
+    void InstantiateIcons()
+    {
         for (int i = 0; i < PlayerHeldUpgrades.Count; i++)
         {
             GameObject uiIcon = Instantiate(upgradePrefab);
@@ -300,19 +327,21 @@ public class Level_manager : MonoBehaviour
 
     // Adds an upgrade to the player's held list
     // Returns true if the upgrade successfully adds to the list
-    public bool AddPlayerUpgrade(Upgrade upgrade, GameObject shop) 
+    public bool AddPlayerUpgrade(Upgrade upgrade, GameObject shop)
     {
         // If the upgrade is already held by the player, then...
-        if (Array.IndexOf(PlayerHeldUpgradeIds, upgrade.Id) > -1)
+        if (Array.IndexOf(PlayerHeldUpgradeIds, upgrade.Id) > -1 && upgrade.Cost <= Currency)
         {
             // POST MVP FIXME: The player already holds this upgrade, so it won't be added to a new slot.
             // For now it doesn't do anything when you try to add an upgrade the player already has (i.e. it lets the add attempt go through without actually adding anything)
             // But we potentially want it to level up the stats provided by the upgrade, so you have some long-term scaling options
             Debug.Log("Add suceeded, duplicate upgrade");
+            ApplyUpgradeModifiers(upgrade);
+            Currency -= upgrade.Cost;
             return true;
         }
         // Otherwise, if the player's max upgrade slots would be exceeded by adding this upgrade, then...
-        else if (PlayerHeldUpgrades.Count + 1 > MAX_PLAYER_UPGRADES)
+        else if (PlayerHeldUpgrades.Count + 1 > MAX_PLAYER_UPGRADES && upgrade.Cost <= Currency)
         {
             // Start the coroutine prompt to select/confirm/replace a currently held upgrade
             ReplacePlayerUpgrade(upgrade, shop);
@@ -320,10 +349,11 @@ public class Level_manager : MonoBehaviour
             return false;
         }
         // Otherwise (if the upgrade is not held by the player AND the max upgrade slots would not be exceeded by adding this upgrade), then...
-        else 
+        else if (upgrade.Cost <= Currency)
         {
             // Upgrade addition succeeds and adds to the player upgrade list.
             PlayerHeldUpgrades.Add(upgrade);
+            ApplyUpgradeModifiers(upgrade);
             PlayerHeldUpgradeIds[PlayerHeldUpgrades.Count - 1] = upgrade.Id;
             // UI is updated accordingly
             GameObject upgradeUIIcon = Instantiate(upgradePrefab);
@@ -335,8 +365,13 @@ public class Level_manager : MonoBehaviour
             upgradeUIIcon.SetActive(true);
             PlayerHeldUpgradeIcons.Add(upgradeUIIcon);
             Debug.Log("Add suceeded");
+            Currency -= upgrade.Cost;
 
             return true;
+        }
+        else { 
+            // U ARE TOO BROKE TO AFFORD UPGRADE
+            return false;
         }
     }
     // Functionality: Starts a coroutine defined in Player_input_manager that prompts the player to select and confirm which upgrade they want to swap
@@ -353,9 +388,11 @@ public class Level_manager : MonoBehaviour
     // Called within the coroutine in Player_input_manager (structured this way to keep all player inputs inside that script... it's a bit clunky but it works
     // Updates all the necessary lists that track the player's currently held upgrades
     // Updates the UI with the new upgrade's icon and destroys the old upgrade's icon.
-    public void swapOutUpgrade(Upgrade newUpgrade, GameObject shop)
+    public void SwapOutUpgrade(Upgrade newUpgrade, GameObject shop)
     {
+        RemoveUpgradeModifiers(PlayerHeldUpgrades[CurrentlySelectedUpgradeIndex]);
         PlayerHeldUpgrades[CurrentlySelectedUpgradeIndex] = newUpgrade;
+        ApplyUpgradeModifiers(newUpgrade);
         PlayerHeldUpgradeIds[CurrentlySelectedUpgradeIndex] = newUpgrade.Id;
 
         GameObject upgradeUIIcon = Instantiate(upgradePrefab);
@@ -368,10 +405,49 @@ public class Level_manager : MonoBehaviour
 
         Destroy(PlayerHeldUpgradeIcons[CurrentlySelectedUpgradeIndex].GetComponent<Upgrade_manager>().upgradeUIIcon);
         Destroy(PlayerHeldUpgradeIcons[CurrentlySelectedUpgradeIndex]);
+        
 
         Debug.Log("Replacing upgrade: " + PlayerHeldUpgradeIcons[CurrentlySelectedUpgradeIndex].GetComponent<Upgrade_manager>().upgrade.Name + " (Upgrade slot index " + CurrentlySelectedUpgradeIndex + ")");
         PlayerHeldUpgradeIcons[CurrentlySelectedUpgradeIndex] = upgradeUIIcon;
 
-        shop.GetComponent<Shop_interaction_manager>().destroyChildren();
+        shop.GetComponent<Shop_interaction_manager>().destroyChildren();   
+    }
+
+    // Called when upgrades are added to the player held upgrades list, essentially applies the effects of upgrades.
+    // POST-MVP: implement more effects
+    void ApplyUpgradeModifiers(Upgrade upgrade) {
+        switch (upgrade.Name) {
+            case "Precision":
+                precisionUpgradeModifier += precisionUpgradeModifierValue;
+                upgrade.N = precisionUpgradeModifier;
+                break;
+            default:
+                Debug.Log("Modifier not found for upgrade with name: \"" + upgrade.Name + "\"");
+                break;
+        }
+        upgrade.UpdateDesc();
+        if (Shop_room_setup.instance != null) {
+            Shop_room_setup.instance.UpdateShopItemLabel(upgrade);
+        }
+    }
+
+    // Called when upgrades are removed from the player held upgrades list, essentially removes the effects of upgrades.
+    // POST-MVP: implement more effects
+    void RemoveUpgradeModifiers(Upgrade upgrade) {
+        switch (upgrade.Name)
+        {
+            case "Precision":
+                precisionUpgradeModifier = 0;
+                upgrade.N = precisionUpgradeModifier;
+                break;
+            default:
+                Debug.Log("Modifier not found for upgrade with name: \"" + upgrade.Name + "\"");
+                break;
+        }
+        upgrade.UpdateDesc();
+        if (Shop_room_setup.instance != null)
+        {
+            Shop_room_setup.instance.UpdateShopItemLabel(upgrade);
+        }
     }
 }
