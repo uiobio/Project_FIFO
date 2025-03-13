@@ -149,7 +149,7 @@ public class Shop_interaction_manager : MonoBehaviour
             if (Array.IndexOf(Level_manager.instance.PlayerHeldUpgradeIds, upgrade.Id) <= -1) 
             {
                 // If the player is at or exceeding the upgrade slot limit
-                if (Level_manager.instance.PlayerHeldUpgrades.Count >= Level_manager.MAX_PLAYER_UPGRADES)
+                if (Level_manager.instance.PlayerHeldUpgrades.Count >= GameState.MAX_PLAYER_UPGRADES)
                 {
                     // Set the text to indicate the slots are full, set the text color to match
                     activeLabelTextHotkeyInfoColor = labelTextHotkeyInfoSoldOutColor;

@@ -55,7 +55,7 @@ public class Player_input_manager : MonoBehaviour
 
     private Rigidbody rb;
     private Camera cam;
-
+    private Health health;
 
     // Start is called before the first frame update
     void Start()
@@ -64,6 +64,11 @@ public class Player_input_manager : MonoBehaviour
         rb.freezeRotation = true;
 
         cam = Camera.main;
+
+        // Set Player health based on GameState
+        health = GetComponent<Health>();
+        health.SetMaxHealth(GameState.Instance.PlayerMaxHealth);
+        health.SetHealth(GameState.Instance.roomCount == 0 ? GameState.Instance.PlayerMaxHealth : GameState.Instance.PlayerHealth);
 
         // Set the initial rotation and projectile aim of the player
         aimPoint.y = ProjectilePlaneY;

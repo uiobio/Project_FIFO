@@ -17,12 +17,6 @@ public class Level_manager : MonoBehaviour
     public Button quitButton;
     public Button menuButton;
 
-    // Most upgrades the player can have at once
-    public const int MAX_PLAYER_UPGRADES = 5;
-
-    // The longest an element pattern can be
-    public const int MAX_PATTERN_LEN = 3;
-
     [Header("UI")]
     [SerializeField] private GameObject mainUIPrefab;
     [SerializeField] private GameObject upgradePrefab;
@@ -55,7 +49,7 @@ public class Level_manager : MonoBehaviour
     public int CurrentlySelectedUpgradeIndex = 0;
 
     [Header("Upgrades")]
-    public int[] PlayerHeldUpgradeIds = new int[MAX_PLAYER_UPGRADES];
+    public int[] PlayerHeldUpgradeIds = new int[GameState.MAX_PLAYER_UPGRADES];
     
 
     [SerializeField]
@@ -116,6 +110,8 @@ public class Level_manager : MonoBehaviour
             Upgrades[i].Id = i;
         }
 
+        // Get PlayerHeldUpgrades from GameState
+        PlayerHeldUpgradeIds = GameState.Instance.PlayerHeldUpgradeIds;
         // Sets which upgrades the player has based on the Id array
         setPlayerHeldUpgradesFromIds();
 
@@ -161,7 +157,17 @@ public class Level_manager : MonoBehaviour
     }
 
     public void GainCoin(int val){
-        Currency += val;
+        GameState.Instance.Currency += val;
+    }
+
+    public bool PayCoin(int val){
+        //Returns TRUE if the player can pay, FALSE otherwise
+        if (GameState.Instance.Currency >= val)
+        {  
+            GameState.Instance.Currency -= val;
+            return true;
+        }
+        return false;
     }
 
     //---------------------------------Functions for Patterns----------------------------
@@ -182,7 +188,7 @@ public class Level_manager : MonoBehaviour
     {
         //Add the passed type to the pattern_record
         Pattern_record.Add(type);
-        if(Pattern_record.Count > MAX_PATTERN_LEN){
+        if(Pattern_record.Count > GameState.MAX_PATTERN_LEN){
             Pattern_record.Remove(Pattern_record[0]);
         }
         //int temp = TypeToChar();
@@ -231,7 +237,8 @@ public class Level_manager : MonoBehaviour
 
         return null;
     }
-    // Pause menu
+    
+    //----------------------------------------Pause menu-----------------------------------
 
     void TogglePause()
     {
@@ -271,10 +278,12 @@ public class Level_manager : MonoBehaviour
         SceneManager.LoadScene("Menu Room"); // Replace with actual Main Menu scene name
     }
 
+    //----------------------------------------Upgrades-----------------------------------
+
     // Adds upgrades to the PlayerHeldUpgrades list based on the array of upgrade Ids
     void setPlayerHeldUpgradesFromIds()
     {
-        for (int i = 0; i < MAX_PLAYER_UPGRADES; i++)
+        for (int i = 0; i < GameState.MAX_PLAYER_UPGRADES; i++)
         {
             if (PlayerHeldUpgradeIds[i] != -1)
             {
@@ -312,7 +321,7 @@ public class Level_manager : MonoBehaviour
             return true;
         }
         // Otherwise, if the player's max upgrade slots would be exceeded by adding this upgrade, then...
-        else if (PlayerHeldUpgrades.Count + 1 > MAX_PLAYER_UPGRADES)
+        else if (PlayerHeldUpgrades.Count + 1 > GameState.MAX_PLAYER_UPGRADES)
         {
             // Start the coroutine prompt to select/confirm/replace a currently held upgrade
             ReplacePlayerUpgrade(upgrade, shop);

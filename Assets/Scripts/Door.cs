@@ -13,7 +13,6 @@ public class Door : MonoBehaviour
         GameState.Instance.roomCount++;
 
         // Load the Basic L Room scene when this is entered
-        // FIXME: make this adjustable room type
         // Bugfix: made it so only the player can trigger the door.
         if (other.tag == "Player")
         {

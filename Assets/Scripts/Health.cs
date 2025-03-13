@@ -21,6 +21,16 @@ public class Health : MonoBehaviour
     public void SetMaxHealth(float health)
     {
         maxHealth = health;
+        UpdateIfPlayer(true, false);
+    }
+
+    public void SetHealth(float SetTo){
+        health = SetTo;
+        UpdateIfPlayer(false, true);
+    }
+
+    public float GetHealth(){
+        return health;
     }
 
     public void Heal(float heal)
@@ -29,6 +39,7 @@ public class Health : MonoBehaviour
         {
             health += heal;
         }
+        UpdateIfPlayer();
     }
 
     public void TakeDamage(float damage)
@@ -36,6 +47,20 @@ public class Health : MonoBehaviour
         if (health > 0)
         {
             health -= damage;
+        }
+        UpdateIfPlayer();
+    }
+
+    // Functions to keep GameState up to date with player's health
+    private void UpdateIfPlayer(){
+        UpdateIfPlayer(true, true);
+    }
+    private void UpdateIfPlayer(bool setMax, bool setHealth)
+    {
+        if(gameObject.tag == "Player")
+        {
+            if(setMax) { GameState.Instance.PlayerMaxHealth = maxHealth; }
+            if(setHealth) { GameState.Instance.PlayerHealth = health; }
         }
     }
 }
