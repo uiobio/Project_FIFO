@@ -29,6 +29,6 @@ public class Projectile : MonoBehaviour
     {
         // Very simple straight-line movement
         // Post MVP: maybe implement different, complex moving patterns (homing, spiraling, etc.)
-        transform.position += transform.forward * speed * Time.deltaTime;
+        transform.position += speed * Time.deltaTime * transform.forward;
     }
 }

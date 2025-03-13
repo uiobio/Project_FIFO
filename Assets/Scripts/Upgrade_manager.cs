@@ -8,9 +8,6 @@ public class Upgrade_manager : MonoBehaviour
     // This prefab is a self-reference to this gameObject's prefab. Used mostly for clarity.
     public GameObject upgradePrefab;
 
-    // UI panel where the upgrade-related things will go
-    private Transform upgradeSlotsPanel;
-
     // The upgrade this gameObject is working with 
     public Upgrade upgrade;
 
@@ -58,7 +55,7 @@ public class Upgrade_manager : MonoBehaviour
     {   
         // Icons are children of the MainCanvas
         GameObject mainUI = GameObject.Find("UI");
-        upgradeSlotsPanel = mainUI.transform.Find("MainCanvas").Find("UpgradeUISlots");
+        gameObject.transform.SetParent(GameObject.Find("LevelManager").transform);
         upgradeUIIcon = Instantiate(upgradePrefab.transform.GetChild(1).gameObject);
         upgradeUIIcon.transform.SetParent(mainUI.transform.Find("MainCanvas"));
         upgradeUIIcon.gameObject.name = upgradeUIIcon.gameObject.name + "_" + gameObject.name.Substring(gameObject.name.Length - 1, 1);
@@ -76,7 +73,7 @@ public class Upgrade_manager : MonoBehaviour
         Image uiImage = upgradeUIIcon.GetComponent<Image>();
         uiImage.sprite = sprite;
 
-        // Set the position based on which upgrade this is, set the size according to a 1920 x 1080 resolution
+        // Set the position based on which player held upgrade index this is, set the size according to a 1920 x 1080 resolution
         upgradeUIIcon.GetComponent<RectTransform>().anchoredPosition = new Vector2(108, 761 - (108) * upgradeIndex);
         upgradeUIIcon.GetComponent<RectTransform>().sizeDelta = new Vector2(150, 102);
         upgradeUIIcon.gameObject.SetActive(true);
@@ -152,6 +149,7 @@ public class Upgrade
     private int id;
     private int cost;
     private string spriteFilePath;
+    private string initDesc;
 
     // "UI" for the upgrade manager to instantiate a UI icon. "ShopItem" for the upgrade manager to instantiate a ShopItem upgrade.
     private string uiOrShopItem;
@@ -168,22 +166,30 @@ public class Upgrade
     //  string spriteFilePath: file path of the sprite of this Upgrade.
     public Upgrade(string name, string desc, float x, float n, string type, int id, int cost, string spriteFilePath)
     {
-        this.upgrade_name = name;
+        upgrade_name = name;
         this.desc = desc;
+        initDesc = desc;
         this.x = x;
         this.n = n;
         this.type = type;
         this.id = id;
         this.cost = cost;
         this.spriteFilePath = spriteFilePath;
-
-        this.desc = desc.Replace("[x]", ((int)this.x).ToString());
+        this.desc = this.desc.Replace("[x]", ((int)this.x).ToString());
         this.desc = this.desc.Replace("[X]", ((int)this.x).ToString());
         this.desc = this.desc.Replace("[n]", ((int)this.n).ToString());
         this.desc = this.desc.Replace("[N]", ((int)this.n).ToString());
         this.desc = this.desc.Replace("[type]", this.type);
 
         this.uiOrShopItem = "ShopItem";
+    }
+    public void UpdateDesc() {
+        desc = initDesc;
+        desc = desc.Replace("[x]", ((int)x).ToString());
+        desc = desc.Replace("[X]", ((int)x).ToString());
+        desc = desc.Replace("[n]", ((int)n).ToString());
+        desc = desc.Replace("[N]", ((int)n).ToString());
+        desc = desc.Replace("[type]", type);
     }
 
     // Getters, Setters
