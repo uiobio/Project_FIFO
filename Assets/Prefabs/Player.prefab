@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 2813901396608048529}
   - component: {fileID: 6030772368928814415}
   - component: {fileID: -5633399821039483507}
-  - component: {fileID: 5199830634458034811}
+  - component: {fileID: 1684782969197543246}
   m_Layer: 3
   m_Name: Player
   m_TagString: Player
@@ -174,7 +174,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dashCooldownLength: 3
   fireProjectileCooldownLength: 0.5
---- !u!114 &5199830634458034811
+  slashCooldownLength: 0.5
+--- !u!114 &1684782969197543246
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

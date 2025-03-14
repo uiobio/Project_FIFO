@@ -22,6 +22,8 @@ public class Shop_interaction_manager : MonoBehaviour
     [SerializeField]
     private string labelTextHotkeyInfoLevelUp = "(E) Level Up"; // Displays when the player currently holds the labeled upgrade REGARDLESS of whether the slots are full
     [SerializeField]
+    private string labelTextHotkeyInfoInsufficientFunds = "Not Enough Chips";
+    [SerializeField]
     private string labelTextHotkeyInfoColor = "#F0FFFF"; // Pale, electric blue, used for the "BUY" and "LEVEL UP" text.
     [SerializeField]
     private string labelTextHotkeyInfoSoldOutColor = "#FF2800"; // Bright ish red, used for the "ALL SLOTS FILLED" text.
@@ -145,31 +147,43 @@ public class Shop_interaction_manager : MonoBehaviour
         // Update the text to reflect changes in game state
         if (other.gameObject.tag == "Player" && !bought)
         {
-            // If the player does not currently hold this upgrade, then...
-            if (Array.IndexOf(Level_manager.instance.PlayerHeldUpgradeIds, upgrade.Id) <= -1) 
+            // If player has enough currency to buy the upgrade...
+            if (upgrade.Cost <= Level_manager.instance.Currency)
             {
                 // If the player is at or exceeding the upgrade slot limit
                 if (Level_manager.instance.PlayerHeldUpgrades.Count >= GameState.MAX_PLAYER_UPGRADES)
+                // If the player does not currently hold this upgrade, then...
+                // if (Array.IndexOf(Level_manager.instance.PlayerHeldUpgradeIds, upgrade.Id) <= -1)
                 {
-                    // Set the text to indicate the slots are full, set the text color to match
-                    activeLabelTextHotkeyInfoColor = labelTextHotkeyInfoSoldOutColor;
-                    activeLabelTextHotkeyInfo = labelTextHotkeyInfoSoldOut;
+                    // If the player is at or exceeding the upgrade slot limit
+                    if (Level_manager.instance.PlayerHeldUpgrades.Count >= Level_manager.MAX_PLAYER_UPGRADES)
+                    {
+                        // Set the text to indicate the slots are full, set the text color to match
+                        activeLabelTextHotkeyInfoColor = labelTextHotkeyInfoSoldOutColor;
+                        activeLabelTextHotkeyInfo = labelTextHotkeyInfoSoldOut;
+                    }
+                    else
+                    {
+                        // Set the text to inform the player of the hotkey and the action ("(E) Buy"), set the color to match
+                        activeLabelTextHotkeyInfoColor = labelTextHotkeyInfoColor;
+                        activeLabelTextHotkeyInfo = labelTextHotkeyInfo;
+                    }
                 }
-                else {
-                    // Set the text to inform the player of the hotkey and the action ("(E) Buy"), set the color to match
+                // Otherwise (if the player currently holds this upgrade), then...
+                else
+                {
+                    // Set the text to inform the player of the hotkey and the action ("(E) Level Up"), set color to match.
                     activeLabelTextHotkeyInfoColor = labelTextHotkeyInfoColor;
-                    activeLabelTextHotkeyInfo = labelTextHotkeyInfo;
+                    activeLabelTextHotkeyInfo = labelTextHotkeyInfoLevelUp;
+
                 }
             }
-            // Otherwise (if the player currently holds this upgrade), then...
-            else
-            {
-                // Set the text to inform the player of the hotkey and the action ("(E) Level Up"), set color to match.
-                activeLabelTextHotkeyInfoColor = labelTextHotkeyInfoColor;
-                activeLabelTextHotkeyInfo = labelTextHotkeyInfoLevelUp;
-                
+            // Otherwise, set the label's text to reflect that the player does not have enough currency.
+            else {
+                activeLabelTextHotkeyInfoColor = labelTextHotkeyInfoSoldOutColor;
+                activeLabelTextHotkeyInfo = labelTextHotkeyInfoInsufficientFunds;
             }
-            label.SetActive(true);
+                label.SetActive(true);
             // Update the TextMeshPro component according to the new active text
             MakeFullFormattedTextString();
 
@@ -220,7 +234,7 @@ public class Shop_interaction_manager : MonoBehaviour
     {
         string text = string.Empty;
         text += "<line-height=90%><b><color=" + activeLabelTextHotkeyInfoColor + ">" + activeLabelTextHotkeyInfo + "</color></b>\n";
-        text += "<line-height=125%><b><size=75%><color=" + labelTextItemCostColor + "> Cost: " + labelTextItemCost.ToString() + " Coins</color></size></b>\n";
+        text += "<line-height=125%><b><size=75%><color=" + labelTextItemCostColor + "> Cost: " + labelTextItemCost.ToString() + " Chips</color></size></b>\n";
         text += "<line-height=95%><b>" + labelTextItemName + "</b>\n";
         text += "<i><size=75%>" + labelTextItemDesc + "</size></i>";
         tmpText.text = text;

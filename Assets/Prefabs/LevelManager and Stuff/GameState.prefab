@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &1938935141146923489
+--- !u!1 &3467618002743239910
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,52 +8,44 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 899006907650152735}
-  - component: {fileID: 3203375570371492845}
+  - component: {fileID: 268113134193308193}
+  - component: {fileID: 9087232338478902905}
   m_Layer: 0
-  m_Name: LevelManager
+  m_Name: GameState
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &899006907650152735
+--- !u!4 &268113134193308193
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1938935141146923489}
+  m_GameObject: {fileID: 3467618002743239910}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -7.23, y: 0.56999993, z: 3}
+  m_LocalPosition: {x: 28.704212, y: 32.58825, z: -27.325846}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &3203375570371492845
+--- !u!114 &9087232338478902905
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1938935141146923489}
+  m_GameObject: {fileID: 3467618002743239910}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5f48463adec31594a8874bd568381b6f, type: 3}
+  m_Script: {fileID: 11500000, guid: 7b6000a851910a543b7451b1875ef976, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isPaused: 0
   mainUIPrefab: {fileID: 6993848563969293405, guid: 4b21b0de48a90fa44a02f7e65060e2f3, type: 3}
-  pauseMenuUIPrefab: {fileID: 3825415695463233874, guid: 73fe6a16f8d22f84493bf8070f2dfb56, type: 3}
   upgradePrefab: {fileID: 4524767290060870829, guid: a7ed141474d227344ac9614b1cd31c3a, type: 3}
-  healthBar: {fileID: 0}
-  T_Currency: {fileID: 0}
-  PlayerHealth: -1
-  PlayerMaxHealth: 20
-  UpgradeIconUnplugOffset: 30
-  PlayerHeldUpgradeIcons: []
-  PlayerHeldUpgradeIds: 0000000002000000030000000400000005000000
-  Currency: 5
+  PlayerHeldUpgradeIds: 0000000000000000000000000000000000000000
   precisionUpgradeModifier: 0
+  roomCount: 0

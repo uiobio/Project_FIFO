@@ -80,12 +80,12 @@ public class Player_input_manager : MonoBehaviour
     void Update()
     {
         // If the player is dashing, continue with fixed velocity, reject new player inputs
-        // Otherwise, read inputs
+        // Otherwise, read inputs as long as the game is not paused.
         if (Time.time < dashCompleteTime)
         {
             rb.linearVelocity = orientation.normalized * dashSpeed;
         }
-        else 
+        else if (!Level_manager.instance.isPaused)
         {
             // Called once per frame. Reads input & updates vars
             GetInput();
@@ -111,7 +111,7 @@ public class Player_input_manager : MonoBehaviour
             FireProjectile();
         }
 
-        if (attackInput){
+        if (attackInput && !Cooldown_manager.instance.IsSlashOnCooldown && !Level_manager.instance.IsCurrentlySelectingUpgrade){
             BasicAttack();
         }
     }
@@ -160,7 +160,7 @@ public class Player_input_manager : MonoBehaviour
     void Interact(GameObject interactable)
     {
         // If the other GameObject is a ShopItem and the shop is active, buy the item.
-        if (interactable.tag == "ShopItem" && interactable.GetComponent<Shop_interaction_manager>().IsShopActive) 
+        if (interactable.CompareTag("ShopItem") && interactable.GetComponent<Shop_interaction_manager>().IsShopActive) 
         {
             interactable.GetComponent<Shop_interaction_manager>().buy();
         }
@@ -180,15 +180,15 @@ public class Player_input_manager : MonoBehaviour
     {
         GameObject Slash = Instantiate(slashPrefab, new Vector3(transform.Find("Forward").position.x, transform.position.y, transform.Find("Forward").position.z), transform.rotation);
         Slash.transform.parent = transform;
+        Cooldown_manager.instance.UpdateSlashCooldown();
     }
 
     // Calculates the world position on the projectile firing plane to which the mouse is pointing
     void AimToMousePoint()
     {
-        float hit;
         Plane plane = new Plane(Vector3.up, -1 * ProjectilePlaneY);
         Ray ray = cam.ScreenPointToRay(Input.mousePosition);
-        if (plane.Raycast(ray, out hit))
+        if (plane.Raycast(ray, out float hit))
         {
             aimPoint = ray.GetPoint(hit);
         }
@@ -209,28 +209,36 @@ public class Player_input_manager : MonoBehaviour
     // It's a coroutine and not a function so it can run alongside Update() blocks, without interrupting core game processes.
     public IEnumerator SelectAndConfirmReplace(Upgrade newUpgrade, GameObject shop)
     {
+        Level_manager levelManager = Level_manager.instance;
+        levelManager.IsCurrentlySelectingUpgrade = true;
         yield return null; // Wait one frame so no extraneous inputs can leak through
         while (true)
         {
-            int tempIndex = Level_manager.instance.CurrentlySelectedUpgradeIndex;
-            shop.GetComponent<Shop_interaction_manager>().ActiveLabelTextHotkeyInfo = "(E) Confirm \n (MB1) Select \n<size=80%><color=" + shop.GetComponent<Shop_interaction_manager>().LabelTextHotkeyInfoColor + "> Replace [<i>" + Level_manager.instance.PlayerHeldUpgrades[Level_manager.instance.CurrentlySelectedUpgradeIndex].Name + "</i>] with the following upgrade?</color><size=100%>";
+            int tempIndex = levelManager.CurrentlySelectedUpgradeIndex;
+            RectTransform upgradeIconTransform = levelManager.PlayerHeldUpgradeIcons[levelManager.CurrentlySelectedUpgradeIndex].GetComponent<Upgrade_manager>().upgradeUIIcon.GetComponent<RectTransform>();
+            Vector2 originalPosition = upgradeIconTransform.anchoredPosition;
+            upgradeIconTransform.anchoredPosition = new Vector2(upgradeIconTransform.anchoredPosition.x + levelManager.UpgradeIconUnplugOffset, upgradeIconTransform.anchoredPosition.y);
+            shop.GetComponent<Shop_interaction_manager>().ActiveLabelTextHotkeyInfo = "(E) Confirm \n (MB1) Select \n<size=80%><color=" + shop.GetComponent<Shop_interaction_manager>().LabelTextHotkeyInfoColor + "> Replace [<i>" + levelManager.PlayerHeldUpgrades[levelManager.CurrentlySelectedUpgradeIndex].Name + "</i>] with the following upgrade?</color><size=100%>";
             shop.GetComponent<Shop_interaction_manager>().MakeFullFormattedTextString();
 
             // Waits until one and only one of three things happens:
-            // a) the player interacts with the ShopItem, confirming the replacement
-            // b) the player leaves the radius of the ShopItem's trigger collider, cancelling the replacement
+            // a) the player interacts with the ShopItem, confirming the replacement, calling the function to swap the old in-slot upgrade with the incoming shop upgrade, and breaking out of the loop 
+            // b) the player leaves the radius of the ShopItem's trigger collider, cancelling the replacement and breaking out of the loop
             // c) the player clicks on a new upgrade icon in the upgrade slot UI, thus continuing the while loop and reloading the text to show the newly selected upgrade to swap.
-            yield return new WaitUntil(() => interactInput ^ !shop.GetComponent<Shop_interaction_manager>().IsShopActive ^ tempIndex != Level_manager.instance.CurrentlySelectedUpgradeIndex);
+            yield return new WaitUntil(() => interactInput ^ !shop.GetComponent<Shop_interaction_manager>().IsShopActive ^ tempIndex != levelManager.CurrentlySelectedUpgradeIndex);
             if (interactInput)
             {
-                Level_manager.instance.swapOutUpgrade(newUpgrade, shop);
+                levelManager.SwapOutUpgrade(newUpgrade, shop, originalPosition);
                 break;
             }
             if (!shop.GetComponent<Shop_interaction_manager>().IsShopActive)
             {
+                upgradeIconTransform.anchoredPosition = originalPosition;
                 break;
             }
+            upgradeIconTransform.anchoredPosition = originalPosition;
         }
+        levelManager.IsCurrentlySelectingUpgrade = false;
     }
 
     // Getters, Setters
