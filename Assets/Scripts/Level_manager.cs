@@ -160,14 +160,18 @@ public class Level_manager : MonoBehaviour
         GameState.Instance.Currency += val;
     }
 
-    public bool PayCoin(int val){
-        //Returns TRUE if the player can pay, FALSE otherwise
-        if (GameState.Instance.Currency >= val)
-        {  
-            GameState.Instance.Currency -= val;
-            return true;
-        }
-        return false;
+    public void PayCoin(int val){
+        Currency -= val;
+        T_Currency.text = Currency.ToString() + " CHIPS";
+    }
+
+    public void SetMaxHealth(float val){
+        PlayerMaxHealth = val;
+    }
+
+    public void SetHealth(float val){
+        PlayerHealth = val;
+        healthBar.SetProgress(PlayerHealth/PlayerMaxHealth);
     }
 
     //---------------------------------Functions for Patterns----------------------------
@@ -318,6 +322,8 @@ public class Level_manager : MonoBehaviour
             // For now it doesn't do anything when you try to add an upgrade the player already has (i.e. it lets the add attempt go through without actually adding anything)
             // But we potentially want it to level up the stats provided by the upgrade, so you have some long-term scaling options
             Debug.Log("Add suceeded, duplicate upgrade");
+            ApplyUpgradeModifiers(upgrade);
+            PayCoin(upgrade.Cost);
             return true;
         }
         // Otherwise, if the player's max upgrade slots would be exceeded by adding this upgrade, then...
@@ -344,6 +350,7 @@ public class Level_manager : MonoBehaviour
             upgradeUIIcon.SetActive(true);
             PlayerHeldUpgradeIcons.Add(upgradeUIIcon);
             Debug.Log("Add suceeded");
+            PayCoin(upgrade.Cost);
 
             return true;
         }
@@ -380,7 +387,8 @@ public class Level_manager : MonoBehaviour
 
         Debug.Log("Replacing upgrade: " + PlayerHeldUpgradeIcons[CurrentlySelectedUpgradeIndex].GetComponent<Upgrade_manager>().upgrade.Name + " (Upgrade slot index " + CurrentlySelectedUpgradeIndex + ")");
         PlayerHeldUpgradeIcons[CurrentlySelectedUpgradeIndex] = upgradeUIIcon;
-
+        upgradeUIIcon.GetComponent<Upgrade_manager>().upgradeUIIcon.GetComponent<RectTransform>().anchoredPosition = originalSlotPosition;
+        PayCoin(newUpgrade.Cost);
         shop.GetComponent<Shop_interaction_manager>().destroyChildren();
     }
 }
