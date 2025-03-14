@@ -13,6 +13,18 @@ public class Health : MonoBehaviour
     [SerializeField]
     private bool isDead = false;
 
+    void Start()
+    {
+        if (gameObject.tag == "Player"){
+            maxHealth = Level_manager.instance.PlayerMaxHealth;
+            health = Level_manager.instance.PlayerHealth;
+            if (health == -1){
+                health = Level_manager.instance.PlayerMaxHealth;
+                UpdateHealth();
+            }
+        }
+    }
+
     void Update()
     {
         isDead = (health <= 0) ? true : false;
@@ -21,6 +33,7 @@ public class Health : MonoBehaviour
     public void SetMaxHealth(float health)
     {
         maxHealth = health;
+        UpdateMax();
     }
 
     public void Heal(float heal)
@@ -28,6 +41,7 @@ public class Health : MonoBehaviour
         if (health < maxHealth)
         {
             health += heal;
+            UpdateHealth();
         }
     }
 
@@ -36,6 +50,20 @@ public class Health : MonoBehaviour
         if (health > 0)
         {
             health -= damage;
+            UpdateHealth();
+        }
+    }
+
+    //Functions used to update the UI Healthbar
+    private void UpdateMax(){
+        if (gameObject.tag == "Player"){
+            Level_manager.instance.SetMaxHealth(maxHealth);
+        }
+    }
+
+    private void UpdateHealth(){
+        if (gameObject.tag == "Player"){
+            Level_manager.instance.SetHealth(health);
         }
     }
 }
