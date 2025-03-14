@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 2813901396608048529}
   - component: {fileID: 6030772368928814415}
   - component: {fileID: -5633399821039483507}
-  - component: {fileID: 1804911649560472555}
+  - component: {fileID: 1684782969197543246}
   m_Layer: 3
   m_Name: Player
   m_TagString: Player
@@ -175,6 +175,21 @@ MonoBehaviour:
   dashCooldownLength: 3
   fireProjectileCooldownLength: 0.5
   slashCooldownLength: 0.5
+--- !u!114 &1684782969197543246
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 328789305087572588}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2d77ddddab070484185ad43d54780acf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHealth: 100
+  health: 100
+  isDead: 0
 --- !u!1 &2526909672888894419
 GameObject:
   m_ObjectHideFlags: 0
