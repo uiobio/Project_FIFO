@@ -4,7 +4,7 @@ using System;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
-
+using TMPro;
 
 public class Level_manager : MonoBehaviour
 {
@@ -28,8 +28,16 @@ public class Level_manager : MonoBehaviour
     private Button quitButton;
     private Button menuButton;
     [SerializeField] private GameObject upgradePrefab;
+
+    [SerializeField] private ProgressBar healthBar;
+    [SerializeField] private TMP_Text T_Currency;
+    [SerializeField] public float PlayerHealth = -1;
+    [SerializeField] public float PlayerMaxHealth = 20;
+
+
     public float UpgradeIconUnplugOffset; // how far the upgrade UI icons "unplug" when you select them
     [System.NonSerialized] public GameObject MusicManager;
+
 
     //FIXME: Add this list to a game_constants file
     [System.NonSerialized]
@@ -81,12 +89,18 @@ public class Level_manager : MonoBehaviour
             instance = this;
             DontDestroyOnLoad(gameObject);
 
+            //Instantiate the main UI
             GameObject mainUI = Instantiate(mainUIPrefab);
             mainUI.name = "UI";
             DontDestroyOnLoad(mainUI);
 
-            pauseMenuUI = Instantiate(pauseMenuUIPrefab, transform);
+            //Get HUD elements to keep them up to date
+            healthBar = mainUI.GetComponent<ProgressBar>();
+            T_Currency = mainUI.transform.Find("MainCanvas/Healthbar/Currency").GetComponent<TMP_Text>();
 
+            //Instantiate the Pause Menu
+            pauseMenuUI = Instantiate(pauseMenuUIPrefab, transform);
+            //Get Buttons for PauseMenu
             resumeButton = pauseMenuUI.transform.Find("PauseMenu/ResumeButton").GetComponent<Button>();
             pauseButton = pauseMenuUI.transform.Find("PauseMenu/PauseButton").GetComponent<Button>();
             quitButton = pauseMenuUI.transform.Find("PauseMenu/QuitButton").GetComponent<Button>();
@@ -100,7 +114,9 @@ public class Level_manager : MonoBehaviour
 
     // Start is called before the first frame update
     void Start()
-    {
+    { 
+        // Give self 0 coins to set HUD currency
+        GainCoin(0);
         MusicManager = Instantiate(musicManagerPrefab);
 
         // FIXME: Setting up the Patterns List should be move to gameconstants when one exists.
@@ -192,6 +208,16 @@ public class Level_manager : MonoBehaviour
 
     public void GainCoin(int val) {
         Currency += val;
+        T_Currency.text = Currency.ToString() + " CHIPS";
+    }
+
+    public void SetMaxHealth(float val){
+        PlayerMaxHealth = val;
+    }
+
+    public void SetHealth(float val){
+        PlayerHealth = val;
+        healthBar.SetProgress(PlayerHealth/PlayerMaxHealth);
     }
 
     //---------------------------------Functions for Patterns----------------------------
