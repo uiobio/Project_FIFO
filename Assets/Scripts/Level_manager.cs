@@ -309,7 +309,7 @@ public class Level_manager : MonoBehaviour
     {
         isPaused = false;
         pauseMenuUI.SetActive(false); // Hide menu
-        MusicManager.GetComponent<MusicManager>().AudioSource.Play();
+        MusicManager.GetComponent<MusicManager>().AudioSource.UnPause();
         Time.timeScale = 1f; // Resume game
     }
 

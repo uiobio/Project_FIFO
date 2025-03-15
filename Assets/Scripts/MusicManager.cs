@@ -25,13 +25,6 @@ public class MusicManager : MonoBehaviour
         SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
-    private void OnEnable()
-    {
-        if (AudioSource != null) {
-            
-        }
-    }
-
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         AudioSource.Stop();
