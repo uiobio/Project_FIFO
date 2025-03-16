@@ -63,9 +63,6 @@ public class Shop_room_setup : MonoBehaviour
             // 0.12f is a good height above the Shop to make the upgrade icon appear more 3D
             GameObject shopItemUpgrade = Instantiate(ShopItemUpgradePrefab, center + new Vector3(0, height + 0.12f, 0), Quaternion.identity);
 
-            // Append a number to the name of the gameObject
-            shopItemUpgrade.name = shopItemUpgrade.name + "_" + i.ToString();
-
             // Give the label and upgrade each a reference to the appropriate Upgrade object.
             shopItemUpgrade.GetComponent<Upgrade_manager>().upgrade = shopItemUpgrades[i];
             shopItem.GetComponent<Shop_interaction_manager>().upgrade = shopItemUpgrades[i];
@@ -76,15 +73,15 @@ public class Shop_room_setup : MonoBehaviour
             shopItemUpgrade.GetComponent<Upgrade_manager>().wallDirection = wallDirection;
             shopItemUpgrade.GetComponent<Upgrade_manager>().CreateGameObjects();
 
-            // Append a number to the name of the gameObject
-            shopItem.name = shopItem.name + "_" + i.ToString();
+            shopItem.name = "Upgrade ShopItem " + shopItemUpgrade.GetComponent<Upgrade_manager>().upgrade.Name;
+            shopItemUpgrade.name = "Data for Upgrade ShopItem " + shopItemUpgrade.GetComponent<Upgrade_manager>().upgrade.Name;
 
             shopItemUpgradeGameObjects.Add(shopItem);
         }
-        Debug.Log("ShopRoom setup finished");
     }
 
     // Generate a list of 3 distinct, random upgrades to place on the shops
+    // FIXME: make these weighted based on how strong the upgrades are, once the upgrades are implemented
     void GenerateUpgrades()
     {
         int[] generatedIds = new int[numShopItems];

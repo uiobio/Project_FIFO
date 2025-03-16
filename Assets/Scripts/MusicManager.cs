@@ -29,7 +29,6 @@ public class MusicManager : MonoBehaviour
     {
         AudioSource.Stop();
         AudioClip = null;
-        Debug.Log("AudioSource isplaying: " + AudioSource.isPlaying);
         // FIXME: replace with actual scene names once we start implementing actual rooms
         if (scene.name == "Basic L Room")
         {
@@ -47,7 +46,7 @@ public class MusicManager : MonoBehaviour
         }
         else
         {
-            Debug.Log("Could not find audio");
+            Debug.LogWarning("Could not find audio for scene named: " + scene.name);
         }
     }
 

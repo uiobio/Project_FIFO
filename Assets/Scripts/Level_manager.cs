@@ -20,15 +20,16 @@ public class Level_manager : MonoBehaviour
 
     [Header("UI")]
     [SerializeField] private GameObject mainUIPrefab;
-    [SerializeField] private GameObject pauseMenuUIPrefab;
     [SerializeField] private GameObject musicManagerPrefab;
+    public GameObject parentUI;
+    private GameObject upgradesUI;
     private GameObject pauseMenuUI;
+    private GameObject healthBarUI;
     private Button resumeButton;
     private Button pauseButton;
     private Button quitButton;
     private Button menuButton;
     [SerializeField] private GameObject upgradePrefab;
-
     [SerializeField] private ProgressBar healthBar;
     [SerializeField] private TMP_Text T_Currency;
     [SerializeField] public float PlayerHealth = -1;
@@ -90,21 +91,27 @@ public class Level_manager : MonoBehaviour
             DontDestroyOnLoad(gameObject);
 
             //Instantiate the main UI
-            GameObject mainUI = Instantiate(mainUIPrefab);
-            mainUI.name = "UI";
-            DontDestroyOnLoad(mainUI);
+            parentUI = Instantiate(mainUIPrefab);
+            parentUI.name = "UI";
+            parentUI.transform.Find("MainCanvas").GetComponent<Canvas>().sortingOrder = 1000;
+            DontDestroyOnLoad(parentUI);
 
             //Get HUD elements to keep them up to date
-            healthBar = mainUI.GetComponent<ProgressBar>();
-            T_Currency = mainUI.transform.Find("MainCanvas/Healthbar/Currency").GetComponent<TMP_Text>();
+            healthBarUI = parentUI.transform.Find("MainCanvas/Healthbar").gameObject;
+            healthBar = parentUI.GetComponent<ProgressBar>();
+            T_Currency = parentUI.transform.Find("MainCanvas/Healthbar/Currency").GetComponent<TMP_Text>();
 
-            //Instantiate the Pause Menu
-            pauseMenuUI = Instantiate(pauseMenuUIPrefab, transform);
+            //Assign the upgradesUI gameobject for easier access
+            upgradesUI = parentUI.transform.Find("MainCanvas/Upgrades").gameObject;
+
+            //Assign the pauseMenuUI gameobject for easier access
+            pauseMenuUI = parentUI.transform.Find("MainCanvas/PauseMenu").gameObject;
+
             //Get Buttons for PauseMenu
-            resumeButton = pauseMenuUI.transform.Find("PauseMenu/ResumeButton").GetComponent<Button>();
-            pauseButton = pauseMenuUI.transform.Find("PauseMenu/PauseButton").GetComponent<Button>();
-            quitButton = pauseMenuUI.transform.Find("PauseMenu/QuitButton").GetComponent<Button>();
-            menuButton = pauseMenuUI.transform.Find("PauseMenu/MenuButton").GetComponent<Button>();
+            resumeButton = pauseMenuUI.transform.Find("ResumeButton").GetComponent<Button>();
+            pauseButton = pauseMenuUI.transform.Find("PauseButton").GetComponent<Button>();
+            quitButton = pauseMenuUI.transform.Find("QuitButton").GetComponent<Button>();
+            menuButton = pauseMenuUI.transform.Find("MenuButton").GetComponent<Button>();
         }
         else
         {
