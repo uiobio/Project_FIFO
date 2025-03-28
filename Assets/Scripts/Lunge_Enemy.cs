@@ -57,7 +57,12 @@ public class LungeEnemy : MonoBehaviour
         if (isLunging && collision.gameObject.CompareTag("Player"))
         {
             Debug.Log("Player hit!");
-            // collision.gameObject.GetComponent<PlayerHealth>()?.TakeDamage(damage);
+
+            Health playerHealth = collision.gameObject.GetComponent<Health>();
+            if (playerHealth != null)
+            {
+                playerHealth.TakeDamage(damage);
+            }
         }
     }
 }
