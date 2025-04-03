@@ -92,7 +92,7 @@ public class Shop_interaction_manager : MonoBehaviour
         activeLabelTextHotkeyInfo = labelTextHotkeyInfo;
         activeLabelTextHotkeyInfoColor = labelTextHotkeyInfoColor;
         label = Instantiate(labelPrefab, transform.position, Quaternion.identity);
-        label.name = label.name + "_" + gameObject.name.Substring(gameObject.name.Length - 1, 1);
+        label.name = "Upgrade Label " + upgrade.Name;
         tmpText = label.transform.Find("Panel").gameObject.transform.Find("TMP").gameObject.GetComponent<TextMeshProUGUI>();
         MakeFullFormattedTextString();
         label.transform.rotation = Quaternion.Euler(labelRotationXYZ[0], labelRotationXYZ[1], labelRotationXYZ[2]);
