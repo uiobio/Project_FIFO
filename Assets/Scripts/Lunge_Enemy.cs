@@ -4,7 +4,7 @@ using UnityEngine;
 public class LungeEnemy : MonoBehaviour
 {
     public float detectionRadius = 5f;
-    public float lungeForce = 20f;
+    public float lungeForce = 10f; // Was 20f before — now shorter lunge
     public float lungeDelay = 0.5f;
     public float recoveryTime = 1.5f;
     public float movementSpeed = 2f;
