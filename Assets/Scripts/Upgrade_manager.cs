@@ -53,12 +53,12 @@ public class Upgrade_manager : MonoBehaviour
     // All magic numbers are positions relative to a 1920 x 1080 resolution.
     private void InstantiateUpgradeUIIcon()
     {   
-        // Icons are children of the MainCanvas
-        GameObject mainUI = GameObject.Find("UI");
-        gameObject.transform.SetParent(GameObject.Find("LevelManager").transform);
+        // Icons are children of the "Upgrades" child of the Main UI canvas"
+        GameObject parentUI = Level_manager.instance.parentUI;
+        gameObject.transform.SetParent(Level_manager.instance.transform);
         upgradeUIIcon = Instantiate(upgradePrefab.transform.GetChild(1).gameObject);
-        upgradeUIIcon.transform.SetParent(mainUI.transform.Find("MainCanvas"));
-        upgradeUIIcon.gameObject.name = upgradeUIIcon.gameObject.name + "_" + gameObject.name.Substring(gameObject.name.Length - 1, 1);
+        upgradeUIIcon.transform.SetParent(parentUI.transform.Find("MainCanvas/Upgrades"));
+        upgradeUIIcon.name = upgradeUIIcon.gameObject.name + "_" + gameObject.name.Substring(gameObject.name.Length - 1, 1);
 
         // Icons render on bottom layer
         upgradeUIIcon.transform.SetSiblingIndex(0);
@@ -74,7 +74,7 @@ public class Upgrade_manager : MonoBehaviour
         uiImage.sprite = sprite;
 
         // Set the position based on which player held upgrade index this is, set the size according to a 1920 x 1080 resolution
-        upgradeUIIcon.GetComponent<RectTransform>().anchoredPosition = new Vector2(108, 761 - (108) * upgradeIndex);
+        upgradeUIIcon.GetComponent<RectTransform>().anchoredPosition = new Vector2(108, 691 - (108) * upgradeIndex);
         upgradeUIIcon.GetComponent<RectTransform>().sizeDelta = new Vector2(150, 102);
         upgradeUIIcon.gameObject.SetActive(true);
     }
@@ -86,7 +86,7 @@ public class Upgrade_manager : MonoBehaviour
         upgradeShopItem = Instantiate(upgradePrefab.transform.GetChild(0), transform.position + new Vector3(0.07f, 0, 0.06f), Quaternion.Euler(new Vector3(45, 34.9999924f, 0)));
 
         upgradeShopItem.transform.SetParent(shopItem);
-        upgradeShopItem.gameObject.name = upgradeShopItem.gameObject.name + "_" + gameObject.name.Substring(gameObject.name.Length - 1, 1);
+        upgradeShopItem.gameObject.name = "Upgrade ShopItem Icon " + upgrade.Name;
 
         // Makes the material of the mesh an image of the upgrade
         Renderer renderer = upgradeShopItem.GetComponent<MeshRenderer>();
