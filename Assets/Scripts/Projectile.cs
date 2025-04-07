@@ -2,58 +2,31 @@ using UnityEngine;
 
 public class Projectile : MonoBehaviour
 {
-    public float lifetime = 5f;
-    public float damage = 10f;
+    [Header("Projectile")]
+    [SerializeField] private float speed = 50f;
+    [SerializeField] private float lifetime = 5f;
+    [SerializeField] private float damage = 10f;
 
     void Start()
     {
         Destroy(gameObject, lifetime);
     }
 
-    void OnCollisionEnter(Collision collision)
+    void Update()
     {
-        if (collision.gameObject.CompareTag("Player"))
+        // Moves the projectile forward every frame
+        transform.position += transform.forward * speed * Time.deltaTime;
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        // Optional: use layers to restrict collisions via physics matrix
+        Health health = other.GetComponent<Health>();
+        if (health != null)
         {
-            Health health = collision.gameObject.GetComponent<Health>();
-            if (health != null)
-            {
-                health.TakeDamage(damage);
-            }
+            health.TakeDamage(damage);
         }
 
         Destroy(gameObject);
     }
 }
-
-// public class Projectile : MonoBehaviour
-// {
-//     [Header("Projectile")]
-//     [SerializeField]
-//     private float speed;
-//     [SerializeField]
-//     private float lifetime;
-//     [SerializeField]
-//     private float damage;
-
-//     // Start is called once before the first execution of Update after the MonoBehaviour is created
-//     void Start()
-//     {
-//         Destroy(gameObject, lifetime);
-//     }
-
-//     // Note: projectiles use the layer collision matrix to calculate what to collide with.
-//     // Thus we don't need to manually calculate what collides with what, meaning this function
-//     // takes no parameters.
-//     private void OnTriggerEnter()
-//     {
-//         Destroy(gameObject);
-//     }
-
-//     // Update is called once per frame
-//     void Update()
-//     {
-//         // Very simple straight-line movement
-//         // Post MVP: maybe implement different, complex moving patterns (homing, spiraling, etc.)
-//         transform.position += speed * Time.deltaTime * transform.forward;
-//     }
-// }
