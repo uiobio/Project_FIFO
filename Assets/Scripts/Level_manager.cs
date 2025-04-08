@@ -51,9 +51,7 @@ public class Level_manager : MonoBehaviour
 
     //FIXME: Add this to a game_constants file
     [System.NonSerialized]
-    public List<List<(int, string)>> Patterns = new List<List<(int, string)>>();
-    //[System.NonSerialized]
-    //public List<List<delegate void PatternFunc()>> PatternFuncs = new List<List<delegate void PatternFunc()>>();
+    public List<List<(int, string, Action)>> Patterns = new List<List<(int, string, Action)>>();
 
 
     //FIXME: Add to game_constants
@@ -155,18 +153,19 @@ public class Level_manager : MonoBehaviour
 
         // FIXME: Setting up the Patterns List should be move to gameconstants when one exists.
         //Create lists for all of the Patterns
-        List<(int, string)> Len1_Patterns = new List<(int, string)>();
-        List<(int, string)> Len2_Patterns = new List<(int, string)>() {
-            (11, "Pair")
+        List<(int, string, Action)> Len1_Patterns = new List<(int, string, Action)>();
+        List<(int, string, Action)> Len2_Patterns = new List<(int, string, Action)>() {
+            (11, "Pair", Dummy) };
+        List<(int, string, Action)> Len2_Actions = new List<(int, string, Action)>(){
+            (1, "TEST", Dummy) };
+        List<(int, string, Action)> Len3_Patterns = new List<(int, string, Action)>() {
+            (121, "Sandwich", Dummy), (111, "Three of a kind", Dummy)
         };
-        List<(int, string)> Len3_Patterns = new List<(int, string)>() {
-            (121, "Sandwich"), (111, "Three of a kind")
+        List<(int, string, Action)> Len4_Patterns = new List<(int, string, Action)>() {
+            (1221, "Big Sandwich", Dummy), (1111, "Four of a kind", Dummy), (4321, "Four Suited", Dummy)
         };
-        List<(int, string)> Len4_Patterns = new List<(int, string)>() {
-            (1221, "Big Sandwich"), (1111, "Four of a kind"), (4321, "Four Suited")
-        };
-        List<(int, string)> Len5_Patterns = new List<(int, string)>() {
-            (12121, "Big Mac"), (11111, "Five of a kind"), (14321, "Club Sandwich")
+        List<(int, string, Action)> Len5_Patterns = new List<(int, string, Action)>() {
+            (12121, "Big Mac", Dummy), (11111, "Five of a kind", Dummy), (14321, "Club Sandwich", Dummy)
         };
 
         //Add all of the Patterns to the Patterns double list
@@ -360,10 +359,15 @@ public class Level_manager : MonoBehaviour
     }
 
     void UsePattern(){
+        //Use the current Pattern's ability
         pat_man.ClearQueue();
         string patternName = "";
         if(currentPattern.Item1 != -1){
+            //Update the name for debugging and use ability
             patternName = Patterns[currentPattern.Item1][currentPattern.Item2].Item2;
+            int l = currentPattern.Item1; //length
+            int j = currentPattern.Item2; //index
+            Patterns[l][j].Item3();
         }
         Debug.Log($"Using {currentPattern}: {patternName}");
         currentPattern = (-1, -1);
