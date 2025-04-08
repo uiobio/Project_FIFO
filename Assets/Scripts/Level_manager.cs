@@ -43,6 +43,9 @@ public class Level_manager : MonoBehaviour
     //FIXME: Add this list to a game_constants file
     [System.NonSerialized]
     public List<string> types = new List<string>() { "Earth", "Fire", "Ice", "Wind" };
+    [System.NonSerialized]
+    public List<Color> typeColors = new List<Color>() { Color.green, Color.red, Color.blue, Color.cyan};
+    static Pattern_UI_manager pat_man;
 
     //FIXME: Add this to a game_constants file
     [System.NonSerialized]
@@ -200,19 +203,19 @@ public class Level_manager : MonoBehaviour
         // Key inputs for testing patterns- feel free to delete/ignore
         if (Input.GetKeyDown("1"))
         {
-            UpdatePattern("Earth");
+            UpdatePattern(0);
         }
         if (Input.GetKeyDown("2"))
         {
-            UpdatePattern("Fire");
+            UpdatePattern(1);
         }
         if (Input.GetKeyDown("3"))
         {
-            UpdatePattern("Ice");
+            UpdatePattern(2);
         }
         if (Input.GetKeyDown("4"))
         {
-            UpdatePattern("Wind");
+            UpdatePattern(3);
         }
     }
 
@@ -236,7 +239,11 @@ public class Level_manager : MonoBehaviour
     }
 
     //---------------------------------Functions for Patterns----------------------------
-    void UpdatePattern(string type) {
+    public static void AddPatternUI(GameObject new_pat_man){
+        pat_man = new_pat_man.GetComponent<Pattern_UI_manager>();
+    }
+
+    public void UpdatePattern(int type) {
         // Adds a type to the pattern record. Should be called whenever an enemy is killed.
         // This then checks the Pattern Record to see if any Patterns have occurred.
         AddToPattern(type);
@@ -255,14 +262,17 @@ public class Level_manager : MonoBehaviour
         Debug.Log($"{pat}:{success} from {pstr}");
     }
 
-    void AddToPattern(string type)
+    void AddToPattern(int type)
     {
         //Add the passed type to the pattern_record
-        Pattern_record.Add(type);
+        Pattern_record.Add(types[type]);
         if (Pattern_record.Count > MAX_PATTERN_LEN) {
             Pattern_record.Remove(Pattern_record[0]);
         }
         //int temp = TypeToChar();
+        if (pat_man != null){
+            pat_man.UpdateQueueColors(type);
+        }
     }
 
     int TypeToChar(){
