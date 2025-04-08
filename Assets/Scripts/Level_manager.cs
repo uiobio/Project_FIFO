@@ -46,10 +46,15 @@ public class Level_manager : MonoBehaviour
     [System.NonSerialized]
     public List<Color> typeColors = new List<Color>() { Color.green, Color.red, Color.blue, Color.cyan};
     static Pattern_UI_manager pat_man;
+    (int, int) currentPattern = (-1, -1);
+
 
     //FIXME: Add this to a game_constants file
     [System.NonSerialized]
     public List<List<(int, string)>> Patterns = new List<List<(int, string)>>();
+    //[System.NonSerialized]
+    //public List<List<delegate void PatternFunc()>> PatternFuncs = new List<List<delegate void PatternFunc()>>();
+
 
     //FIXME: Add to game_constants
     [System.NonSerialized]
@@ -198,6 +203,7 @@ public class Level_manager : MonoBehaviour
         if (Input.GetButtonDown("Dummy"))
         {
             Dummy();
+            UsePattern();
         }
 
         // Key inputs for testing patterns- feel free to delete/ignore
@@ -254,12 +260,10 @@ public class Level_manager : MonoBehaviour
             pat = Patterns[success.Item1][success.Item2].Item2;
         }
 
-        //print pattern record for debugging
-        string pstr = "";
-        for(int j=0; j<Pattern_record.Count; j++){
-            pstr += ", "+Pattern_record[j];
+        currentPattern = success;
+        if (pat_man != null){
+            pat_man.UpdatePatternName(pat);
         }
-        Debug.Log($"{pat}:{success} from {pstr}");
     }
 
     void AddToPattern(int type)
@@ -311,10 +315,6 @@ public class Level_manager : MonoBehaviour
                 return (-1, -1);
             }
             Seq = TypeToChar(start, end);
-            Debug.Log($"Checking {Seq}; {start} to {end} *");
-        }
-        else{
-            Debug.Log($"Checking {Seq}; {start} to {end}");
         }
 
         int l = start-end;
@@ -338,6 +338,16 @@ public class Level_manager : MonoBehaviour
             return sub_left.Item2 > sub_right.Item2 ? sub_left : sub_right;
         }
         return sub_left.Item1 > sub_right.Item1 ? sub_left : sub_right;
+    }
+
+    void UsePattern(){
+        pat_man.ClearQueue();
+        string patternName = "";
+        if(currentPattern.Item1 != -1){
+            patternName = Patterns[currentPattern.Item1][currentPattern.Item2].Item2;
+        }
+        Debug.Log($"Using {currentPattern}: {patternName}");
+        currentPattern = (-1, -1);
     }
     // Pause menu
 
