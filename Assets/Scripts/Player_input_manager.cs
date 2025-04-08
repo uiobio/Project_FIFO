@@ -33,6 +33,8 @@ public class Player_input_manager : MonoBehaviour
     [Header("Slash")]
     [SerializeField]
     private GameObject slashPrefab;
+    [Header("Boost")]
+    public float boostedMult = 1.5f; // 1.5x speed boost
 
     // From InputManager
     private float horizontalInput;
@@ -99,6 +101,10 @@ public class Player_input_manager : MonoBehaviour
         {
             Interact(interactable);
         }
+        else if(interactInput){
+            // Use e for pattern activation if there's no interactable
+            Level_manager.instance.UsePattern();
+        }
 
         // If fireProjectile input pressed and the projectile is not on cooldown, fire the projectile
         if (fireProjectileInput && !Cooldown_manager.instance.IsFireProjectileOnCooldown) 
@@ -140,7 +146,8 @@ public class Player_input_manager : MonoBehaviour
         }
 
         // Add the forces in direction specified by moveDirection and speed specified by moveSpeed
-        rb.AddForce(moveDirection.normalized * moveSpeed, ForceMode.Force);
+        float speed = moveSpeed * (Level_manager.instance.PF.isBoosted ? boostedMult : 1f);
+        rb.AddForce(moveDirection.normalized * speed, ForceMode.Force);
         
     }
 
@@ -248,4 +255,6 @@ public class Player_input_manager : MonoBehaviour
         get { return aimPoint; } 
         set { aimPoint = value; } 
     }
+
+    
 }

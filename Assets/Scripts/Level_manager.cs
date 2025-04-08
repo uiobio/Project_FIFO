@@ -18,6 +18,9 @@ public class Level_manager : MonoBehaviour
     // The longest an element pattern can be
     public const int MAX_PATTERN_LEN = 5;
 
+    [SerializeField]
+    public PatternFuncs PF;
+
     [Header("UI")]
     [SerializeField] private GameObject mainUIPrefab;
     [SerializeField] private GameObject musicManagerPrefab;
@@ -155,9 +158,7 @@ public class Level_manager : MonoBehaviour
         //Create lists for all of the Patterns
         List<(int, string, Action)> Len1_Patterns = new List<(int, string, Action)>();
         List<(int, string, Action)> Len2_Patterns = new List<(int, string, Action)>() {
-            (11, "Pair", Dummy) };
-        List<(int, string, Action)> Len2_Actions = new List<(int, string, Action)>(){
-            (1, "TEST", Dummy) };
+            (11, "Pair", PF.StartSpeedBoost) };
         List<(int, string, Action)> Len3_Patterns = new List<(int, string, Action)>() {
             (121, "Sandwich", Dummy), (111, "Three of a kind", Dummy)
         };
@@ -358,7 +359,7 @@ public class Level_manager : MonoBehaviour
         return sub_left.Item1 > sub_right.Item1 ? sub_left : sub_right;
     }
 
-    void UsePattern(){
+    public void UsePattern(){
         //Use the current Pattern's ability
         pat_man.ClearQueue();
         string patternName = "";

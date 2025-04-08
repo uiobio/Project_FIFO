@@ -3,9 +3,9 @@ using UnityEngine;
 public class Projectile : MonoBehaviour
 {
     [Header("Projectile")]
-    [SerializeField] private float speed = 50f;
-    [SerializeField] private float lifetime = 5f;
-    [SerializeField] private float damage = 10f;
+    [SerializeField] private float speed;
+    [SerializeField] private float lifetime;
+    [SerializeField] private float damage;
 
     void Start()
     {
@@ -27,6 +27,7 @@ public class Projectile : MonoBehaviour
             health.TakeDamage(damage);
         }
 
+        Debug.Log($"Projectile HIT {other.gameObject.name}!");
         Destroy(gameObject);
     }
 }
