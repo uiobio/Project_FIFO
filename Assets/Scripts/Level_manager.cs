@@ -16,7 +16,7 @@ public class Level_manager : MonoBehaviour
     public const int MAX_PLAYER_UPGRADES = 5;
 
     // The longest an element pattern can be
-    public const int MAX_PATTERN_LEN = 3;
+    public const int MAX_PATTERN_LEN = 5;
 
     [Header("UI")]
     [SerializeField] private GameObject mainUIPrefab;
@@ -128,18 +128,26 @@ public class Level_manager : MonoBehaviour
 
         // FIXME: Setting up the Patterns List should be move to gameconstants when one exists.
         //Create lists for all of the Patterns
-        List<(int, string)> Temp_1 = new List<(int, string)>();
-        List<(int, string)> Temp_2 = new List<(int, string)>() {
+        List<(int, string)> Len1_Patterns = new List<(int, string)>();
+        List<(int, string)> Len2_Patterns = new List<(int, string)>() {
             (11, "Pair")
         };
-        List<(int, string)> Temp_3 = new List<(int, string)>() {
+        List<(int, string)> Len3_Patterns = new List<(int, string)>() {
             (121, "Sandwich"), (111, "Three of a kind")
+        };
+        List<(int, string)> Len4_Patterns = new List<(int, string)>() {
+            (1221, "Big Sandwich"), (1111, "Four of a kind"), (4321, "Four Suited")
+        };
+        List<(int, string)> Len5_Patterns = new List<(int, string)>() {
+            (12121, "Big Mac"), (11111, "Five of a kind"), (14321, "Club Sandwich")
         };
 
         //Add all of the Patterns to the Patterns double list
-        Patterns.Add(Temp_1);
-        Patterns.Add(Temp_2);
-        Patterns.Add(Temp_3);
+        Patterns.Add(Len1_Patterns);
+        Patterns.Add(Len2_Patterns);
+        Patterns.Add(Len3_Patterns);
+        Patterns.Add(Len4_Patterns);
+        Patterns.Add(Len5_Patterns);
 
         resumeButton.onClick.AddListener(ResumeGame);
         pauseButton.onClick.AddListener(PauseGame);
@@ -232,13 +240,19 @@ public class Level_manager : MonoBehaviour
         // Adds a type to the pattern record. Should be called whenever an enemy is killed.
         // This then checks the Pattern Record to see if any Patterns have occurred.
         AddToPattern(type);
-        int Cur_Pattern = TypeToChar();
-        print(Cur_Pattern);
-        string success = CheckPatterns(Cur_Pattern);
-        if (success != null)
+        (int, int) success = CheckPatterns();
+        string pat = "";
+        if (success.Item1 != -1)
         {
-            Debug.Log(success);
+            pat = Patterns[success.Item1][success.Item2].Item2;
         }
+
+        //print pattern record for debugging
+        string pstr = "";
+        for(int j=0; j<Pattern_record.Count; j++){
+            pstr += ", "+Pattern_record[j];
+        }
+        Debug.Log($"{pat}:{success} from {pstr}");
     }
 
     void AddToPattern(string type)
@@ -251,16 +265,18 @@ public class Level_manager : MonoBehaviour
         //int temp = TypeToChar();
     }
 
-    int TypeToChar()
+    int TypeToChar(){
+        return TypeToChar(Pattern_record.Count, 0);
+    }
+    int TypeToChar(int start, int end)
     {
         //Translates the 5 most recent slain enemy types to a 5 int number to compare with patterns
         int ret = 0;
         int counter = 1;
 
-        int c = Pattern_record.Count;
         Dictionary<string, int> Translations = new Dictionary<string, int>();
         //Iterate from most recent to oldest of saved types
-        for (int i = c - 1; i >= 0; i--)
+        for (int i = start; i >= end; i--)
         {
             string t = Pattern_record[i];
             if (!Translations.ContainsKey(t))
@@ -268,31 +284,50 @@ public class Level_manager : MonoBehaviour
                 Translations.Add(t, counter);
                 counter++;
             }
-            ret += (int)(Mathf.Pow(10, i) * Translations[t]);
+            ret += (int)(Mathf.Pow(10, start-i) * Translations[t]);
         }
-        Debug.Log(ret);
         return ret;
     }
 
-    string CheckPatterns(int Seq)
+    (int, int) CheckPatterns(){
+        return CheckPatterns(-1, Pattern_record.Count-1, 0);
+    }
+    (int, int) CheckPatterns(int Seq_in, int start, int end)
     {
-        int s = Pattern_record.Count - 1;
-        //Loop through all patterns of size and smaller
-        for (int l = s; l >= 0; l--)
-        { //Loop through pattern sizes
-            for (int i = 0; i < Patterns[l].Count; i++)
-            {
-                if (Patterns[l][i].Item1 == Seq)
-                {
-                    //Found Matching Pattern! Return the name
-                    return Patterns[l][i].Item2;
-                }
+        if(Seq_in == 0){return (-1, -1); }
+        int Seq = Seq_in;
+        if(Seq_in == -1){
+            if (start < end){
+                return (-1, -1);
             }
-            //Go to smaller pattern if no pattern found in that list.
-            Seq = (int)(Seq / 10);
+            Seq = TypeToChar(start, end);
+            Debug.Log($"Checking {Seq}; {start} to {end} *");
+        }
+        else{
+            Debug.Log($"Checking {Seq}; {start} to {end}");
         }
 
-        return null;
+        int l = start-end;
+        int s = Pattern_record.Count - 1;
+        //Loop through all patterns of size and smaller
+        for (int i = 0; i < Patterns[l].Count; i++)
+        {
+            if (Patterns[l][i].Item1 == Seq)
+            {
+                //Found Matching Pattern! Return the name
+                return (l, i);
+            }
+        }
+        //Go to smaller pattern if no pattern found in that list.
+        //Left
+        (int, int) sub_left = CheckPatterns(-1, start, end+1);
+        //Right
+        (int, int) sub_right = CheckPatterns(-1, start-1, end);
+
+        if (sub_left.Item1 == sub_right.Item1){
+            return sub_left.Item2 > sub_right.Item2 ? sub_left : sub_right;
+        }
+        return sub_left.Item1 > sub_right.Item1 ? sub_left : sub_right;
     }
     // Pause menu
 
