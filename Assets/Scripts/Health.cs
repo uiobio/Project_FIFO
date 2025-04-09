@@ -11,7 +11,9 @@ public class Health : MonoBehaviour
     private float health = 100;
 
     [SerializeField]
-    private bool isDead = false;
+    public bool isDead = false;
+    [SerializeField]
+    public ProgressBar PB;
 
     void Start()
     {
@@ -54,16 +56,29 @@ public class Health : MonoBehaviour
         }
     }
 
+    public float GetHealthPercentage()
+    {
+        float per = health/maxHealth;
+        return ((per < 0) ? 0 : ((per > 1) ? 1 : per));
+    }
+
     //Functions used to update the UI Healthbar
     private void UpdateMax(){
         if (gameObject.tag == "Player"){
             Level_manager.instance.SetMaxHealth(maxHealth);
+        }
+        else if (PB != null){
+            PB.SetProgress(GetHealthPercentage());
         }
     }
 
     private void UpdateHealth(){
         if (gameObject.tag == "Player"){
             Level_manager.instance.SetHealth(health);
+        }
+        else if (PB != null){
+            PB.SetProgress(GetHealthPercentage());
+            Debug.Log($"{gameObject.name} updated Health");
         }
     }
 }
