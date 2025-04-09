@@ -14,8 +14,19 @@ public class Respawn_Point : MonoBehaviour
         Spawn();
     }
 
-    void Spawn()
+    public void Spawn()
     {
-        spawnee = Instantiate(SpawneePrefab, transform.position, Quaternion.identity);
+        if(SpawneePrefab != null){
+            spawnee = Instantiate(SpawneePrefab, transform.position, Quaternion.identity);
+            Debug.Log($"Spawned {spawnee.gameObject.name}");
+        }
+    }
+
+    public void SetSpawnee(GameObject new_spawnee){
+        SetSpawnee(new_spawnee, false);
+    }
+    public void SetSpawnee(GameObject new_spawnee, bool spawn){
+        SpawneePrefab = new_spawnee;
+        if (spawn) { Spawn(); }
     }
 }
