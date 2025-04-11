@@ -38,11 +38,18 @@ public class EnemySpawning : MonoBehaviour
                 //Select random position for enemy of rank i
                 int p_rand = (int)Random.Range(0f, (float)allSpawners.Count-1);
                 int r = _rank[i];
+                int element = GetElement();
                 //Spawn enemy of rank r at position p_rand
-                allSpawners[p_rand].GetComponent<Respawn_Point>().SetSpawnee(EnemyRanks[r], true);
+                allSpawners[p_rand].GetComponent<Respawn_Point>().SetSpawnee(EnemyRanks[r], true, true, element);
                 Debug.Log($"Set {EnemyRanks[r].name} to spawn at position {p_rand}");
                 allSpawners.RemoveAt(p_rand);
             }
         }
+    }
+
+    int GetElement(){
+        // Returns an integer representing the element of the enemy.
+        // This is a separate function to allow for more robust element spawning logic in the future.
+        return (int)Random.Range(0f, 3f);
     }
 }

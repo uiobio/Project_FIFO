@@ -49,6 +49,8 @@ public class Level_manager : MonoBehaviour
     [System.NonSerialized]
     public List<Color> typeColors = new List<Color>() { Color.green, Color.red, Color.blue, Color.cyan};
     static Pattern_UI_manager pat_man;
+    [Header("Patterns")]
+    [SerializeField]
     (int, int) currentPattern = (-1, -1);
 
 
@@ -61,7 +63,8 @@ public class Level_manager : MonoBehaviour
     [System.NonSerialized]
     public List<Upgrade> Upgrades = new List<Upgrade>();
 
-    [System.NonSerialized]
+    //[System.NonSerialized]
+    [SerializeField]
     public List<string> Pattern_record = new List<string>();
 
     // The upgrades the player currently has
@@ -361,7 +364,6 @@ public class Level_manager : MonoBehaviour
 
     public void UsePattern(){
         //Use the current Pattern's ability
-        pat_man.ClearQueue();
         string patternName = "";
         if(currentPattern.Item1 != -1){
             //Update the name for debugging and use ability
@@ -371,7 +373,14 @@ public class Level_manager : MonoBehaviour
             Patterns[l][j].Item3();
         }
         Debug.Log($"Using {currentPattern}: {patternName}");
+        //Reset the pattern state
         currentPattern = (-1, -1);
+        ClearPatternQueue();
+        pat_man.ClearQueue();
+    }
+
+    void ClearPatternQueue(){
+        Pattern_record.RemoveAll(c => true);
     }
     // Pause menu
 

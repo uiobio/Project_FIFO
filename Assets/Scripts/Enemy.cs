@@ -8,6 +8,8 @@ public class Enemy : MonoBehaviour
 	private Transform healthBar;
 	[SerializeField]
 	public Vector3 cam_rot;
+	[SerializeField]
+	private int element;
 
     void Start()
 	{
@@ -17,8 +19,13 @@ public class Enemy : MonoBehaviour
 	void Update()
 	{
 		if (H.isDead){
+			Level_manager.instance.UpdatePattern(element);
 			Destroy(gameObject);
 		}
 		healthBar.eulerAngles = cam_rot;
+	}
+
+	public void SetElement(int elem){
+		element = elem;
 	}
 }
