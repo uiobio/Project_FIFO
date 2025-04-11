@@ -65,6 +65,7 @@ public class Health : MonoBehaviour
     //Functions used to update the UI Healthbar
     private void UpdateMax(){
         if (gameObject.tag == "Player"){
+            Debug.Log("PLAYER MAX HEALTH SET");
             Level_manager.instance.SetMaxHealth(maxHealth);
         }
         else if (PB != null){

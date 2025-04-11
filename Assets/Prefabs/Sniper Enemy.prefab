@@ -145,6 +145,7 @@ MonoBehaviour:
   H: {fileID: 5580215127657636561}
   healthBar: {fileID: 8741535053493870743}
   cam_rot: {x: 48.59, y: -135, z: 0}
+  element: 0
 --- !u!114 &5580215127657636561
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -157,8 +158,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2d77ddddab070484185ad43d54780acf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 45
-  health: 45
+  maxHealth: 40
+  health: 40
   isDead: 0
   PB: {fileID: 547693905571498814}
 --- !u!1 &4601289208719956107

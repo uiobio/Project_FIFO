@@ -54,11 +54,12 @@ MonoBehaviour:
   healthBar: {fileID: 0}
   T_Currency: {fileID: 0}
   PlayerHealth: -1
-  PlayerMaxHealth: 20
+  PlayerMaxHealth: 160
   UpgradeIconUnplugOffset: 30
+  Pattern_record: []
   PlayerHeldUpgradeIcons: []
   PlayerHeldUpgradeIds: 0000000002000000030000000400000005000000
-  Currency: 5
+  Currency: 0
   precisionUpgradeModifier: 0
   hardwareAccelUpgradeModifier: 0
   twoBirdsUpgradeModifier: 0
