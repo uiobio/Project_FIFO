@@ -63,6 +63,7 @@ public class Shop_interaction_manager : MonoBehaviour
 
         // Make the label invisible
         label.GetComponent<UpgradeLabel>().Initialize(upgrade);
+        label.GetComponent<UpgradeLabel>().ChangeLabelTextBasedOnGameState(upgrade);
         MakeFullFormattedTextString();
         label.SetActive(false);
     }
@@ -75,6 +76,7 @@ public class Shop_interaction_manager : MonoBehaviour
         // Update the text to reflect changes in game state
         if (other.gameObject.CompareTag("Player") && !bought)
         {
+            label.GetComponent<UpgradeLabel>().ChangeLabelTextBasedOnGameState(upgrade);
             MakeFullFormattedTextString();
             label.SetActive(true);
             // Update the TextMeshPro component according to the new active text
@@ -123,7 +125,6 @@ public class Shop_interaction_manager : MonoBehaviour
     // Makes a single formatted string from this ShopItem's hotkey info, name, and description strings
     public string MakeFullFormattedTextString()
     {
-        label.GetComponent<UpgradeLabel>().ChangeLabelTextBasedOnGameState(upgrade);
         string text = "";
         if (label != null)
         {

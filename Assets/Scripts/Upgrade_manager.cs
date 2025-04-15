@@ -86,10 +86,10 @@ public class Upgrade_manager : MonoBehaviour
         upgradeUIIcon.GetComponent<RectTransform>().anchoredPosition = pos;
         upgradeUIIcon.GetComponent<RectTransform>().sizeDelta = new Vector2(150, 102);
         upgradeUIIcon.GetComponent<RectTransform>().GetWorldCorners(UIIconCorners);
-        UIIconCorners[0] += new Vector3(40, 29, 0);
-        UIIconCorners[1] += new Vector3(40, -7, 0);
-        UIIconCorners[2] += new Vector3(-40, -7, 0);
-        UIIconCorners[3] += new Vector3(-40, 29, 0);
+        UIIconCorners[0] += new Vector3(39, 24, 0);
+        UIIconCorners[1] += new Vector3(39, -6, 0);
+        UIIconCorners[2] += new Vector3(-39, -6, 0);
+        UIIconCorners[3] += new Vector3(-39, 24, 0);
         upgradeUIIcon.SetActive(true);
         MainUI = GameObject.Find("UI");
         Label = MainUI.transform.Find("MainCanvas/Upgrades/Label").gameObject;
@@ -160,12 +160,12 @@ public class Upgrade_manager : MonoBehaviour
         if (Level_manager.instance.isPaused) 
         {
             upgradeUIIcon.GetComponent<RectTransform>().GetWorldCorners(UIIconCorners);
-            UIIconCorners[0] += new Vector3(40, 29, 0);
-            UIIconCorners[1] += new Vector3(40, -7, 0);
-            UIIconCorners[2] += new Vector3(-40, -7, 0);
-            UIIconCorners[3] += new Vector3(-40, 29, 0);
+            UIIconCorners[0] += new Vector3(39, 24, 0);
+            UIIconCorners[1] += new Vector3(39, -6, 0);
+            UIIconCorners[2] += new Vector3(-39, -6, 0);
+            UIIconCorners[3] += new Vector3(-39, 24, 0);
             Level_manager.instance.CurrentlyHoveredUpgradeIndex = upgradeIndex;
-            Label.GetComponent<RectTransform>().anchoredPosition = new Vector2(-450, -60);
+            Label.GetComponent<RectTransform>().anchoredPosition = new Vector2(-440, -60);
             Label.transform.parent.Find("LineBL").gameObject.SetActive(true);
             Label.transform.parent.Find("LineTL").gameObject.SetActive(true);
             Label.transform.parent.Find("LineTR").gameObject.SetActive(true);

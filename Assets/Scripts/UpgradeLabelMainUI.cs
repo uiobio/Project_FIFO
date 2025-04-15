@@ -62,9 +62,9 @@ public class UpgradeLabelMainUI : MonoBehaviour
         labelTextUpgradeName = upgrade.Name;
         labelTextUpgradeDesc = upgrade.Desc;
         string text = string.Empty;
-        text += "<line-height=90%><b><color=" + labelTextHotkeyInfoColor + ">" + labelTextHeader + "</color></b>\n";
-        text += "<line-height=125%><b><size=75%><color=" + labelTextUpgradeNameColor + "> Cost: " + labelTextUpgradeNameCost.ToString() + " Chips</color></size></b>\n";
-        text += "<line-height=95%><b>" + labelTextUpgradeName + "</b>\n";
+        text += "<line-height=90%><size=110%><color=" + labelTextHotkeyInfoColor + ">" + labelTextHeader + "</size></color>\n";
+        text += "<line-height=125%><size=75%><color=" + labelTextUpgradeNameColor + "> Cost: " + labelTextUpgradeNameCost.ToString() + " Chips</color></size>\n";
+        text += "<line-height=95%><size=100%>" + labelTextUpgradeName + "</size>\n";
         text += "<i><size=75%>" + labelTextUpgradeDesc + "</size></i>";
         tmpText.text = text;
         UpdateSize();
@@ -73,10 +73,10 @@ public class UpgradeLabelMainUI : MonoBehaviour
 
     public void DrawLines() {
         labelRectTransform.Find("Panel").GetComponent<RectTransform>().GetWorldCorners(corners);
-        LineBL.GetComponent<ScreenSpaceLine>().fromPos = new Vector2(corners[0][0], corners[0][1]);
-        LineTL.GetComponent<ScreenSpaceLine>().fromPos = new Vector2(corners[1][0], corners[1][1]);
-        LineTR.GetComponent<ScreenSpaceLine>().fromPos = new Vector2(corners[2][0], corners[2][1]);
-        LineBR.GetComponent<ScreenSpaceLine>().fromPos = new Vector2(corners[3][0], corners[3][1]);
+        LineBL.GetComponent<ScreenSpaceLine>().fromPos = new Vector2(corners[0][0] + 3, corners[0][1] + 3);
+        LineTL.GetComponent<ScreenSpaceLine>().fromPos = new Vector2(corners[1][0] + 3, corners[1][1] - 3);
+        LineTR.GetComponent<ScreenSpaceLine>().fromPos = new Vector2(corners[2][0] - 3, corners[2][1] - 3);
+        LineBR.GetComponent<ScreenSpaceLine>().fromPos = new Vector2(corners[3][0] - 3, corners[3][1] + 3);
         LineBL.GetComponent<ScreenSpaceLine>().toPos = new Vector2(upgradeIconCorners[0][0], upgradeIconCorners[0][1]);
         LineTL.GetComponent<ScreenSpaceLine>().toPos = new Vector2(upgradeIconCorners[1][0], upgradeIconCorners[1][1]);
         LineTR.GetComponent<ScreenSpaceLine>().toPos = new Vector2(upgradeIconCorners[2][0], upgradeIconCorners[2][1]);

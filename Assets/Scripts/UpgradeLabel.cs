@@ -151,10 +151,10 @@ public class UpgradeLabel : MonoBehaviour
         string text = string.Empty;
         if (isHeaderDisplayed)
         {
-            text += "<line-height=90%><b><color=" + activeLabelTextHotkeyInfoColor + ">" + activeLabelTextHotkeyInfo + "</color></b>\n";
-            text += "<line-height=125%><b><size=75%><color=" + labelTextItemCostColor + "> Cost: " + labelTextItemCost.ToString() + " Chips</color></size></b>\n";
+            text += "<line-height=90%><size=110%><color=" + activeLabelTextHotkeyInfoColor + ">" + activeLabelTextHotkeyInfo + "</size></color>\n";
+            text += "<line-height=125%><size=75%><color=" + labelTextItemCostColor + "> Cost: " + labelTextItemCost.ToString() + " Chips</color></size>\n";
         }
-        text += "<line-height=95%><b>" + labelTextItemName + "</b>\n";
+        text += "<line-height=95%><size=100%>" + labelTextItemName + "</size>\n";
         text += "<i><size=75%>" + labelTextItemDesc + "</size></i>";
         tmpText.text = text;
         if (label != null)
