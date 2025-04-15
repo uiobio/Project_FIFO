@@ -8,6 +8,9 @@ public class Upgrade_manager : MonoBehaviour
     // This prefab is a self-reference to this gameObject's prefab. Used mostly for clarity.
     public GameObject upgradePrefab;
 
+    // This prefab is a reference to the upgrade's UI label (unused if this upgrade is a shopItem)
+    private GameObject MainUI;
+
     // The upgrade this gameObject is working with 
     public Upgrade upgrade;
 
@@ -25,15 +28,26 @@ public class Upgrade_manager : MonoBehaviour
     // The GameObject that will be instantiated if this upgrade is a UI icon
     public GameObject upgradeUIIcon;
 
+    // The UI label corresponding to this upgrade (unused if this upgrade is a shopItem)
+    public GameObject Label;
+
+    // The screen space positions of the corners of this gameObject (unused if this upgrade is a shopItem).
+    private Vector3[] UIIconCorners = new Vector3[4];
+
+    // Positions of the corners of the RectTransform of the upgrade (unused if this upgrade is a shopItem).
+    private Vector3 upgradeBottomLeft;
+    private Vector3 upgradeTopLeft;
+    private Vector3 upgradeTopRight;
+    private Vector3 upgradeBottomRight;
+
     void Start()
     {
         gameObject.SetActive(false);
     }
 
-    // Update is called once per frame
     void Update()
     {
-
+        Label.SetActive(false);
     }
 
     // Makes different GameObjects depending on whether the upgrade is supposed to be a UI icon or ShopItem.
@@ -58,25 +72,36 @@ public class Upgrade_manager : MonoBehaviour
         gameObject.transform.SetParent(Level_manager.instance.transform);
         upgradeUIIcon = Instantiate(upgradePrefab.transform.GetChild(1).gameObject);
         upgradeUIIcon.transform.SetParent(parentUI.transform.Find("MainCanvas/Upgrades"));
-        upgradeUIIcon.name = upgradeUIIcon.gameObject.name + "_" + gameObject.name.Substring(gameObject.name.Length - 1, 1);
+        upgradeUIIcon.name = upgradeUIIcon.name + "_" + gameObject.name.Substring(gameObject.name.Length - 1, 1);
 
         // Icons render on bottom layer
         upgradeUIIcon.transform.SetSiblingIndex(0);
 
         // Get the image data from the file path, convert to a Sprite, and set the Image to the Sprite.
         byte[] imageBytes = GetImageBytes(upgrade.SpriteFilePath);
-        Texture2D tex = new Texture2D(2, 2, TextureFormat.RGBA32, false);
+        Texture2D tex = new(2, 2, TextureFormat.RGBA32, false);
         ImageConversion.LoadImage(tex, imageBytes);
-        Texture2D scaledTex = new Texture2D(150, 102, TextureFormat.RGBA32, false);
+        Texture2D scaledTex = new(150, 102, TextureFormat.RGBA32, false);
         Graphics.ConvertTexture(tex, scaledTex);
         Sprite sprite = Sprite.Create(scaledTex, new Rect(0, 0, scaledTex.width, scaledTex.height), new Vector2(0.5f, 0.5f));
         Image uiImage = upgradeUIIcon.GetComponent<Image>();
         uiImage.sprite = sprite;
 
         // Set the position based on which player held upgrade index this is, set the size according to a 1920 x 1080 resolution
-        upgradeUIIcon.GetComponent<RectTransform>().anchoredPosition = new Vector2(108, 691 - (108) * upgradeIndex);
+        Vector2 pos = new Vector2(108, 691 - (108) * upgradeIndex);
+        upgradeUIIcon.GetComponent<RectTransform>().anchoredPosition = pos;
         upgradeUIIcon.GetComponent<RectTransform>().sizeDelta = new Vector2(150, 102);
-        upgradeUIIcon.gameObject.SetActive(true);
+        upgradeUIIcon.GetComponent<RectTransform>().GetWorldCorners(UIIconCorners);
+        UIIconCorners[0] += new Vector3(40, 29, 0);
+        UIIconCorners[1] += new Vector3(40, -7, 0);
+        UIIconCorners[2] += new Vector3(-40, -7, 0);
+        UIIconCorners[3] += new Vector3(-40, 29, 0);
+        upgradeUIIcon.SetActive(true);
+        MainUI = GameObject.Find("UI");
+        Label = MainUI.transform.Find("MainCanvas/Upgrades/Label").gameObject;
+        Label.GetComponent<UpgradeLabelMainUI>().Initialize();
+        Label.SetActive(false);
+        Label.transform.parent.Find("HoverSquare").gameObject.SetActive(false);
     }
 
     // Instantiates an upgrade and draws it on top of a ShopItem
@@ -134,6 +159,40 @@ public class Upgrade_manager : MonoBehaviour
     public void OnUIIconClick() {
         Debug.Log("Upgrade with name: " + upgrade.Name + " clicked! (Upgrade slot index " + upgradeIndex + ")");
         Level_manager.instance.CurrentlySelectedUpgradeIndex = upgradeIndex;
+    }
+
+    public void OnUIHoverEnter()
+    {
+        if (Level_manager.instance.isPaused) 
+        {
+            upgradeUIIcon.GetComponent<RectTransform>().GetWorldCorners(UIIconCorners);
+            UIIconCorners[0] += new Vector3(40, 29, 0);
+            UIIconCorners[1] += new Vector3(40, -7, 0);
+            UIIconCorners[2] += new Vector3(-40, -7, 0);
+            UIIconCorners[3] += new Vector3(-40, 29, 0);
+            Level_manager.instance.CurrentlyHoveredUpgradeIndex = upgradeIndex;
+            Label.GetComponent<RectTransform>().anchoredPosition = new Vector2(-400, -60);
+            Label.transform.parent.Find("LineBL").gameObject.SetActive(true);
+            Label.transform.parent.Find("LineTL").gameObject.SetActive(true);
+            Label.transform.parent.Find("LineTR").gameObject.SetActive(true);
+            Label.transform.parent.Find("LineBR").gameObject.SetActive(true);
+            Label.transform.parent.Find("HoverSquare").gameObject.SetActive(true);
+            Label.SetActive(true);
+            Label.GetComponent<UpgradeLabelMainUI>().upgradeIconCorners = UIIconCorners;
+            Label.GetComponent<UpgradeLabelMainUI>().MakeFullFormattedString(upgrade);
+        }
+    }
+
+    public void OnUIHoverExit()
+    {
+        Level_manager.instance.isHoveringUpgradeIcon = false;
+        Debug.Log("Unhovered");
+        Label.SetActive(false);
+        Label.transform.parent.Find("LineBL").gameObject.SetActive(false);
+        Label.transform.parent.Find("LineTL").gameObject.SetActive(false);
+        Label.transform.parent.Find("LineTR").gameObject.SetActive(false);
+        Label.transform.parent.Find("LineBR").gameObject.SetActive(false);
+        Label.transform.parent.Find("HoverSquare").gameObject.SetActive(false);
     }
 }
 

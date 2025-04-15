@@ -213,7 +213,7 @@ public class Player_input_manager : MonoBehaviour
             RectTransform upgradeIconTransform = levelManager.PlayerHeldUpgradeIcons[levelManager.CurrentlySelectedUpgradeIndex].GetComponent<Upgrade_manager>().upgradeUIIcon.GetComponent<RectTransform>();
             Vector2 originalPosition = upgradeIconTransform.anchoredPosition;
             upgradeIconTransform.anchoredPosition = new Vector2(upgradeIconTransform.anchoredPosition.x + levelManager.UpgradeIconUnplugOffset, upgradeIconTransform.anchoredPosition.y);
-            shop.GetComponent<Shop_interaction_manager>().ActiveLabelTextHotkeyInfo = "(E) Confirm \n (MB1) Select \n<size=80%><color=" + shop.GetComponent<Shop_interaction_manager>().LabelTextHotkeyInfoColor + "> Replace [<i>" + levelManager.PlayerHeldUpgrades[levelManager.CurrentlySelectedUpgradeIndex].Name + "</i>] with the following upgrade?</color><size=100%>";
+            shop.GetComponent<Shop_interaction_manager>().Label.GetComponent<UpgradeLabel>().ActiveLabelTextHotkeyInfo = "(E) Confirm \n (MB1) Select \n<size=80%><color=" + shop.GetComponent<Shop_interaction_manager>().Label.GetComponent<UpgradeLabel>().LabelTextHotkeyInfoColor + "> Replace [<i>" + levelManager.PlayerHeldUpgrades[levelManager.CurrentlySelectedUpgradeIndex].Name + "</i>] with the following upgrade?</color><size=100%>";
             shop.GetComponent<Shop_interaction_manager>().MakeFullFormattedTextString();
 
             // Waits until one and only one of three things happens:
