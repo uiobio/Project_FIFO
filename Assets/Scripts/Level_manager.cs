@@ -49,7 +49,14 @@ public class Level_manager : MonoBehaviour
     [System.NonSerialized]
     public List<Color> typeColors = new List<Color>() { Color.green, Color.red, Color.blue, Color.cyan};
     static Pattern_UI_manager pat_man;
+    [Header("Patterns")]
+    [SerializeField]
     (int, int) currentPattern = (-1, -1);
+
+    [SerializeField]
+    public Transform Left_point;
+    [SerializeField]
+    public Transform Right_point;
 
 
     //FIXME: Add this to a game_constants file
@@ -61,8 +68,9 @@ public class Level_manager : MonoBehaviour
     [System.NonSerialized]
     public List<Upgrade> Upgrades = new List<Upgrade>();
 
-    [System.NonSerialized]
-    public List<string> Pattern_record = new List<string>();
+    //[System.NonSerialized]
+    [SerializeField]
+    public List<int> Pattern_record = new List<int>();
 
     // The upgrades the player currently has
     [System.NonSerialized]
@@ -163,10 +171,10 @@ public class Level_manager : MonoBehaviour
             (121, "Sandwich", Dummy), (111, "Three of a kind", Dummy)
         };
         List<(int, string, Action)> Len4_Patterns = new List<(int, string, Action)>() {
-            (1221, "Big Sandwich", Dummy), (1111, "Four of a kind", Dummy), (4321, "Four Suited", Dummy)
+            (1221, "Big Sandwich", PF.DamageSweep), (1111, "Four of a kind", PF.DamageSweep), (4321, "Rainbow", PF.DamageSweep), (2211, "Two Pair", PF.DamageSweep), (1321, "Mini Club", PF.DamageSweep)
         };
         List<(int, string, Action)> Len5_Patterns = new List<(int, string, Action)>() {
-            (12121, "Big Mac", Dummy), (11111, "Five of a kind", Dummy), (14321, "Club Sandwich", Dummy)
+            (12121, "Big Mac", Dummy), (11111, "Five of a kind", Dummy), (14321, "Club Sandwich", Dummy), (22211, "Full House", Dummy), (12321, "Double Decker", Dummy), (11211, "Fat Sandwich", Dummy)
         };
 
         //Add all of the Patterns to the Patterns double list
@@ -272,7 +280,9 @@ public class Level_manager : MonoBehaviour
         // Adds a type to the pattern record. Should be called whenever an enemy is killed.
         // This then checks the Pattern Record to see if any Patterns have occurred.
         AddToPattern(type);
-        (int, int) success = CheckPatterns();
+        ((int, int), (int, int)) ActivePattern = CheckPatterns();
+        (int, int) success = ActivePattern.Item1;
+        (int, int) subpat = ActivePattern.Item2;
         string pat = "";
         if (success.Item1 != -1)
         {
@@ -282,19 +292,17 @@ public class Level_manager : MonoBehaviour
         currentPattern = success;
         if (pat_man != null){
             pat_man.UpdatePatternName(pat);
+            pat_man.UpdateQueueColors(type, subpat.Item1, subpat.Item2);
         }
     }
 
     void AddToPattern(int type)
     {
+        Debug.Log($"Add to Pattern {type}");
         //Add the passed type to the pattern_record
-        Pattern_record.Add(types[type]);
+        Pattern_record.Add(type);
         if (Pattern_record.Count > MAX_PATTERN_LEN) {
             Pattern_record.Remove(Pattern_record[0]);
-        }
-        //int temp = TypeToChar();
-        if (pat_man != null){
-            pat_man.UpdateQueueColors(type);
         }
     }
 
@@ -307,11 +315,11 @@ public class Level_manager : MonoBehaviour
         int ret = 0;
         int counter = 1;
 
-        Dictionary<string, int> Translations = new Dictionary<string, int>();
+        Dictionary<int, int> Translations = new Dictionary<int, int>();
         //Iterate from most recent to oldest of saved types
         for (int i = start; i >= end; i--)
         {
-            string t = Pattern_record[i];
+            int t = Pattern_record[i];
             if (!Translations.ContainsKey(t))
             {
                 Translations.Add(t, counter);
@@ -322,16 +330,16 @@ public class Level_manager : MonoBehaviour
         return ret;
     }
 
-    (int, int) CheckPatterns(){
+    ((int, int), (int, int)) CheckPatterns(){
         return CheckPatterns(-1, Pattern_record.Count-1, 0);
     }
-    (int, int) CheckPatterns(int Seq_in, int start, int end)
+    ((int, int), (int, int)) CheckPatterns(int Seq_in, int start, int end)
     {
-        if(Seq_in == 0){return (-1, -1); }
+        if(Seq_in == 0){return ((-1, -1), (-1, -1)); }
         int Seq = Seq_in;
         if(Seq_in == -1){
             if (start < end){
-                return (-1, -1);
+                return ((-1, -1), (-1, -1));
             }
             Seq = TypeToChar(start, end);
         }
@@ -344,24 +352,26 @@ public class Level_manager : MonoBehaviour
             if (Patterns[l][i].Item1 == Seq)
             {
                 //Found Matching Pattern! Return the name
-                return (l, i);
+                return ((l, i), (start, end));
             }
         }
         //Go to smaller pattern if no pattern found in that list.
         //Left
-        (int, int) sub_left = CheckPatterns(-1, start, end+1);
+        ((int, int), (int, int)) left = CheckPatterns(-1, start, end+1);
+        (int, int) sub_left = left.Item1;
         //Right
-        (int, int) sub_right = CheckPatterns(-1, start-1, end);
+        ((int, int), (int, int)) right = CheckPatterns(-1, start-1, end);
+        (int, int) sub_right = right.Item1;
+        Debug.Log($"Comparing {left} to {right} :: {sub_left.Item1} > {sub_right.Item1}? {sub_left.Item1>sub_right.Item1}-{sub_left.Item2} > {sub_right.Item2}? {sub_left.Item2>sub_right.Item2}");
 
         if (sub_left.Item1 == sub_right.Item1){
-            return sub_left.Item2 > sub_right.Item2 ? sub_left : sub_right;
+            return sub_left.Item2 > sub_right.Item2 ? left : right;
         }
-        return sub_left.Item1 > sub_right.Item1 ? sub_left : sub_right;
+        return sub_left.Item1 > sub_right.Item1 ? left : right;
     }
 
     public void UsePattern(){
         //Use the current Pattern's ability
-        pat_man.ClearQueue();
         string patternName = "";
         if(currentPattern.Item1 != -1){
             //Update the name for debugging and use ability
@@ -371,8 +381,24 @@ public class Level_manager : MonoBehaviour
             Patterns[l][j].Item3();
         }
         Debug.Log($"Using {currentPattern}: {patternName}");
+        //Reset the pattern state
         currentPattern = (-1, -1);
+        ClearPatternQueue();
+        pat_man.ClearQueue();
     }
+
+    void ClearPatternQueue(){
+        Pattern_record.RemoveAll(c => true);
+    }
+
+    //Sets the leftmost and rightmost points of the room - used for pattern func sweeps
+    public void SetLeftPoint(Transform t){
+        Left_point = t;
+    }
+    public void SetRightPoint(Transform t){
+        Right_point = t;        
+    }
+
     // Pause menu
 
     public void TogglePause()

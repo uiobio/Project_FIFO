@@ -54,11 +54,14 @@ MonoBehaviour:
   healthBar: {fileID: 0}
   T_Currency: {fileID: 0}
   PlayerHealth: -1
-  PlayerMaxHealth: 20
+  PlayerMaxHealth: 160
   UpgradeIconUnplugOffset: 30
+  Left_point: {fileID: 0}
+  Right_point: {fileID: 0}
+  Pattern_record: 
   PlayerHeldUpgradeIcons: []
   PlayerHeldUpgradeIds: 0000000002000000030000000400000005000000
-  Currency: 5
+  Currency: 0
   precisionUpgradeModifier: 0
   hardwareAccelUpgradeModifier: 0
   twoBirdsUpgradeModifier: 0
@@ -91,3 +94,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isBoosted: 0
+  DamageSweepPrefab: {fileID: 6740479364000219458, guid: 5200c6428bdb67f43a80d03441d19939, type: 3}

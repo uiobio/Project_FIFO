@@ -160,6 +160,7 @@ MonoBehaviour:
   projectilePrefab: {fileID: 6468611732971071279, guid: 349baaa7c2f8a1a45a3c60c3f8647e0f, type: 3}
   ProjectilePlaneY: 0.7
   slashPrefab: {fileID: 8608725923624236417, guid: d8991ce9c621eca4c8a4c531d037eea4, type: 3}
+  boostedMult: 1.5
 --- !u!114 &-5633399821039483507
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -187,9 +188,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2d77ddddab070484185ad43d54780acf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 100
-  health: 100
+  maxHealth: 160
+  health: 160
   isDead: 0
+  PB: {fileID: 0}
 --- !u!1 &2526909672888894419
 GameObject:
   m_ObjectHideFlags: 0
