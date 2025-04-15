@@ -273,6 +273,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   SpawneePrefab: {fileID: 328789305087572588, guid: 6a120e85c4b8215448cb02a44cba1de9, type: 3}
+  SpawnsEnemy: 0
+  EnemyElement: 0
 --- !u!1 &874944015
 GameObject:
   m_ObjectHideFlags: 0
@@ -367,7 +369,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6858049663151496565, guid: fd257221cef5b5d45b40521e00463138, type: 3}
       propertyPath: m_TagString
-      value: Player
+      value: Untagged
       objectReference: {fileID: 0}
     - target: {fileID: 7518049464966666591, guid: fd257221cef5b5d45b40521e00463138, type: 3}
       propertyPath: m_LocalPosition.x

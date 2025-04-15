@@ -144,6 +144,9 @@ public class Player_input_manager : MonoBehaviour
         {
             orientation = moveDirection.normalized;
         }
+        else{
+            rb.linearVelocity = new Vector3(0f, 0f, 0f);
+        }
 
         // Add the forces in direction specified by moveDirection and speed specified by moveSpeed
         float speed = moveSpeed * (Level_manager.instance.PF.isBoosted ? boostedMult : 1f);

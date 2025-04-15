@@ -230,7 +230,6 @@ public class Level_manager : MonoBehaviour
         if (Input.GetButtonDown("Dummy"))
         {
             Dummy();
-            UsePattern();
         }
 
         // Key inputs for testing patterns- feel free to delete/ignore

@@ -173,7 +173,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ac9b4ec5b39b90947a2b7a8cbe8db39a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dashCooldownLength: 3
+  dashCooldownLength: 0.5
   fireProjectileCooldownLength: 0.5
   slashCooldownLength: 0.5
 --- !u!114 &1684782969197543246
