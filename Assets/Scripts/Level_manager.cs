@@ -53,6 +53,11 @@ public class Level_manager : MonoBehaviour
     [SerializeField]
     (int, int) currentPattern = (-1, -1);
 
+    [SerializeField]
+    public Transform Left_point;
+    [SerializeField]
+    public Transform Right_point;
+
 
     //FIXME: Add this to a game_constants file
     [System.NonSerialized]
@@ -166,7 +171,7 @@ public class Level_manager : MonoBehaviour
             (121, "Sandwich", Dummy), (111, "Three of a kind", Dummy)
         };
         List<(int, string, Action)> Len4_Patterns = new List<(int, string, Action)>() {
-            (1221, "Big Sandwich", Dummy), (1111, "Four of a kind", Dummy), (4321, "Rainbow", Dummy), (2211, "Two Pair", Dummy), (1321, "Mini Club", Dummy)
+            (1221, "Big Sandwich", PF.DamageSweep), (1111, "Four of a kind", PF.DamageSweep), (4321, "Rainbow", PF.DamageSweep), (2211, "Two Pair", PF.DamageSweep), (1321, "Mini Club", PF.DamageSweep)
         };
         List<(int, string, Action)> Len5_Patterns = new List<(int, string, Action)>() {
             (12121, "Big Mac", Dummy), (11111, "Five of a kind", Dummy), (14321, "Club Sandwich", Dummy), (22211, "Full House", Dummy), (12321, "Double Decker", Dummy), (11211, "Fat Sandwich", Dummy)
@@ -385,6 +390,15 @@ public class Level_manager : MonoBehaviour
     void ClearPatternQueue(){
         Pattern_record.RemoveAll(c => true);
     }
+
+    //Sets the leftmost and rightmost points of the room - used for pattern func sweeps
+    public void SetLeftPoint(Transform t){
+        Left_point = t;
+    }
+    public void SetRightPoint(Transform t){
+        Right_point = t;        
+    }
+
     // Pause menu
 
     public void TogglePause()
