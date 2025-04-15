@@ -37,7 +37,7 @@ public class UpgradeLabelMainUI : MonoBehaviour
     public void Initialize()
     {
         labelRectTransform = gameObject.GetComponent<RectTransform>();
-        labelRectTransform.GetWorldCorners(corners);
+        labelRectTransform.Find("Panel").GetComponent<RectTransform>().GetWorldCorners(corners);
         tmpText = transform.Find("Panel").gameObject.transform.Find("TMP").gameObject.GetComponent<TextMeshProUGUI>();
         LineBL = gameObject.transform.parent.Find("LineBL").gameObject;
         LineTL = gameObject.transform.parent.Find("LineTL").gameObject;
@@ -54,7 +54,6 @@ public class UpgradeLabelMainUI : MonoBehaviour
         Canvas.ForceUpdateCanvases();
         LayoutRebuilder.ForceRebuildLayoutImmediate(tmpTextRect);
         labelRectTransform.sizeDelta = new Vector2(labelRectTransform.sizeDelta.x, tmpTextRect.rect.height);
-        labelRectTransform.GetWorldCorners(corners);
         DrawLines();
     }
 
@@ -72,7 +71,8 @@ public class UpgradeLabelMainUI : MonoBehaviour
         return text;
     }
 
-    public void DrawLines() { 
+    public void DrawLines() {
+        labelRectTransform.Find("Panel").GetComponent<RectTransform>().GetWorldCorners(corners);
         LineBL.GetComponent<ScreenSpaceLine>().fromPos = new Vector2(corners[0][0], corners[0][1]);
         LineTL.GetComponent<ScreenSpaceLine>().fromPos = new Vector2(corners[1][0], corners[1][1]);
         LineTR.GetComponent<ScreenSpaceLine>().fromPos = new Vector2(corners[2][0], corners[2][1]);
@@ -83,9 +83,5 @@ public class UpgradeLabelMainUI : MonoBehaviour
         LineBR.GetComponent<ScreenSpaceLine>().toPos = new Vector2(upgradeIconCorners[3][0], upgradeIconCorners[3][1]);
         HoverSquare.GetComponent<RectTransform>().anchoredPosition = new Vector2((upgradeIconCorners[1][0] + upgradeIconCorners[2][0]) / 2, (upgradeIconCorners[1][1] + upgradeIconCorners[0][1]) / 2);
         HoverSquare.GetComponent<RectTransform>().sizeDelta = new Vector2(upgradeIconCorners[2][0] - upgradeIconCorners[1][0], upgradeIconCorners[1][1] - upgradeIconCorners[0][1]);
-    }
-
-    public void DrawLine() { 
-        
     }
 }

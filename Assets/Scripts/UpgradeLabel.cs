@@ -64,7 +64,7 @@ public class UpgradeLabel : MonoBehaviour
 
         // Assign the positions of the label's corners
         Vector3[] corners = new Vector3[4];
-        labelRectTransform = (RectTransform)GameObject.Find("ItemLabelPanel").transform;
+        labelRectTransform = (RectTransform)transform.Find("ItemLabelPanel");
         labelRectTransform.GetWorldCorners(corners);
         labelBottomLeft = corners[0];
         labelTopLeft = corners[1];
@@ -82,7 +82,7 @@ public class UpgradeLabel : MonoBehaviour
         lrTr.enabled = false;
         lrBr.enabled = false;
 
-        tmpText = transform.Find("ItemLabelPanel").gameObject.transform.Find("TMP").gameObject.GetComponent<TextMeshProUGUI>();
+        tmpText = transform.Find("ItemLabelPanel/TMP").gameObject.GetComponent<TextMeshProUGUI>();
     }
 
     // Either draws the lines to the-corners-of-the-label from the-center-point-of-the-top-face-of-this-ShopItem
@@ -123,13 +123,15 @@ public class UpgradeLabel : MonoBehaviour
 
     private void RecalculateCorners()
     {
-        Vector3[] corners = new Vector3[4];
-        labelRectTransform = (RectTransform)GameObject.Find("ItemLabelPanel").transform;
-        labelRectTransform.GetWorldCorners(corners);
-        labelBottomLeft = corners[0];
-        labelTopLeft = corners[1];
-        labelTopRight = corners[2];
-        labelBottomRight = corners[3];
+        if(labelRectTransform != null)
+        {
+            Vector3[] corners = new Vector3[4];
+            labelRectTransform.GetWorldCorners(corners);
+            labelBottomLeft = corners[0];
+            labelTopLeft = corners[1];
+            labelTopRight = corners[2];
+            labelBottomRight = corners[3];
+        }
     }
 
     // Force update/reload the canvases and TMP object to ensure the TMP object assigns its preferred height
@@ -163,6 +165,7 @@ public class UpgradeLabel : MonoBehaviour
     }
 
     public void ChangeLabelTextBasedOnGameState(Upgrade upgrade) {
+        
         // If player has enough currency to buy the upgrade...
         if (upgrade.Cost <= Level_manager.instance.Currency)
         {
@@ -175,12 +178,14 @@ public class UpgradeLabel : MonoBehaviour
                     // Set the text to indicate the slots are full, set the text color to match
                     activeLabelTextHotkeyInfoColor = labelTextHotkeyInfoSoldOutColor;
                     activeLabelTextHotkeyInfo = labelTextHotkeyInfoSoldOut;
+                    Debug.Log("Slots filled, player doesn't hold upgrade");
                 }
                 else
                 {
                     // Set the text to inform the player of the hotkey and the action ("(E) Buy"), set the color to match
                     activeLabelTextHotkeyInfoColor = labelTextHotkeyInfoColor;
                     activeLabelTextHotkeyInfo = labelTextHotkeyInfo;
+                    Debug.Log("Slots not filled, player doesn't hold upgrade");
                 }
             }
             // Otherwise (if the player currently holds this upgrade), then...
@@ -189,7 +194,7 @@ public class UpgradeLabel : MonoBehaviour
                 // Set the text to inform the player of the hotkey and the action ("(E) Level Up"), set color to match.
                 activeLabelTextHotkeyInfoColor = labelTextHotkeyInfoColor;
                 activeLabelTextHotkeyInfo = labelTextHotkeyInfoLevelUp;
-
+                Debug.Log("Player holds upgrade");
             }
         }
         // Otherwise, set the label's text to reflect that the player does not have enough currency.
@@ -197,6 +202,7 @@ public class UpgradeLabel : MonoBehaviour
         {
             activeLabelTextHotkeyInfoColor = labelTextHotkeyInfoSoldOutColor;
             activeLabelTextHotkeyInfo = labelTextHotkeyInfoInsufficientFunds;
+            Debug.Log("Player doesn't have the currency");
         }
     }
     public string LabelTextHotkeyInfo

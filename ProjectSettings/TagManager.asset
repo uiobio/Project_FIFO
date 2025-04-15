@@ -11,6 +11,7 @@ TagManager:
   - ShopItemLabelLines
   - Upgrade
   - UI
+  - Enemy
   layers:
   - Default
   - TransparentFX

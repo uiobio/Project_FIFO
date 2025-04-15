@@ -1192,6 +1192,10 @@ PrefabInstance:
       value: LevelManager
       objectReference: {fileID: 0}
     - target: {fileID: 3203375570371492845, guid: 4201026a094fdde4786da0df2069e0c2, type: 3}
+      propertyPath: Currency
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3203375570371492845, guid: 4201026a094fdde4786da0df2069e0c2, type: 3}
       propertyPath: Left_point
       value: 
       objectReference: {fileID: 952280546}

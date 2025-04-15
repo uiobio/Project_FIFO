@@ -144,27 +144,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   labelPrefab: {fileID: 1013203243436421646, guid: cc2029d4bce78204bab7dd4a9b5749eb, type: 3}
-  labelTextHotkeyInfo: (E) Buy
-  labelTextHotkeyInfoSoldOut: (E) Replace
-  labelTextHotkeyInfoLevelUp: (E) Level Up
-  labelTextHotkeyInfoInsufficientFunds: Not Enough Chips
-  labelTextHotkeyInfoColor: '#87CEEB'
-  labelTextHotkeyInfoSoldOutColor: '#FF2800'
-  labelTextItemCost: 0
-  labelTextItemCostColor: '#FFDF00'
-  labelTextItemName: Default Name
-  labelTextItemDesc: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla
-    facilisi. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere
-    cubilia curae; Donec eget justo at ligula vehicula tincidunt. Sed auctor, velit
-    nec efficitur, nunc sapien
   labelRotationXYZ:
   - 45
   - -135
   - 0
   labelPositionOffsetXYZ:
-  - -1.1
-  - 2.5
-  - 1.5
+  - -1
+  - 1
+  - 2
   labelTriggerHitboxSize:
   - 2
   - 2

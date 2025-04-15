@@ -34,12 +34,6 @@ public class Upgrade_manager : MonoBehaviour
     // The screen space positions of the corners of this gameObject (unused if this upgrade is a shopItem).
     private Vector3[] UIIconCorners = new Vector3[4];
 
-    // Positions of the corners of the RectTransform of the upgrade (unused if this upgrade is a shopItem).
-    private Vector3 upgradeBottomLeft;
-    private Vector3 upgradeTopLeft;
-    private Vector3 upgradeTopRight;
-    private Vector3 upgradeBottomRight;
-
     void Start()
     {
         gameObject.SetActive(false);
@@ -171,7 +165,7 @@ public class Upgrade_manager : MonoBehaviour
             UIIconCorners[2] += new Vector3(-40, -7, 0);
             UIIconCorners[3] += new Vector3(-40, 29, 0);
             Level_manager.instance.CurrentlyHoveredUpgradeIndex = upgradeIndex;
-            Label.GetComponent<RectTransform>().anchoredPosition = new Vector2(-400, -60);
+            Label.GetComponent<RectTransform>().anchoredPosition = new Vector2(-450, -60);
             Label.transform.parent.Find("LineBL").gameObject.SetActive(true);
             Label.transform.parent.Find("LineTL").gameObject.SetActive(true);
             Label.transform.parent.Find("LineTR").gameObject.SetActive(true);
