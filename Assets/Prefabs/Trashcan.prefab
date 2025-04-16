@@ -9,10 +9,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7538102720436726106}
-  - component: {fileID: 8256685986447464011}
   m_Layer: 0
-  m_Name: ShopItem
-  m_TagString: ShopItem
+  m_Name: Trashcan
+  m_TagString: Trashcan
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -26,7 +25,7 @@ Transform:
   m_GameObject: {fileID: 684560450688701559}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 3.28, y: 0.288, z: -2.4}
+  m_LocalPosition: {x: -2.4, y: 0.288, z: 2.4}
   m_LocalScale: {x: 0.94, y: 0.5848223, z: 0.94}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -34,35 +33,6 @@ Transform:
   - {fileID: 2245966294081068185}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8256685986447464011
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 684560450688701559}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ac50cd37c06b4784daaf1a766555ef01, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  labelPrefab: {fileID: 1013203243436421646, guid: cc2029d4bce78204bab7dd4a9b5749eb, type: 3}
-  labelRotationXYZ:
-  - 45
-  - -135
-  - 0
-  labelPositionOffsetXYZ:
-  - -1
-  - 1
-  - 2
-  labelTriggerHitboxSize:
-  - 2
-  - 2
-  - 2
-  pedastalEmpty: {fileID: 21300000, guid: 4b80e60f1aaecb9449189a1fbee9291d, type: 3}
-  pedastalEmptyShadow: {fileID: 21300000, guid: 93071adcebe942741ab22521f1592993, type: 3}
-  pedastalUp: {fileID: 21300000, guid: a8078bf54dcc5c9458935603201c9c14, type: 3}
-  pedastalUpShadow: {fileID: 21300000, guid: 5994b18f34cd04e40a24ad4a1adfa448, type: 3}
 --- !u!1 &2090766816062600479
 GameObject:
   m_ObjectHideFlags: 0
@@ -76,7 +46,6 @@ GameObject:
   - component: {fileID: 2393982788316879072}
   - component: {fileID: 8654368744275000089}
   - component: {fileID: 5586004378863692266}
-  - component: {fileID: 7997883247724813756}
   m_Layer: 0
   m_Name: Collider
   m_TagString: ShopItem
@@ -194,18 +163,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 2, y: 2, z: 2}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &7997883247724813756
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2090766816062600479}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e1a4a4154be642445a8b16b1747d6bb7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &6899898975387234628
 GameObject:
   m_ObjectHideFlags: 0
@@ -282,7 +239,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: a8078bf54dcc5c9458935603201c9c14, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 75d78651653e9de4d8a53b2e4e2d29c8, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0

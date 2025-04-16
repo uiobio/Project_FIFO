@@ -19,9 +19,11 @@ public class UpgradeLabel : MonoBehaviour
     [SerializeField]
     private string labelTextHotkeyInfoInsufficientFunds = "Not Enough Chips";
     [SerializeField]
+    private string labelTextHotkeyInfoTrashcan = "(E) Recycle"; // Displays when the player is looking at the trashcan
+    [SerializeField]
     private string labelTextHotkeyInfoColor = "#87CEEB"; // Pale, electric blue, used for the "BUY" and "LEVEL UP" text.
     [SerializeField]
-    private string labelTextHotkeyInfoSoldOutColor = "#FF2800"; // Bright ish red, used for the "ALL SLOTS FILLED" text.
+    private string labelTextHotkeyInfoSoldOutColor = "#FF2800"; // Bright ish red, used for the "Not enough chips, Replace, and Recycle" text.
     private string activeLabelTextHotkeyInfo = "(E) Buy"; // The currently displayed hotkey info text
     private string activeLabelTextHotkeyInfoColor = "#87CEEB"; // The currently displayed hotkey info text color
     [SerializeField]
@@ -48,6 +50,8 @@ public class UpgradeLabel : MonoBehaviour
     private Vector3 labelTopLeft;
     private Vector3 labelTopRight;
     private Vector3 labelBottomRight;
+
+    public bool IsTrashcan { get; set; } = false; // Whether this label is for a trashcan or not
 
     public void Initialize(Upgrade upgrade) 
     {
@@ -151,8 +155,12 @@ public class UpgradeLabel : MonoBehaviour
         string text = string.Empty;
         if (isHeaderDisplayed)
         {
-            text += "<line-height=90%><size=110%><color=" + activeLabelTextHotkeyInfoColor + ">" + activeLabelTextHotkeyInfo + "</size></color>\n";
-            text += "<line-height=125%><size=75%><color=" + labelTextItemCostColor + "> Cost: " + labelTextItemCost.ToString() + " Chips</color></size>\n";
+            if (!IsTrashcan) {
+                text += "<line-height=90%><size=110%><color=" + activeLabelTextHotkeyInfoColor + ">" + activeLabelTextHotkeyInfo + "</size></color>\n";
+                text += "<line-height=125%><size=75%><color=" + labelTextItemCostColor + "> Cost: " + labelTextItemCost.ToString() + " Chips</color></size>\n"; 
+            } else {
+                text += "<line-height=125%><size=110%><color=" + activeLabelTextHotkeyInfoColor + ">" + activeLabelTextHotkeyInfo + "</size></color>\n";
+            }
         }
         text += "<line-height=95%><size=100%>" + labelTextItemName + "</size>\n";
         text += "<i><size=75%>" + labelTextItemDesc + "</size></i>";
@@ -165,44 +173,54 @@ public class UpgradeLabel : MonoBehaviour
     }
 
     public void ChangeLabelTextBasedOnGameState(Upgrade upgrade) {
-        
-        // If player has enough currency to buy the upgrade...
-        if (upgrade.Cost <= Level_manager.instance.Currency)
-        {
-            // If the player does not currently hold this upgrade, then...
-            if (Array.IndexOf(Level_manager.instance.PlayerHeldUpgradeIds, upgrade.Id) <= -1)
+        if (!IsTrashcan) {
+            // If player has enough currency to buy the upgrade...
+            if (upgrade.Cost <= Level_manager.instance.Currency)
             {
-                // If the player is at or exceeding the upgrade slot limit
-                if (Level_manager.instance.PlayerHeldUpgrades.Count >= Level_manager.MAX_PLAYER_UPGRADES)
+                // If the player does not currently hold this upgrade, then...
+                if (Array.IndexOf(Level_manager.instance.PlayerHeldUpgradeIds, upgrade.Id) <= -1)
                 {
-                    // Set the text to indicate the slots are full, set the text color to match
-                    activeLabelTextHotkeyInfoColor = labelTextHotkeyInfoSoldOutColor;
-                    activeLabelTextHotkeyInfo = labelTextHotkeyInfoSoldOut;
-                    Debug.Log("Slots filled, player doesn't hold upgrade");
+                    // If the player is at or exceeding the upgrade slot limit
+                    if (Level_manager.instance.PlayerHeldUpgrades.Count >= Level_manager.MAX_PLAYER_UPGRADES)
+                    {
+                        // Set the text to indicate the slots are full, set the text color to match
+                        activeLabelTextHotkeyInfoColor = labelTextHotkeyInfoSoldOutColor;
+                        activeLabelTextHotkeyInfo = labelTextHotkeyInfoSoldOut;
+                    }
+                    else
+                    {
+                        // Set the text to inform the player of the hotkey and the action ("(E) Buy"), set the color to match
+                        activeLabelTextHotkeyInfoColor = labelTextHotkeyInfoColor;
+                        activeLabelTextHotkeyInfo = labelTextHotkeyInfo;
+                    }
                 }
+                // Otherwise (if the player currently holds this upgrade), then...
                 else
                 {
-                    // Set the text to inform the player of the hotkey and the action ("(E) Buy"), set the color to match
+                    // Set the text to inform the player of the hotkey and the action ("(E) Level Up"), set color to match.
                     activeLabelTextHotkeyInfoColor = labelTextHotkeyInfoColor;
-                    activeLabelTextHotkeyInfo = labelTextHotkeyInfo;
-                    Debug.Log("Slots not filled, player doesn't hold upgrade");
+                    activeLabelTextHotkeyInfo = labelTextHotkeyInfoLevelUp;
                 }
             }
-            // Otherwise (if the player currently holds this upgrade), then...
+            // Otherwise, set the label's text to reflect that the player does not have enough currency.
             else
             {
-                // Set the text to inform the player of the hotkey and the action ("(E) Level Up"), set color to match.
-                activeLabelTextHotkeyInfoColor = labelTextHotkeyInfoColor;
-                activeLabelTextHotkeyInfo = labelTextHotkeyInfoLevelUp;
-                Debug.Log("Player holds upgrade");
+                activeLabelTextHotkeyInfoColor = labelTextHotkeyInfoSoldOutColor;
+                activeLabelTextHotkeyInfo = labelTextHotkeyInfoInsufficientFunds;
             }
-        }
-        // Otherwise, set the label's text to reflect that the player does not have enough currency.
-        else
+        } else
         {
             activeLabelTextHotkeyInfoColor = labelTextHotkeyInfoSoldOutColor;
-            activeLabelTextHotkeyInfo = labelTextHotkeyInfoInsufficientFunds;
-            Debug.Log("Player doesn't have the currency");
+            activeLabelTextHotkeyInfo = labelTextHotkeyInfoTrashcan;
+        }
+    }
+
+    public void SetNewUpgrade(Upgrade upgrade) { 
+        if (upgrade != null)
+        {
+            labelTextItemName = upgrade.Name;
+            labelTextItemDesc = upgrade.Desc;
+            labelTextItemCost = upgrade.Cost;
         }
     }
     public string LabelTextHotkeyInfo

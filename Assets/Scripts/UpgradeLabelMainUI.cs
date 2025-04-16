@@ -36,6 +36,7 @@ public class UpgradeLabelMainUI : MonoBehaviour
     public Vector3[] upgradeIconCorners = new Vector3[4];
     public void Initialize()
     {
+        Debug.Log("I'm a label and I'm initialized!");
         labelRectTransform = gameObject.GetComponent<RectTransform>();
         labelRectTransform.Find("Panel").GetComponent<RectTransform>().GetWorldCorners(corners);
         tmpText = transform.Find("Panel").gameObject.transform.Find("TMP").gameObject.GetComponent<TextMeshProUGUI>();
@@ -44,6 +45,12 @@ public class UpgradeLabelMainUI : MonoBehaviour
         LineTR = gameObject.transform.parent.Find("LineTR").gameObject;
         LineBR = gameObject.transform.parent.Find("LineBR").gameObject;
         HoverSquare = gameObject.transform.parent.Find("HoverSquare").gameObject;
+        gameObject.SetActive(false);
+        LineBL.SetActive(false);
+        LineTL.SetActive(false);
+        LineTR.SetActive(false);
+        LineBR.SetActive(false);
+        HoverSquare.SetActive(false);
     }
 
     // Force update/reload the canvases and TMP object to ensure the TMP object assigns its preferred height
