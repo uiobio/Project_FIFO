@@ -21,6 +21,9 @@ public class Level_manager : MonoBehaviour
     [SerializeField]
     public PatternFuncs PF;
 
+    [Header("Enemy Spawning")]
+    public float EnemySpawnWarningTime;
+
     [Header("UI")]
     [SerializeField] private GameObject mainUIPrefab;
     [SerializeField] private GameObject musicManagerPrefab;

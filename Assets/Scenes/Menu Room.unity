@@ -1199,6 +1199,10 @@ PrefabInstance:
       propertyPath: Right_point
       value: 
       objectReference: {fileID: 2925335}
+    - target: {fileID: 3203375570371492845, guid: 4201026a094fdde4786da0df2069e0c2, type: 3}
+      propertyPath: EnemySpawnWarningTime
+      value: 2
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1612,6 +1616,7 @@ MonoBehaviour:
   SpawneePrefab: {fileID: 328789305087572588, guid: 6a120e85c4b8215448cb02a44cba1de9, type: 3}
   SpawnsEnemy: 0
   EnemyElement: 0
+  p_Warning: {fileID: 0}
 --- !u!1 &1851457043
 GameObject:
   m_ObjectHideFlags: 0

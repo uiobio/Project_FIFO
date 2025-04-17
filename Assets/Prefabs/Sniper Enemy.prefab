@@ -146,6 +146,7 @@ MonoBehaviour:
   healthBar: {fileID: 8741535053493870743}
   cam_rot: {x: 48.59, y: -135, z: 0}
   element: 0
+  num_chips: 5
 --- !u!114 &5580215127657636561
 MonoBehaviour:
   m_ObjectHideFlags: 0
