@@ -19,9 +19,11 @@ public class UpgradeLabel : MonoBehaviour
     [SerializeField]
     private string labelTextHotkeyInfoInsufficientFunds = "Not Enough Chips";
     [SerializeField]
+    private string labelTextHotkeyInfoTrashcan = "(E) Recycle"; // Displays when the player is looking at the trashcan
+    [SerializeField]
     private string labelTextHotkeyInfoColor = "#87CEEB"; // Pale, electric blue, used for the "BUY" and "LEVEL UP" text.
     [SerializeField]
-    private string labelTextHotkeyInfoSoldOutColor = "#FF2800"; // Bright ish red, used for the "ALL SLOTS FILLED" text.
+    private string labelTextHotkeyInfoSoldOutColor = "#FF2800"; // Bright ish red, used for the "Not enough chips, Replace, and Recycle" text.
     private string activeLabelTextHotkeyInfo = "(E) Buy"; // The currently displayed hotkey info text
     private string activeLabelTextHotkeyInfoColor = "#87CEEB"; // The currently displayed hotkey info text color
     [SerializeField]
@@ -49,6 +51,8 @@ public class UpgradeLabel : MonoBehaviour
     private Vector3 labelTopRight;
     private Vector3 labelBottomRight;
 
+    public bool IsTrashcan { get; set; } = false; // Whether this label is for a trashcan or not
+
     public void Initialize(Upgrade upgrade) 
     {
         // If we are given an upgrade object, then use that object's Name and Description for the label
@@ -64,7 +68,7 @@ public class UpgradeLabel : MonoBehaviour
 
         // Assign the positions of the label's corners
         Vector3[] corners = new Vector3[4];
-        labelRectTransform = (RectTransform)GameObject.Find("ItemLabelPanel").transform;
+        labelRectTransform = (RectTransform)transform.Find("ItemLabelPanel");
         labelRectTransform.GetWorldCorners(corners);
         labelBottomLeft = corners[0];
         labelTopLeft = corners[1];
@@ -82,7 +86,7 @@ public class UpgradeLabel : MonoBehaviour
         lrTr.enabled = false;
         lrBr.enabled = false;
 
-        tmpText = transform.Find("ItemLabelPanel").gameObject.transform.Find("TMP").gameObject.GetComponent<TextMeshProUGUI>();
+        tmpText = transform.Find("ItemLabelPanel/TMP").gameObject.GetComponent<TextMeshProUGUI>();
     }
 
     // Either draws the lines to the-corners-of-the-label from the-center-point-of-the-top-face-of-this-ShopItem
@@ -123,13 +127,15 @@ public class UpgradeLabel : MonoBehaviour
 
     private void RecalculateCorners()
     {
-        Vector3[] corners = new Vector3[4];
-        labelRectTransform = (RectTransform)GameObject.Find("ItemLabelPanel").transform;
-        labelRectTransform.GetWorldCorners(corners);
-        labelBottomLeft = corners[0];
-        labelTopLeft = corners[1];
-        labelTopRight = corners[2];
-        labelBottomRight = corners[3];
+        if(labelRectTransform != null)
+        {
+            Vector3[] corners = new Vector3[4];
+            labelRectTransform.GetWorldCorners(corners);
+            labelBottomLeft = corners[0];
+            labelTopLeft = corners[1];
+            labelTopRight = corners[2];
+            labelBottomRight = corners[3];
+        }
     }
 
     // Force update/reload the canvases and TMP object to ensure the TMP object assigns its preferred height
@@ -149,10 +155,14 @@ public class UpgradeLabel : MonoBehaviour
         string text = string.Empty;
         if (isHeaderDisplayed)
         {
-            text += "<line-height=90%><b><color=" + activeLabelTextHotkeyInfoColor + ">" + activeLabelTextHotkeyInfo + "</color></b>\n";
-            text += "<line-height=125%><b><size=75%><color=" + labelTextItemCostColor + "> Cost: " + labelTextItemCost.ToString() + " Chips</color></size></b>\n";
+            if (!IsTrashcan) {
+                text += "<line-height=90%><size=110%><color=" + activeLabelTextHotkeyInfoColor + ">" + activeLabelTextHotkeyInfo + "</size></color>\n";
+                text += "<line-height=125%><size=75%><color=" + labelTextItemCostColor + "> Cost: " + labelTextItemCost.ToString() + " Chips</color></size>\n"; 
+            } else {
+                text += "<line-height=125%><size=110%><color=" + activeLabelTextHotkeyInfoColor + ">" + activeLabelTextHotkeyInfo + "</size></color>\n";
+            }
         }
-        text += "<line-height=95%><b>" + labelTextItemName + "</b>\n";
+        text += "<line-height=95%><size=100%>" + labelTextItemName + "</size>\n";
         text += "<i><size=75%>" + labelTextItemDesc + "</size></i>";
         tmpText.text = text;
         if (label != null)
@@ -163,40 +173,54 @@ public class UpgradeLabel : MonoBehaviour
     }
 
     public void ChangeLabelTextBasedOnGameState(Upgrade upgrade) {
-        // If player has enough currency to buy the upgrade...
-        if (upgrade.Cost <= Level_manager.instance.Currency)
-        {
-            // If the player does not currently hold this upgrade, then...
-            if (Array.IndexOf(Level_manager.instance.PlayerHeldUpgradeIds, upgrade.Id) <= -1)
+        if (!IsTrashcan) {
+            // If player has enough currency to buy the upgrade...
+            if (upgrade.Cost <= Level_manager.instance.Currency)
             {
-                // If the player is at or exceeding the upgrade slot limit
-                if (Level_manager.instance.PlayerHeldUpgrades.Count >= Level_manager.MAX_PLAYER_UPGRADES)
+                // If the player does not currently hold this upgrade, then...
+                if (Array.IndexOf(Level_manager.instance.PlayerHeldUpgradeIds, upgrade.Id) <= -1)
                 {
-                    // Set the text to indicate the slots are full, set the text color to match
-                    activeLabelTextHotkeyInfoColor = labelTextHotkeyInfoSoldOutColor;
-                    activeLabelTextHotkeyInfo = labelTextHotkeyInfoSoldOut;
+                    // If the player is at or exceeding the upgrade slot limit
+                    if (Level_manager.instance.PlayerHeldUpgrades.Count >= Level_manager.MAX_PLAYER_UPGRADES)
+                    {
+                        // Set the text to indicate the slots are full, set the text color to match
+                        activeLabelTextHotkeyInfoColor = labelTextHotkeyInfoSoldOutColor;
+                        activeLabelTextHotkeyInfo = labelTextHotkeyInfoSoldOut;
+                    }
+                    else
+                    {
+                        // Set the text to inform the player of the hotkey and the action ("(E) Buy"), set the color to match
+                        activeLabelTextHotkeyInfoColor = labelTextHotkeyInfoColor;
+                        activeLabelTextHotkeyInfo = labelTextHotkeyInfo;
+                    }
                 }
+                // Otherwise (if the player currently holds this upgrade), then...
                 else
                 {
-                    // Set the text to inform the player of the hotkey and the action ("(E) Buy"), set the color to match
+                    // Set the text to inform the player of the hotkey and the action ("(E) Level Up"), set color to match.
                     activeLabelTextHotkeyInfoColor = labelTextHotkeyInfoColor;
-                    activeLabelTextHotkeyInfo = labelTextHotkeyInfo;
+                    activeLabelTextHotkeyInfo = labelTextHotkeyInfoLevelUp;
                 }
             }
-            // Otherwise (if the player currently holds this upgrade), then...
+            // Otherwise, set the label's text to reflect that the player does not have enough currency.
             else
             {
-                // Set the text to inform the player of the hotkey and the action ("(E) Level Up"), set color to match.
-                activeLabelTextHotkeyInfoColor = labelTextHotkeyInfoColor;
-                activeLabelTextHotkeyInfo = labelTextHotkeyInfoLevelUp;
-
+                activeLabelTextHotkeyInfoColor = labelTextHotkeyInfoSoldOutColor;
+                activeLabelTextHotkeyInfo = labelTextHotkeyInfoInsufficientFunds;
             }
-        }
-        // Otherwise, set the label's text to reflect that the player does not have enough currency.
-        else
+        } else
         {
             activeLabelTextHotkeyInfoColor = labelTextHotkeyInfoSoldOutColor;
-            activeLabelTextHotkeyInfo = labelTextHotkeyInfoInsufficientFunds;
+            activeLabelTextHotkeyInfo = labelTextHotkeyInfoTrashcan;
+        }
+    }
+
+    public void SetNewUpgrade(Upgrade upgrade) { 
+        if (upgrade != null)
+        {
+            labelTextItemName = upgrade.Name;
+            labelTextItemDesc = upgrade.Desc;
+            labelTextItemCost = upgrade.Cost;
         }
     }
     public string LabelTextHotkeyInfo
