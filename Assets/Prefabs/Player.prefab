@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 6030772368928814415}
   - component: {fileID: -5633399821039483507}
   - component: {fileID: 1684782969197543246}
+  - component: {fileID: 8913487488376097240}
   m_Layer: 3
   m_Name: Player
   m_TagString: Player
@@ -192,6 +193,19 @@ MonoBehaviour:
   health: 160
   isDead: 0
   PB: {fileID: 0}
+--- !u!114 &8913487488376097240
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 328789305087572588}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e534323ea20dff047874e70e47e4e778, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  room_name: Menu Room
 --- !u!1 &2526909672888894419
 GameObject:
   m_ObjectHideFlags: 0

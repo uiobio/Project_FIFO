@@ -273,6 +273,10 @@ public class Level_manager : MonoBehaviour
         healthBar.SetProgress(PlayerHealth/PlayerMaxHealth);
     }
 
+    public void ResetPlayerHealth(){
+        SetHealth(PlayerMaxHealth);
+    }
+
     //---------------------------------Functions for Patterns----------------------------
     public static void AddPatternUI(GameObject new_pat_man){
         pat_man = new_pat_man.GetComponent<Pattern_UI_manager>();
