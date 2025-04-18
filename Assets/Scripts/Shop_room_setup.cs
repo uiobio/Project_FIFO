@@ -39,24 +39,23 @@ public class Shop_room_setup : MonoBehaviour
     void Start()
     {
         GenerateUpgrades();
-        
         for (int i = 0; i < numShopItems; i++)
         {
             GameObject shopItem;
             // Context:
             // Vector3(0.371f, 0.288f, 7.126f) represents the top right corner of the large floor square.
             // The ShopItemPrefab position is at the bottom left corner of the large floor square.
-            // 0.375f is the width of a single, small floor tile
+            // 0.471875f is the width of a single, small floor tile
             // 1.5f is to account for the fact that the position is calculated from the center of each ShopItem (so the expected "distance between" is effectively shortened by 2/3)
             if (wallDirection.Equals("Northwest"))
             {
-                shopItem = Instantiate(ShopItemPrefab, new Vector3(0.371f, 0.288f, 7.126f) + new Vector3(0, 0, -0.375f * 1.5f * i * numSquaresBetweenEachShopItem + -0.375f * numSquaresFirstShopItemFromEdge), Quaternion.identity);
+                shopItem = Instantiate(ShopItemPrefab, new Vector3(2.5f, 0, 2.5f) + new Vector3(0, 0, -0.471875f * i * numSquaresBetweenEachShopItem + -0.471875f * numSquaresFirstShopItemFromEdge), Quaternion.identity);
             }
             else
             {
-                shopItem = Instantiate(ShopItemPrefab, ShopItemPrefab.transform.position + new Vector3(-0.375f * 1.5f * i * numSquaresBetweenEachShopItem + -0.375f * numSquaresFirstShopItemFromEdge, 0, 0), Quaternion.identity);
+                shopItem = Instantiate(ShopItemPrefab, ShopItemPrefab.transform.position + new Vector3(-0.471875f * i * numSquaresBetweenEachShopItem + -0.471875f * numSquaresFirstShopItemFromEdge, 0, 0), Quaternion.identity);
             }
-            Renderer cubeRenderer = shopItem.GetComponent<MeshRenderer>();
+            Renderer cubeRenderer = shopItem.gameObject.transform.Find("Collider").GetComponent<MeshRenderer>();
             Vector3 center = cubeRenderer.bounds.center;
             float height = cubeRenderer.bounds.extents.y;
 
@@ -65,7 +64,7 @@ public class Shop_room_setup : MonoBehaviour
 
             // Give the label and upgrade each a reference to the appropriate Upgrade object.
             shopItemUpgrade.GetComponent<Upgrade_manager>().upgrade = shopItemUpgrades[i];
-            shopItem.GetComponent<Shop_interaction_manager>().upgrade = shopItemUpgrades[i];
+            shopItem.GetComponent<ShopItem>().upgrade = shopItemUpgrades[i];
 
             // Tell the Upgrade_manager that we want to make a ShopItem (rather than a UI icon)
             shopItemUpgrade.GetComponent<Upgrade_manager>().upgrade.UIOrShopItem = "ShopItem";
@@ -123,7 +122,7 @@ public class Shop_room_setup : MonoBehaviour
         for (int i = 0; i < shopItemUpgrades.Count; i++) {
             if (shopItemUpgrades[i].Name.Equals(nameToSearch))
             {
-                shopItemUpgradeGameObjects[i].GetComponent<Shop_interaction_manager>().MakeFullFormattedTextString();
+                shopItemUpgradeGameObjects[i].GetComponent<ShopItem>().MakeFullFormattedTextString();
             }
         }
     }

@@ -36,14 +36,21 @@ public class UpgradeLabelMainUI : MonoBehaviour
     public Vector3[] upgradeIconCorners = new Vector3[4];
     public void Initialize()
     {
+        Debug.Log("I'm a label and I'm initialized!");
         labelRectTransform = gameObject.GetComponent<RectTransform>();
-        labelRectTransform.GetWorldCorners(corners);
+        labelRectTransform.Find("Panel").GetComponent<RectTransform>().GetWorldCorners(corners);
         tmpText = transform.Find("Panel").gameObject.transform.Find("TMP").gameObject.GetComponent<TextMeshProUGUI>();
         LineBL = gameObject.transform.parent.Find("LineBL").gameObject;
         LineTL = gameObject.transform.parent.Find("LineTL").gameObject;
         LineTR = gameObject.transform.parent.Find("LineTR").gameObject;
         LineBR = gameObject.transform.parent.Find("LineBR").gameObject;
         HoverSquare = gameObject.transform.parent.Find("HoverSquare").gameObject;
+        gameObject.SetActive(false);
+        LineBL.SetActive(false);
+        LineTL.SetActive(false);
+        LineTR.SetActive(false);
+        LineBR.SetActive(false);
+        HoverSquare.SetActive(false);
     }
 
     // Force update/reload the canvases and TMP object to ensure the TMP object assigns its preferred height
@@ -54,7 +61,6 @@ public class UpgradeLabelMainUI : MonoBehaviour
         Canvas.ForceUpdateCanvases();
         LayoutRebuilder.ForceRebuildLayoutImmediate(tmpTextRect);
         labelRectTransform.sizeDelta = new Vector2(labelRectTransform.sizeDelta.x, tmpTextRect.rect.height);
-        labelRectTransform.GetWorldCorners(corners);
         DrawLines();
     }
 
@@ -63,29 +69,26 @@ public class UpgradeLabelMainUI : MonoBehaviour
         labelTextUpgradeName = upgrade.Name;
         labelTextUpgradeDesc = upgrade.Desc;
         string text = string.Empty;
-        text += "<line-height=90%><b><color=" + labelTextHotkeyInfoColor + ">" + labelTextHeader + "</color></b>\n";
-        text += "<line-height=125%><b><size=75%><color=" + labelTextUpgradeNameColor + "> Cost: " + labelTextUpgradeNameCost.ToString() + " Chips</color></size></b>\n";
-        text += "<line-height=95%><b>" + labelTextUpgradeName + "</b>\n";
+        text += "<line-height=90%><size=110%><color=" + labelTextHotkeyInfoColor + ">" + labelTextHeader + "</size></color>\n";
+        text += "<line-height=125%><size=75%><color=" + labelTextUpgradeNameColor + "> Cost: " + labelTextUpgradeNameCost.ToString() + " Chips</color></size>\n";
+        text += "<line-height=95%><size=100%>" + labelTextUpgradeName + "</size>\n";
         text += "<i><size=75%>" + labelTextUpgradeDesc + "</size></i>";
         tmpText.text = text;
         UpdateSize();
         return text;
     }
 
-    public void DrawLines() { 
-        LineBL.GetComponent<ScreenSpaceLine>().fromPos = new Vector2(corners[0][0], corners[0][1]);
-        LineTL.GetComponent<ScreenSpaceLine>().fromPos = new Vector2(corners[1][0], corners[1][1]);
-        LineTR.GetComponent<ScreenSpaceLine>().fromPos = new Vector2(corners[2][0], corners[2][1]);
-        LineBR.GetComponent<ScreenSpaceLine>().fromPos = new Vector2(corners[3][0], corners[3][1]);
+    public void DrawLines() {
+        labelRectTransform.Find("Panel").GetComponent<RectTransform>().GetWorldCorners(corners);
+        LineBL.GetComponent<ScreenSpaceLine>().fromPos = new Vector2(corners[0][0] + 3, corners[0][1] + 3);
+        LineTL.GetComponent<ScreenSpaceLine>().fromPos = new Vector2(corners[1][0] + 3, corners[1][1] - 3);
+        LineTR.GetComponent<ScreenSpaceLine>().fromPos = new Vector2(corners[2][0] - 3, corners[2][1] - 3);
+        LineBR.GetComponent<ScreenSpaceLine>().fromPos = new Vector2(corners[3][0] - 3, corners[3][1] + 3);
         LineBL.GetComponent<ScreenSpaceLine>().toPos = new Vector2(upgradeIconCorners[0][0], upgradeIconCorners[0][1]);
         LineTL.GetComponent<ScreenSpaceLine>().toPos = new Vector2(upgradeIconCorners[1][0], upgradeIconCorners[1][1]);
         LineTR.GetComponent<ScreenSpaceLine>().toPos = new Vector2(upgradeIconCorners[2][0], upgradeIconCorners[2][1]);
         LineBR.GetComponent<ScreenSpaceLine>().toPos = new Vector2(upgradeIconCorners[3][0], upgradeIconCorners[3][1]);
         HoverSquare.GetComponent<RectTransform>().anchoredPosition = new Vector2((upgradeIconCorners[1][0] + upgradeIconCorners[2][0]) / 2, (upgradeIconCorners[1][1] + upgradeIconCorners[0][1]) / 2);
         HoverSquare.GetComponent<RectTransform>().sizeDelta = new Vector2(upgradeIconCorners[2][0] - upgradeIconCorners[1][0], upgradeIconCorners[1][1] - upgradeIconCorners[0][1]);
-    }
-
-    public void DrawLine() { 
-        
     }
 }

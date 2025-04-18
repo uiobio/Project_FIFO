@@ -189,9 +189,15 @@ public class Player_input_manager : MonoBehaviour
     void Interact(GameObject interactable)
     {
         // If the other GameObject is a ShopItem and the shop is active, buy the item.
-        if (interactable.CompareTag("ShopItem") && interactable.GetComponent<Shop_interaction_manager>().IsShopActive) 
+        if (interactable.CompareTag("ShopItem") && interactable.GetComponent<ShopItem>().IsShopActive) 
         {
-            interactable.GetComponent<Shop_interaction_manager>().buy();
+            interactable.GetComponent<ShopItem>().buy();
+            return;
+        }
+        if (interactable.CompareTag("Trashcan") && interactable.GetComponent<Trashcan>().IsTrashcanActive)
+        {
+            interactable.GetComponent<Trashcan>().use();
+            return;
         }
     }
 
@@ -248,20 +254,20 @@ public class Player_input_manager : MonoBehaviour
             RectTransform upgradeIconTransform = levelManager.PlayerHeldUpgradeIcons[levelManager.CurrentlySelectedUpgradeIndex].GetComponent<Upgrade_manager>().upgradeUIIcon.GetComponent<RectTransform>();
             Vector2 originalPosition = upgradeIconTransform.anchoredPosition;
             upgradeIconTransform.anchoredPosition = new Vector2(upgradeIconTransform.anchoredPosition.x + levelManager.UpgradeIconUnplugOffset, upgradeIconTransform.anchoredPosition.y);
-            shop.GetComponent<Shop_interaction_manager>().Label.GetComponent<UpgradeLabel>().ActiveLabelTextHotkeyInfo = "(E) Confirm \n (MB1) Select \n<size=80%><color=" + shop.GetComponent<Shop_interaction_manager>().Label.GetComponent<UpgradeLabel>().LabelTextHotkeyInfoColor + "> Replace [<i>" + levelManager.PlayerHeldUpgrades[levelManager.CurrentlySelectedUpgradeIndex].Name + "</i>] with the following upgrade?</color><size=100%>";
-            shop.GetComponent<Shop_interaction_manager>().MakeFullFormattedTextString();
+            shop.GetComponent<ShopItem>().Label.GetComponent<UpgradeLabel>().ActiveLabelTextHotkeyInfo = "(E) Confirm \n (MB1) Select \n<size=80%><color=" + shop.GetComponent<ShopItem>().Label.GetComponent<UpgradeLabel>().LabelTextHotkeyInfoColor + "> Replace [<i>" + levelManager.PlayerHeldUpgrades[levelManager.CurrentlySelectedUpgradeIndex].Name + "</i>] with the following upgrade?</color><size=100%>";
+            shop.GetComponent<ShopItem>().MakeFullFormattedTextString();
 
             // Waits until one and only one of three things happens:
             // a) the player interacts with the ShopItem, confirming the replacement, calling the function to swap the old in-slot upgrade with the incoming shop upgrade, and breaking out of the loop 
             // b) the player leaves the radius of the ShopItem's trigger collider, cancelling the replacement and breaking out of the loop
             // c) the player clicks on a new upgrade icon in the upgrade slot UI, thus continuing the while loop and reloading the text to show the newly selected upgrade to swap.
-            yield return new WaitUntil(() => interactInput ^ !shop.GetComponent<Shop_interaction_manager>().IsShopActive ^ tempIndex != levelManager.CurrentlySelectedUpgradeIndex);
+            yield return new WaitUntil(() => interactInput ^ !shop.GetComponent<ShopItem>().IsShopActive ^ tempIndex != levelManager.CurrentlySelectedUpgradeIndex);
             if (interactInput)
             {
                 levelManager.SwapOutUpgrade(newUpgrade, shop, originalPosition);
                 break;
             }
-            if (!shop.GetComponent<Shop_interaction_manager>().IsShopActive)
+            if (!shop.GetComponent<ShopItem>().IsShopActive)
             {
                 upgradeIconTransform.anchoredPosition = originalPosition;
                 break;
