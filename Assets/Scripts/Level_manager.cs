@@ -86,6 +86,13 @@ public class Level_manager : MonoBehaviour
     [System.NonSerialized]
     public int CurrentlySelectedUpgradeIndex = 0;
 
+    // The upgrade the player is hovering over when paused
+    [System.NonSerialized]
+    public int CurrentlyHoveredUpgradeIndex = 0;
+
+    [System.NonSerialized]
+    public bool isHoveringUpgradeIcon = false;
+
     // If the player is currently selecting an upgrade to replace/sell
     [System.NonSerialized]
     public bool IsCurrentlySelectingUpgrade = false;
@@ -198,16 +205,16 @@ public class Level_manager : MonoBehaviour
         // Add all upgrades to the Upgrade list; move to game_constants when one exists
         // See the constructor for the Upgrade class in 'Upgrade_manager.cs' to find detailed info about parameters.
         // Only one upgrade sprite asset is finished (Precision, as of 02/28), so all others will use the default
-        Upgrades.Add(new Upgrade("Precision", "Deal +[X] extra damage on every hit (currently adding [N] damage)", (float)precisionUpgradeModifierValue, (float)precisionUpgradeModifier, "", 0, 5, "Assets/Sprites/Upgrades/dmgUpgrade.png"));
-        Upgrades.Add(new Upgrade("Hardware Acceleration", "Increase dash range by [X]%", (float)hardwareAccelUpgradeModifierValue, (float)hardwareAccelUpgradeModifier, "", 0, 5, "Assets/Sprites/Upgrades/upgradeBlank.png"));
-        Upgrades.Add(new Upgrade("Two Birds", "Your attacks hit twice, second attack does [X]% and also applies on-hit effects", (float)twoBirdsUpgradeModifierValue, (float)twoBirdsUpgradeModifier, "", 0, 5, "Assets/Sprites/Upgrades/twobirdsApplied.png"));
-        Upgrades.Add(new Upgrade("Fortified", "Enemy projectiles deal [X]% less damage", (float)fortifiedUpgradeModifierValue, (float)fortifiedUpgradeModifier, "", 0, 5, "Assets/Sprites/Upgrades/upgradeBlank.png"));
-        Upgrades.Add(new Upgrade("Boot Up", "Gain a [X]% speed boost for the first [N] sec of each room", (float)bootUpUpgradeModifierValue, (float)bootUpUpgradeModifier, "", 0, 5, "Assets/Sprites/Upgrades/upgradeBlank.png"));
-        Upgrades.Add(new Upgrade("Spice of Life", "Gain [X]% additional damage for each unique combo used this run", (float)spiceLifeUpgradeModifierValue, (float)spiceLifeUpgradeModifierValue, "", 0, 5, "Assets/Sprites/Upgrades/upgradeBlank.png"));
-        Upgrades.Add(new Upgrade("git restore", "When entering a new non-shop room, restore [X]% of max health", (float)gitRestoreUpgradeModifierValue, (float)gitRestoreUpgradeModifier, "", 0, 5, "Assets/Sprites/Upgrades/upgradeBlank.png"));
-        Upgrades.Add(new Upgrade("Bloodthirsty", "Gain [X] health upon killing [N] enemies", (float)bloodthirstyUpgradeModifierValue, (float)bloodthirstyUpgradeModifier, "", 0, 5, "Assets/Sprites/Upgrades/upgradeBlank.png"));
-        Upgrades.Add(new Upgrade("Greedy", "Gain [X]% more gold from enemy kills", (float)greedyUpgradeModifierValue, (float)greedyUpgradeModifier, "", 0, 5, "Assets/Sprites/Upgrades/upgradeBlank.png"));
-        Upgrades.Add(new Upgrade("Thorns", "When you take damage, deal [X]% to the enemy that hit you", (float)thornsUpgradeModifierValue, (float)thornsUpgradeModifier, "", 0, 5, "Assets/Sprites/Upgrades/upgradeBlank.png"));
+        Upgrades.Add(new Upgrade("Precision", "Deal +[X] extra damage on every hit (currently adding [N] damage)", (float)precisionUpgradeModifierValue, (float)precisionUpgradeModifier, "", 0, 5, "Assets/Sprites/Upgrades/whetstone.png"));
+        Upgrades.Add(new Upgrade("Hardware Acceleration", "Increase dash range by [X]%", (float)hardwareAccelUpgradeModifierValue, (float)hardwareAccelUpgradeModifier, "", 0, 5, "Assets/Sprites/Upgrades/hardwareAccel.png"));
+        Upgrades.Add(new Upgrade("Two Birds", "Your attacks hit twice, second attack does [X]% and also applies on-hit effects", (float)twoBirdsUpgradeModifierValue, (float)twoBirdsUpgradeModifier, "", 0, 5, "Assets/Sprites/Upgrades/twobirds.png"));
+        Upgrades.Add(new Upgrade("Fortified", "Enemy projectiles deal [X]% less damage", (float)fortifiedUpgradeModifierValue, (float)fortifiedUpgradeModifier, "", 0, 5, "Assets/Sprites/Upgrades/fortify.png"));
+        Upgrades.Add(new Upgrade("Boot Up", "Gain a [X]% speed boost for the first [N] sec of each room", (float)bootUpUpgradeModifierValue, (float)bootUpUpgradeModifier, "", 0, 5, "Assets/Sprites/Upgrades/bootUp.png"));
+        Upgrades.Add(new Upgrade("Spice of Life", "Gain [X]% additional damage for each unique combo used this run", (float)spiceLifeUpgradeModifierValue, (float)spiceLifeUpgradeModifierValue, "", 0, 5, "Assets/Sprites/Upgrades/spiceOfLife.png"));
+        Upgrades.Add(new Upgrade("git restore", "When entering a new non-shop room, restore [X]% of max health", (float)gitRestoreUpgradeModifierValue, (float)gitRestoreUpgradeModifier, "", 0, 5, "Assets/Sprites/Upgrades/gitRestore.png"));
+        Upgrades.Add(new Upgrade("Bloodthirsty", "Gain [X] health upon killing [N] enemies", (float)bloodthirstyUpgradeModifierValue, (float)bloodthirstyUpgradeModifier, "", 0, 5, "Assets/Sprites/Upgrades/bloodthirsty.png"));
+        Upgrades.Add(new Upgrade("Greedy", "Gain [X]% more gold from enemy kills", (float)greedyUpgradeModifierValue, (float)greedyUpgradeModifier, "", 0, 5, "Assets/Sprites/Upgrades/chipMagnet.png"));
+        Upgrades.Add(new Upgrade("Thorns", "When you take damage, deal [X]% to the enemy that hit you", (float)thornsUpgradeModifierValue, (float)thornsUpgradeModifier, "", 0, 5, "Assets/Sprites/Upgrades/thorns.png"));
 
         // Id should always = index in Upgrades list
         for (int i = 0; i < Upgrades.Count; i++)
@@ -426,6 +433,7 @@ public class Level_manager : MonoBehaviour
     void ResumeGame()
     {
         isPaused = false;
+        isHoveringUpgradeIcon = false;
         pauseMenuUI.SetActive(false); // Hide menu
         MusicManager.GetComponent<MusicManager>().AudioSource.UnPause();
         Time.timeScale = 1f; // Resume game
@@ -491,7 +499,7 @@ public class Level_manager : MonoBehaviour
             // But we potentially want it to level up the stats provided by the upgrade, so you have some long-term scaling options
             Debug.Log("Add suceeded, duplicate upgrade");
             ApplyUpgradeModifiers(upgrade);
-            Currency -= upgrade.Cost;
+            GainCoin(-1 * upgrade.Cost);
             return true;
         }
         // Otherwise, if the player's max upgrade slots would be exceeded by adding this upgrade, then...
@@ -519,8 +527,7 @@ public class Level_manager : MonoBehaviour
             upgradeUIIcon.SetActive(true);
             PlayerHeldUpgradeIcons.Add(upgradeUIIcon);
             Debug.Log("Add suceeded");
-            Currency -= upgrade.Cost;
-
+            GainCoin(-1 * upgrade.Cost);
             return true;
         }
         else { 
@@ -564,7 +571,7 @@ public class Level_manager : MonoBehaviour
         Debug.Log("Replacing upgrade: " + PlayerHeldUpgradeIcons[CurrentlySelectedUpgradeIndex].GetComponent<Upgrade_manager>().upgrade.Name + " (Upgrade slot index " + CurrentlySelectedUpgradeIndex + ")");
         PlayerHeldUpgradeIcons[CurrentlySelectedUpgradeIndex] = upgradeUIIcon;
         upgradeUIIcon.GetComponent<Upgrade_manager>().upgradeUIIcon.GetComponent<RectTransform>().anchoredPosition = originalSlotPosition;
-        Currency -= newUpgrade.Cost;
+        GainCoin(-1 * newUpgrade.Cost);
         shop.GetComponent<Shop_interaction_manager>().destroyChildren();
     }
 
