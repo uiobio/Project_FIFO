@@ -16,7 +16,10 @@ public class Level_manager : MonoBehaviour
     public const int MAX_PLAYER_UPGRADES = 5;
 
     // The longest an element pattern can be
-    public const int MAX_PATTERN_LEN = 3;
+    public const int MAX_PATTERN_LEN = 5;
+
+    [SerializeField]
+    public PatternFuncs PF;
 
     [Header("UI")]
     [SerializeField] private GameObject mainUIPrefab;
@@ -43,17 +46,31 @@ public class Level_manager : MonoBehaviour
     //FIXME: Add this list to a game_constants file
     [System.NonSerialized]
     public List<string> types = new List<string>() { "Earth", "Fire", "Ice", "Wind" };
+    [System.NonSerialized]
+    public List<Color> typeColors = new List<Color>() { Color.green, Color.red, Color.blue, Color.cyan};
+    static Pattern_UI_manager pat_man;
+    [Header("Patterns")]
+    [SerializeField]
+    (int, int) currentPattern = (-1, -1);
+
+    [SerializeField]
+    public Transform Left_point;
+    [SerializeField]
+    public Transform Right_point;
+
 
     //FIXME: Add this to a game_constants file
     [System.NonSerialized]
-    public List<List<(int, string)>> Patterns = new List<List<(int, string)>>();
+    public List<List<(int, string, Action)>> Patterns = new List<List<(int, string, Action)>>();
+
 
     //FIXME: Add to game_constants
     [System.NonSerialized]
     public List<Upgrade> Upgrades = new List<Upgrade>();
 
-    [System.NonSerialized]
-    public List<string> Pattern_record = new List<string>();
+    //[System.NonSerialized]
+    [SerializeField]
+    public List<int> Pattern_record = new List<int>();
 
     // The upgrades the player currently has
     [System.NonSerialized]
@@ -65,6 +82,13 @@ public class Level_manager : MonoBehaviour
     // The upgrade the player clicks on when replacing/selling
     [System.NonSerialized]
     public int CurrentlySelectedUpgradeIndex = 0;
+
+    // The upgrade the player is hovering over when paused
+    [System.NonSerialized]
+    public int CurrentlyHoveredUpgradeIndex = 0;
+
+    [System.NonSerialized]
+    public bool isHoveringUpgradeIcon = false;
 
     // If the player is currently selecting an upgrade to replace/sell
     [System.NonSerialized]
@@ -147,18 +171,25 @@ public class Level_manager : MonoBehaviour
 
         // FIXME: Setting up the Patterns List should be move to gameconstants when one exists.
         //Create lists for all of the Patterns
-        List<(int, string)> Temp_1 = new List<(int, string)>();
-        List<(int, string)> Temp_2 = new List<(int, string)>() {
-            (11, "Pair")
+        List<(int, string, Action)> Len1_Patterns = new List<(int, string, Action)>();
+        List<(int, string, Action)> Len2_Patterns = new List<(int, string, Action)>() {
+            (11, "Pair", PF.StartSpeedBoost) };
+        List<(int, string, Action)> Len3_Patterns = new List<(int, string, Action)>() {
+            (121, "Sandwich", Dummy), (111, "Three of a kind", Dummy)
         };
-        List<(int, string)> Temp_3 = new List<(int, string)>() {
-            (121, "Sandwich"), (111, "Three of a kind")
+        List<(int, string, Action)> Len4_Patterns = new List<(int, string, Action)>() {
+            (1221, "Big Sandwich", PF.DamageSweep), (1111, "Four of a kind", PF.DamageSweep), (4321, "Rainbow", PF.DamageSweep), (2211, "Two Pair", PF.DamageSweep), (1321, "Mini Club", PF.DamageSweep)
+        };
+        List<(int, string, Action)> Len5_Patterns = new List<(int, string, Action)>() {
+            (12121, "Big Mac", Dummy), (11111, "Five of a kind", Dummy), (14321, "Club Sandwich", Dummy), (22211, "Full House", Dummy), (12321, "Double Decker", Dummy), (11211, "Fat Sandwich", Dummy)
         };
 
         //Add all of the Patterns to the Patterns double list
-        Patterns.Add(Temp_1);
-        Patterns.Add(Temp_2);
-        Patterns.Add(Temp_3);
+        Patterns.Add(Len1_Patterns);
+        Patterns.Add(Len2_Patterns);
+        Patterns.Add(Len3_Patterns);
+        Patterns.Add(Len4_Patterns);
+        Patterns.Add(Len5_Patterns);
 
         resumeButton.onClick.AddListener(ResumeGame);
         pauseButton.onClick.AddListener(PauseGame);
@@ -171,16 +202,16 @@ public class Level_manager : MonoBehaviour
         // Add all upgrades to the Upgrade list; move to game_constants when one exists
         // See the constructor for the Upgrade class in 'Upgrade_manager.cs' to find detailed info about parameters.
         // Only one upgrade sprite asset is finished (Precision, as of 02/28), so all others will use the default
-        Upgrades.Add(new Upgrade("Precision", "Deal +[X] extra damage on every hit (currently adding [N] damage)", (float)precisionUpgradeModifierValue, (float)precisionUpgradeModifier, "", 0, 5, "Assets/Sprites/Upgrades/dmgUpgrade.png"));
-        Upgrades.Add(new Upgrade("Hardware Acceleration", "Increase dash range by [X]%", (float)hardwareAccelUpgradeModifierValue, (float)hardwareAccelUpgradeModifier, "", 0, 5, "Assets/Sprites/Upgrades/upgradeBlank.png"));
-        Upgrades.Add(new Upgrade("Two Birds", "Your attacks hit twice, second attack does [X]% and also applies on-hit effects", (float)twoBirdsUpgradeModifierValue, (float)twoBirdsUpgradeModifier, "", 0, 5, "Assets/Sprites/Upgrades/twobirdsApplied.png"));
-        Upgrades.Add(new Upgrade("Fortified", "Enemy projectiles deal [X]% less damage", (float)fortifiedUpgradeModifierValue, (float)fortifiedUpgradeModifier, "", 0, 5, "Assets/Sprites/Upgrades/upgradeBlank.png"));
-        Upgrades.Add(new Upgrade("Boot Up", "Gain a [X]% speed boost for the first [N] sec of each room", (float)bootUpUpgradeModifierValue, (float)bootUpUpgradeModifier, "", 0, 5, "Assets/Sprites/Upgrades/upgradeBlank.png"));
-        Upgrades.Add(new Upgrade("Spice of Life", "Gain [X]% additional damage for each unique combo used this run", (float)spiceLifeUpgradeModifierValue, (float)spiceLifeUpgradeModifierValue, "", 0, 5, "Assets/Sprites/Upgrades/upgradeBlank.png"));
-        Upgrades.Add(new Upgrade("git restore", "When entering a new non-shop room, restore [X]% of max health", (float)gitRestoreUpgradeModifierValue, (float)gitRestoreUpgradeModifier, "", 0, 5, "Assets/Sprites/Upgrades/upgradeBlank.png"));
-        Upgrades.Add(new Upgrade("Bloodthirsty", "Gain [X] health upon killing [N] enemies", (float)bloodthirstyUpgradeModifierValue, (float)bloodthirstyUpgradeModifier, "", 0, 5, "Assets/Sprites/Upgrades/upgradeBlank.png"));
-        Upgrades.Add(new Upgrade("Greedy", "Gain [X]% more gold from enemy kills", (float)greedyUpgradeModifierValue, (float)greedyUpgradeModifier, "", 0, 5, "Assets/Sprites/Upgrades/upgradeBlank.png"));
-        Upgrades.Add(new Upgrade("Thorns", "When you take damage, deal [X]% to the enemy that hit you", (float)thornsUpgradeModifierValue, (float)thornsUpgradeModifier, "", 0, 5, "Assets/Sprites/Upgrades/upgradeBlank.png"));
+        Upgrades.Add(new Upgrade("Precision", "Deal +[X] extra damage on every hit (currently adding [N] damage)", (float)precisionUpgradeModifierValue, (float)precisionUpgradeModifier, "", 0, 5, "Assets/Sprites/Upgrades/whetstone.png", "Assets/Sprites/Upgrades/whetstoneVert.png"));
+        Upgrades.Add(new Upgrade("Hardware Acceleration", "Increase dash range by [X]%", (float)hardwareAccelUpgradeModifierValue, (float)hardwareAccelUpgradeModifier, "", 0, 5, "Assets/Sprites/Upgrades/hardwareAccel.png", "Assets/Sprites/Upgrades/hardwareAccelVert.png"));
+        Upgrades.Add(new Upgrade("Two Birds", "Your attacks hit twice, second attack does [X]% and also applies on-hit effects", (float)twoBirdsUpgradeModifierValue, (float)twoBirdsUpgradeModifier, "", 0, 5, "Assets/Sprites/Upgrades/twobirds.png", "Assets/Sprites/Upgrades/twobirdsVert.png"));
+        Upgrades.Add(new Upgrade("Fortified", "Enemy projectiles deal [X]% less damage", (float)fortifiedUpgradeModifierValue, (float)fortifiedUpgradeModifier, "", 0, 5, "Assets/Sprites/Upgrades/fortify.png", "Assets/Sprites/Upgrades/fortifyVert.png"));
+        Upgrades.Add(new Upgrade("Boot Up", "Gain a [X]% speed boost for the first [N] sec of each room", (float)bootUpUpgradeModifierValue, (float)bootUpUpgradeModifier, "", 0, 5, "Assets/Sprites/Upgrades/bootUp.png", "Assets/Sprites/Upgrades/bootUpVert.png"));
+        Upgrades.Add(new Upgrade("Spice of Life", "Gain [X]% additional damage for each unique combo used this run", (float)spiceLifeUpgradeModifierValue, (float)spiceLifeUpgradeModifierValue, "", 0, 5, "Assets/Sprites/Upgrades/spiceOfLife.png", "Assets/Sprites/Upgrades/spiceOfLifeVert.png"));
+        Upgrades.Add(new Upgrade("git restore", "When entering a new non-shop room, restore [X]% of max health", (float)gitRestoreUpgradeModifierValue, (float)gitRestoreUpgradeModifier, "", 0, 5, "Assets/Sprites/Upgrades/gitRestore.png", "Assets/Sprites/Upgrades/gitRestoreVert.png"));
+        Upgrades.Add(new Upgrade("Bloodthirsty", "Gain [X] health upon killing [N] enemies", (float)bloodthirstyUpgradeModifierValue, (float)bloodthirstyUpgradeModifier, "", 0, 5, "Assets/Sprites/Upgrades/bloodthirsty.png", "Assets/Sprites/Upgrades/bloodthirstVert.png"));
+        Upgrades.Add(new Upgrade("Greedy", "Gain [X]% more gold from enemy kills", (float)greedyUpgradeModifierValue, (float)greedyUpgradeModifier, "", 0, 5, "Assets/Sprites/Upgrades/chipMagnet.png", "Assets/Sprites/Upgrades/chipMagnetVert.png"));
+        Upgrades.Add(new Upgrade("Thorns", "When you take damage, deal [X]% to the enemy that hit you", (float)thornsUpgradeModifierValue, (float)thornsUpgradeModifier, "", 0, 5, "Assets/Sprites/Upgrades/thorns.png", "Assets/Sprites/Upgrades/thornsVert.png"));
 
         // Id should always = index in Upgrades list
         for (int i = 0; i < Upgrades.Count; i++)
@@ -193,6 +224,12 @@ public class Level_manager : MonoBehaviour
 
         // Instantiate the UI icons of those held upgrades
         InstantiateIcons();
+        parentUI.transform.Find("MainCanvas/Upgrades/LineBL").gameObject.SetActive(false);
+        parentUI.transform.Find("MainCanvas/Upgrades/LineTL").gameObject.SetActive(false);
+        parentUI.transform.Find("MainCanvas/Upgrades/LineTR").gameObject.SetActive(false);
+        parentUI.transform.Find("MainCanvas/Upgrades/LineBR").gameObject.SetActive(false);
+        parentUI.transform.Find("MainCanvas/Upgrades/HoverSquare").gameObject.SetActive(false);
+        parentUI.transform.Find("MainCanvas/Upgrades/Label").gameObject.SetActive(false);
     }
 
     // Update is called once per frame
@@ -206,24 +243,25 @@ public class Level_manager : MonoBehaviour
         if (Input.GetButtonDown("Dummy"))
         {
             Dummy();
+            UsePattern();
         }
 
         // Key inputs for testing patterns- feel free to delete/ignore
         if (Input.GetKeyDown("1"))
         {
-            UpdatePattern("Earth");
+            UpdatePattern(0);
         }
         if (Input.GetKeyDown("2"))
         {
-            UpdatePattern("Fire");
+            UpdatePattern(1);
         }
         if (Input.GetKeyDown("3"))
         {
-            UpdatePattern("Ice");
+            UpdatePattern(2);
         }
         if (Input.GetKeyDown("4"))
         {
-            UpdatePattern("Wind");
+            UpdatePattern(3);
         }
     }
 
@@ -247,72 +285,133 @@ public class Level_manager : MonoBehaviour
     }
 
     //---------------------------------Functions for Patterns----------------------------
-    void UpdatePattern(string type) {
+    public static void AddPatternUI(GameObject new_pat_man){
+        pat_man = new_pat_man.GetComponent<Pattern_UI_manager>();
+    }
+
+    public void UpdatePattern(int type) {
         // Adds a type to the pattern record. Should be called whenever an enemy is killed.
         // This then checks the Pattern Record to see if any Patterns have occurred.
         AddToPattern(type);
-        int Cur_Pattern = TypeToChar();
-        print(Cur_Pattern);
-        string success = CheckPatterns(Cur_Pattern);
-        if (success != null)
+        ((int, int), (int, int)) ActivePattern = CheckPatterns();
+        (int, int) success = ActivePattern.Item1;
+        (int, int) subpat = ActivePattern.Item2;
+        string pat = "";
+        if (success.Item1 != -1)
         {
-            Debug.Log(success);
+            pat = Patterns[success.Item1][success.Item2].Item2;
+        }
+
+        currentPattern = success;
+        if (pat_man != null){
+            pat_man.UpdatePatternName(pat);
+            pat_man.UpdateQueueColors(type, subpat.Item1, subpat.Item2);
         }
     }
 
-    void AddToPattern(string type)
+    void AddToPattern(int type)
     {
+        Debug.Log($"Add to Pattern {type}");
         //Add the passed type to the pattern_record
         Pattern_record.Add(type);
         if (Pattern_record.Count > MAX_PATTERN_LEN) {
             Pattern_record.Remove(Pattern_record[0]);
         }
-        //int temp = TypeToChar();
     }
 
-    int TypeToChar()
+    int TypeToChar(){
+        return TypeToChar(Pattern_record.Count, 0);
+    }
+    int TypeToChar(int start, int end)
     {
         //Translates the 5 most recent slain enemy types to a 5 int number to compare with patterns
         int ret = 0;
         int counter = 1;
 
-        int c = Pattern_record.Count;
-        Dictionary<string, int> Translations = new Dictionary<string, int>();
+        Dictionary<int, int> Translations = new Dictionary<int, int>();
         //Iterate from most recent to oldest of saved types
-        for (int i = c - 1; i >= 0; i--)
+        for (int i = start; i >= end; i--)
         {
-            string t = Pattern_record[i];
+            int t = Pattern_record[i];
             if (!Translations.ContainsKey(t))
             {
                 Translations.Add(t, counter);
                 counter++;
             }
-            ret += (int)(Mathf.Pow(10, i) * Translations[t]);
+            ret += (int)(Mathf.Pow(10, start-i) * Translations[t]);
         }
-        Debug.Log(ret);
         return ret;
     }
 
-    string CheckPatterns(int Seq)
+    ((int, int), (int, int)) CheckPatterns(){
+        return CheckPatterns(-1, Pattern_record.Count-1, 0);
+    }
+    ((int, int), (int, int)) CheckPatterns(int Seq_in, int start, int end)
     {
-        int s = Pattern_record.Count - 1;
-        //Loop through all patterns of size and smaller
-        for (int l = s; l >= 0; l--)
-        { //Loop through pattern sizes
-            for (int i = 0; i < Patterns[l].Count; i++)
-            {
-                if (Patterns[l][i].Item1 == Seq)
-                {
-                    //Found Matching Pattern! Return the name
-                    return Patterns[l][i].Item2;
-                }
+        if(Seq_in == 0){return ((-1, -1), (-1, -1)); }
+        int Seq = Seq_in;
+        if(Seq_in == -1){
+            if (start < end){
+                return ((-1, -1), (-1, -1));
             }
-            //Go to smaller pattern if no pattern found in that list.
-            Seq = (int)(Seq / 10);
+            Seq = TypeToChar(start, end);
         }
 
-        return null;
+        int l = start-end;
+        int s = Pattern_record.Count - 1;
+        //Loop through all patterns of size and smaller
+        for (int i = 0; i < Patterns[l].Count; i++)
+        {
+            if (Patterns[l][i].Item1 == Seq)
+            {
+                //Found Matching Pattern! Return the name
+                return ((l, i), (start, end));
+            }
+        }
+        //Go to smaller pattern if no pattern found in that list.
+        //Left
+        ((int, int), (int, int)) left = CheckPatterns(-1, start, end+1);
+        (int, int) sub_left = left.Item1;
+        //Right
+        ((int, int), (int, int)) right = CheckPatterns(-1, start-1, end);
+        (int, int) sub_right = right.Item1;
+        Debug.Log($"Comparing {left} to {right} :: {sub_left.Item1} > {sub_right.Item1}? {sub_left.Item1>sub_right.Item1}-{sub_left.Item2} > {sub_right.Item2}? {sub_left.Item2>sub_right.Item2}");
+
+        if (sub_left.Item1 == sub_right.Item1){
+            return sub_left.Item2 > sub_right.Item2 ? left : right;
+        }
+        return sub_left.Item1 > sub_right.Item1 ? left : right;
     }
+
+    public void UsePattern(){
+        //Use the current Pattern's ability
+        string patternName = "";
+        if(currentPattern.Item1 != -1){
+            //Update the name for debugging and use ability
+            patternName = Patterns[currentPattern.Item1][currentPattern.Item2].Item2;
+            int l = currentPattern.Item1; //length
+            int j = currentPattern.Item2; //index
+            Patterns[l][j].Item3();
+        }
+        Debug.Log($"Using {currentPattern}: {patternName}");
+        //Reset the pattern state
+        currentPattern = (-1, -1);
+        ClearPatternQueue();
+        pat_man.ClearQueue();
+    }
+
+    void ClearPatternQueue(){
+        Pattern_record.RemoveAll(c => true);
+    }
+
+    //Sets the leftmost and rightmost points of the room - used for pattern func sweeps
+    public void SetLeftPoint(Transform t){
+        Left_point = t;
+    }
+    public void SetRightPoint(Transform t){
+        Right_point = t;        
+    }
+
     // Pause menu
 
     public void TogglePause()
@@ -334,6 +433,7 @@ public class Level_manager : MonoBehaviour
     void ResumeGame()
     {
         isPaused = false;
+        isHoveringUpgradeIcon = false;
         pauseMenuUI.SetActive(false); // Hide menu
         MusicManager.GetComponent<MusicManager>().AudioSource.UnPause();
         Time.timeScale = 1f; // Resume game
@@ -399,7 +499,7 @@ public class Level_manager : MonoBehaviour
             // But we potentially want it to level up the stats provided by the upgrade, so you have some long-term scaling options
             Debug.Log("Add suceeded, duplicate upgrade");
             ApplyUpgradeModifiers(upgrade);
-            Currency -= upgrade.Cost;
+            GainCoin(-1 * upgrade.Cost);
             return true;
         }
         // Otherwise, if the player's max upgrade slots would be exceeded by adding this upgrade, then...
@@ -427,8 +527,7 @@ public class Level_manager : MonoBehaviour
             upgradeUIIcon.SetActive(true);
             PlayerHeldUpgradeIcons.Add(upgradeUIIcon);
             Debug.Log("Add suceeded");
-            Currency -= upgrade.Cost;
-
+            GainCoin(-1 * upgrade.Cost);
             return true;
         }
         else { 
@@ -472,8 +571,8 @@ public class Level_manager : MonoBehaviour
         Debug.Log("Replacing upgrade: " + PlayerHeldUpgradeIcons[CurrentlySelectedUpgradeIndex].GetComponent<Upgrade_manager>().upgrade.Name + " (Upgrade slot index " + CurrentlySelectedUpgradeIndex + ")");
         PlayerHeldUpgradeIcons[CurrentlySelectedUpgradeIndex] = upgradeUIIcon;
         upgradeUIIcon.GetComponent<Upgrade_manager>().upgradeUIIcon.GetComponent<RectTransform>().anchoredPosition = originalSlotPosition;
-        Currency -= newUpgrade.Cost;
-        shop.GetComponent<Shop_interaction_manager>().destroyChildren();
+        GainCoin(-1 * newUpgrade.Cost);
+        shop.GetComponent<ShopItem>().destroyChildren();
     }
 
     // Called when upgrades are added to the player held upgrades list, essentially applies the effects of upgrades.

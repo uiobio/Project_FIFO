@@ -11,6 +11,8 @@ TagManager:
   - ShopItemLabelLines
   - Upgrade
   - UI
+  - Enemy
+  - Trashcan
   layers:
   - Default
   - TransparentFX
@@ -26,8 +28,8 @@ TagManager:
   - MainCamera
   - Upgrade
   - SlashAttack
-  - 
-  - 
+  - TopLayerUI
+  - ForegroundWall
   - 
   - 
   - 

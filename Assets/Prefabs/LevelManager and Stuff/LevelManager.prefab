@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 899006907650152735}
   - component: {fileID: 3203375570371492845}
+  - component: {fileID: 1830808364620419197}
   m_Layer: 0
   m_Name: LevelManager
   m_TagString: Untagged
@@ -45,16 +46,52 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isPaused: 0
+  PF: {fileID: 1830808364620419197}
   mainUIPrefab: {fileID: 6993848563969293405, guid: 4b21b0de48a90fa44a02f7e65060e2f3, type: 3}
-  pauseMenuUIPrefab: {fileID: 6993848563969293405, guid: 4b21b0de48a90fa44a02f7e65060e2f3, type: 3}
   musicManagerPrefab: {fileID: 2623831383503118466, guid: cae6471539e67634faddcb1e02a670a0, type: 3}
+  parentUI: {fileID: 0}
   upgradePrefab: {fileID: 4524767290060870829, guid: a7ed141474d227344ac9614b1cd31c3a, type: 3}
   healthBar: {fileID: 0}
   T_Currency: {fileID: 0}
   PlayerHealth: -1
-  PlayerMaxHealth: 20
+  PlayerMaxHealth: 160
   UpgradeIconUnplugOffset: 30
+  Left_point: {fileID: 0}
+  Right_point: {fileID: 0}
+  Pattern_record: 
   PlayerHeldUpgradeIcons: []
   PlayerHeldUpgradeIds: 0000000002000000030000000400000005000000
-  Currency: 5
+  Currency: 0
   precisionUpgradeModifier: 0
+  hardwareAccelUpgradeModifier: 0
+  twoBirdsUpgradeModifier: 0
+  fortifiedUpgradeModifier: 0
+  bootUpUpgradeModifier: 15
+  spiceLifeUpgradeModifier: 0
+  gitRestoreUpgradeModifier: 0
+  bloodthirstyUpgradeModifier: 5
+  greedyUpgradeModifier: 0
+  thornsUpgradeModifier: 0
+  hardwareAccelUpgradeModifierValue: 10
+  twoBirdsUpgradeModifierValue: 10
+  fortifiedUpgradeModifierValue: 10
+  bootUpUpgradeModifierValue: 10
+  spiceLifeUpgradeModifierValue: 1
+  gitRestoreUpgradeModifierValue: 10
+  bloodthirstyUpgradeModifierValue: 1
+  greedyUpgradeModifierValue: 5
+  thornsUpgradeModifierValue: 10
+--- !u!114 &1830808364620419197
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1938935141146923489}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f0c9e6d49dcf64e46993d136c01162dd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isBoosted: 0
+  DamageSweepPrefab: {fileID: 6740479364000219458, guid: 5200c6428bdb67f43a80d03441d19939, type: 3}

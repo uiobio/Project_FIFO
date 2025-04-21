@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 3804171587905563660}
   m_Layer: 6
   m_Name: Enemy_block
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -152,3 +152,4 @@ MonoBehaviour:
   maxHealth: 100
   health: 100
   isDead: 0
+  PB: {fileID: 0}
