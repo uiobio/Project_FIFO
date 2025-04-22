@@ -10,6 +10,10 @@ public class Projectile : MonoBehaviour
 
     void Start()
     {
+        if (gameObject.layer == 8)
+        {
+            damage *= Level_manager.instance.fortifiedUpgradeModifier;
+        }
         Destroy(gameObject, lifetime);
     }
 

@@ -19,7 +19,7 @@ public class Door : MonoBehaviour
         {
             SceneManager.LoadScene(room_name);
         }
-        Player_Controller.controller.UpgradeBoost();
+        Player_Controller.controller.Boost(Level_manager.instance.bootUpUpgradeModifierValue, Level_manager.instance.bootUpUpgradeModifier);
     }
 }
 
