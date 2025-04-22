@@ -12,6 +12,10 @@ public class Enemy : MonoBehaviour
 	private int element;
 	[SerializeField]
 	private int num_chips;
+	[SerializeField]
+	private SpriteRenderer SR;
+
+	Color[] ElementColors = new Color[] {Color.yellow, Color.red, Color.cyan, Color.green};
 
     void Start()
 	{
@@ -31,5 +35,6 @@ public class Enemy : MonoBehaviour
 
 	public void SetElement(int elem){
 		element = elem;
+		SR.color = ElementColors[elem];
 	}
 }

@@ -1216,6 +1216,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 2925335}
     - target: {fileID: 3203375570371492845, guid: 4201026a094fdde4786da0df2069e0c2, type: 3}
+      propertyPath: EnemySpawnWarningTime
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3203375570371492845, guid: 4201026a094fdde4786da0df2069e0c2, type: 3}
       propertyPath: 'PlayerHeldUpgradeIds.Array.data[0]'
       value: -1
       objectReference: {fileID: 0}
