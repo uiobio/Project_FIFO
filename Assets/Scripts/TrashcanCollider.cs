@@ -7,11 +7,23 @@ public class TrashcanCollider : MonoBehaviour
     {
         Trashcan trashCan = transform.parent.GetComponent<Trashcan>();
         Level_manager levelManager = Level_manager.instance.GetComponent<Level_manager>();
+<<<<<<< HEAD
         // If the other collider is the player, and the player has at least one upgrade:
         if (other.gameObject.CompareTag("Player") && levelManager.PlayerHeldUpgrades.Count >= 1)
         {
             trashCan.upgrade = levelManager.PlayerHeldUpgrades[levelManager.CurrentlySelectedUpgradeIndex];
             Debug.Log(trashCan.upgrade.Name);
+=======
+        if (levelManager.CurrentlySelectedUpgradeIndex >= levelManager.PlayerHeldUpgrades.Count)
+        {
+            levelManager.CurrentlySelectedUpgradeIndex = levelManager.PlayerHeldUpgrades.Count - 1;
+        }
+        // If the other collider is the player, and the player has at least one upgrade:
+        if (other.gameObject.CompareTag("Player") && levelManager.PlayerHeldUpgrades.Count >= 1)
+        {
+            Level_manager.instance.RecyclePlayerUpgrade(transform.parent.gameObject);
+            trashCan.upgrade = levelManager.PlayerHeldUpgrades[levelManager.CurrentlySelectedUpgradeIndex];
+>>>>>>> origin
             trashCan.Label.SetActive(true);
             trashCan.Label.GetComponent<UpgradeLabel>().SetNewUpgrade(trashCan.upgrade);
             trashCan.Label.GetComponent<UpgradeLabel>().ChangeLabelTextBasedOnGameState(trashCan.upgrade);

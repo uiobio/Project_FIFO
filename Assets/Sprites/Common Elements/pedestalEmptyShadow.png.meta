@@ -1,5 +1,13 @@
 fileFormatVersion: 2
+<<<<<<< HEAD
+<<<<<<<< HEAD:Assets/Sprites/Common Elements/pedestalEmptyShadow.png.meta
 guid: 93071adcebe942741ab22521f1592993
+========
+guid: dcc2606bd1321114ca395d90d3bd2587
+>>>>>>>> origin:Assets/Sprites/Upgrades/bloodthirstVert.png.meta
+=======
+guid: 93071adcebe942741ab22521f1592993
+>>>>>>> origin
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -34,7 +42,11 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
+<<<<<<< HEAD
     filterMode: 1
+=======
+    filterMode: 0
+>>>>>>> origin
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -72,9 +84,15 @@ TextureImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
+<<<<<<< HEAD
     textureCompression: 1
     compressionQuality: 50
     crunchedCompression: 0
+=======
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 1
+>>>>>>> origin
     allowsAlphaSplitting: 0
     overridden: 0
     ignorePlatformSupport: 0
