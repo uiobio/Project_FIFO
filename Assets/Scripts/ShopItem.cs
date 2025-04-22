@@ -89,7 +89,10 @@ public class ShopItem : MonoBehaviour
         {
             return;
         }
-        destroyChildren();
+        if (!bought)
+        {
+            destroyChildren();
+        }
     }
 
     public void destroyChildren()

@@ -525,7 +525,7 @@ public class Level_manager : MonoBehaviour
                 }
             }
             ApplyUpgradeModifiers(upgrade);
-
+            Debug.Log("Adding upgrade " + upgrade.Name + " to slot " + index);
             // Put the upgrade in the first empty slots of the PlayerHeldUpgradeIds array and PlayerHeldUpgrades list
             PlayerHeldUpgradeIds[index] = upgrade.Id;
             PlayerHeldUpgrades.Add(upgrade);
@@ -638,12 +638,15 @@ public class Level_manager : MonoBehaviour
         }
 
         // Shift all Ids left by one, and set the last Id to -1
-        PlayerHeldUpgradeIds[4] = -1;
         for (int i = CurrentlySelectedUpgradeIndex; i < 4; i++)
         {
             PlayerHeldUpgradeIds[i] = PlayerHeldUpgradeIds[i + 1];     
         }
-        
+        PlayerHeldUpgradeIds[4] = -1;
+
+        Debug.Log("Upgrade IDs: [" + PlayerHeldUpgradeIds[0] + ", " + PlayerHeldUpgradeIds[1] + ", " + PlayerHeldUpgradeIds[2] + ", " + PlayerHeldUpgradeIds[3] + ", " + PlayerHeldUpgradeIds[4] + "]");
+        //Debug.Log("Upgrades: [" + PlayerHeldUpgrades[0].Name + ", " + PlayerHeldUpgrades[1].Name + ", " + PlayerHeldUpgrades[2].Name + ", " + PlayerHeldUpgrades[3].Name + ", " + PlayerHeldUpgrades[4].Name + "]");
+        //Debug.Log("Icons: [" + PlayerHeldUpgradeIcons[0].name + ", " + PlayerHeldUpgradeIcons[1].name + ", " + PlayerHeldUpgradeIcons[2].name + ", " + PlayerHeldUpgradeIcons[3].name + ", " + PlayerHeldUpgradeIcons[4].name + "]");
         // Deactivate the label
         trashcan.GetComponent<Trashcan>().label.SetActive(false);
     }
