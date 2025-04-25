@@ -729,6 +729,7 @@ MonoBehaviour:
   SpawneePrefab: {fileID: 328789305087572588, guid: 6a120e85c4b8215448cb02a44cba1de9, type: 3}
   SpawnsEnemy: 0
   EnemyElement: 0
+  p_Warning: {fileID: 0}
 --- !u!1 &1776268613
 GameObject:
   m_ObjectHideFlags: 0
@@ -983,6 +984,7 @@ MonoBehaviour:
   numSquaresBetweenEachShopItem: 5
   numSquaresFirstShopItemFromEdge: 2
   wallDirection: Northeast
+  preset_upgrade_ids: 00000000
 --- !u!1001 &2067782014
 PrefabInstance:
   m_ObjectHideFlags: 0
