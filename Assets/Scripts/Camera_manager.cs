@@ -6,8 +6,7 @@ public class Camera_manager : MonoBehaviour
 {
     public static Camera_manager instance;
     [Header("Camera")]
-    [SerializeField]
-    private GameObject player;
+    public GameObject Player;
     [SerializeField]
     private float[] cameraOffsetXYZ = new float[3];
 
@@ -20,22 +19,26 @@ public class Camera_manager : MonoBehaviour
     void Start()
     {
         Cursor.lockState = CursorLockMode.Confined; 
-        GameObject p = GameObject.FindWithTag("Player");
-        if (p != null) {
-            player = p;
+        if (Player == null)
+        {
+            // Debug.Log("Camera_manager: Player is null");
+            GameObject p = GameObject.FindWithTag("Player");
+            if (p != null)
+            {
+                // Debug.Log("Camera_manager Start() called. Player name: " + p.name);
+                Player = p;
+            }
         }
+        else
+        {
+            // Debug.Log("Camera_manager Player is not null. Player name: " + Player.name);
+        }
+        
     }
 
     // Update is called once per frame
     void LateUpdate()
     {
-        transform.position = new Vector3(player.transform.position.x + cameraOffsetXYZ[0], player.transform.position.y + cameraOffsetXYZ[1], player.transform.position.z + cameraOffsetXYZ[2]);
-    }
-
-    // Getters, Setters
-    public GameObject Player
-    {
-        get { return player; }
-        set { player = value; }
+        transform.position = new Vector3(Player.transform.position.x + cameraOffsetXYZ[0], Player.transform.position.y + cameraOffsetXYZ[1], Player.transform.position.z + cameraOffsetXYZ[2]);
     }
 }

@@ -12,6 +12,8 @@ public class Respawn_Point : MonoBehaviour
     [SerializeField]
     private int EnemyElement;
 
+    public GameObject Spawnee { get => spawnee; set => spawnee = value; }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -23,10 +25,15 @@ public class Respawn_Point : MonoBehaviour
         if(SpawneePrefab != null){
             spawnee = Instantiate(SpawneePrefab, transform.position, Quaternion.identity);
             //Set element if enemy
-            if(SpawnsEnemy){
+            if (SpawnsEnemy)
+            {
                 spawnee.GetComponent<Enemy>().SetElement(EnemyElement);
             }
+            else { 
+                GameObject.FindWithTag("MainCamera").GetComponent<Camera_manager>().Player = spawnee;
+            }
             Debug.Log($"Spawned {spawnee.gameObject.name}. Set elem to {EnemyElement}? {SpawnsEnemy}");
+            // Debug.Log("Camera_manager: Player set to " + GameObject.FindWithTag("MainCamera").GetComponent<Camera_manager>().Player.name);
         }
     }
 
