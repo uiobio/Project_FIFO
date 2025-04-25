@@ -12,6 +12,11 @@ public class Player_input_manager : MonoBehaviour
         instance = this;
     }
 
+    private Animator anim;
+    private SpriteRenderer SR;
+    private Vector3 v_N = new Vector3(-1f, 0f, -1f);
+    private Vector3 v_R = new Vector3(-1f, 0f, 1f);
+
     [Header("Movement")]
     // Player's movespeed
     [SerializeField]
@@ -71,6 +76,9 @@ public class Player_input_manager : MonoBehaviour
         aimPoint.y = ProjectilePlaneY;
         AimToMousePoint();
         RotatePlayerToMousePoint();
+
+        anim = GetComponentInChildren<Animator>();
+        SR = GetComponentInChildren<SpriteRenderer>();
     }
 
     
@@ -115,6 +123,22 @@ public class Player_input_manager : MonoBehaviour
         if (attackInput && !Cooldown_manager.instance.IsSlashOnCooldown && !Level_manager.instance.IsCurrentlySelectingUpgrade){
             BasicAttack();
         }
+
+        //Set animation based on if moving up or down
+        Vector3 movingN = Vector3.Project(moveDirection, v_N);
+        float dot_dir = Vector3.Dot(movingN, v_N);
+        if(movingN != new Vector3(0f, 0f, 0f)){ 
+            anim.SetBool("GoingN", dot_dir > 0); 
+        }
+        anim.SetBool("Running", movingN != new Vector3(0f, 0f, 0f));
+        Debug.Log($"Move: {moveDirection}, Proj: {Vector3.Project(moveDirection, v_N)}, magn: {dot_dir}");
+        Vector3 movingR = Vector3.Project(moveDirection, v_R);
+        float dot_dirR = Vector3.Dot(movingR, v_R);
+        SetAnimLR(dot_dirR > 0);
+    }
+
+    void SetAnimLR(bool facingRight){
+        SR.flipX = !facingRight;
     }
 
     void FixedUpdate()
@@ -143,6 +167,9 @@ public class Player_input_manager : MonoBehaviour
         if (!moveDirection.Equals(new Vector3(0, 0, 0))) 
         {
             orientation = moveDirection.normalized;
+        }
+        else{
+            rb.linearVelocity = new Vector3(0f, 0f, 0f);
         }
 
         // Add the forces in direction specified by moveDirection and speed specified by moveSpeed
@@ -189,6 +216,7 @@ public class Player_input_manager : MonoBehaviour
         GameObject Slash = Instantiate(slashPrefab, new Vector3(transform.Find("Forward").position.x, transform.position.y, transform.Find("Forward").position.z), transform.rotation);
         Slash.transform.parent = transform;
         Cooldown_manager.instance.UpdateSlashCooldown();
+        anim.SetTrigger("Slash");
     }
 
     // Calculates the world position on the projectile firing plane to which the mouse is pointing
