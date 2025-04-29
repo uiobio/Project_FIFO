@@ -17,6 +17,8 @@ public class Door : MonoBehaviour
         // Bugfix: made it so only the player can trigger the door.
         if (other.tag == "Player")
         {
+            Level_manager.instance.IncRoom();
+
             SceneManager.LoadScene(room_name);
         }
     }

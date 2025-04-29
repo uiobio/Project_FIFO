@@ -14,16 +14,19 @@ public class Respawn_Point : MonoBehaviour
     [SerializeField]
     private GameObject p_Warning;
     private GameObject I_Warning;
+    private bool spawning;
 
     // Start is called before the first frame update
     void Start()
     {
+        spawning = false;
         if(SpawneePrefab != null){
             StartSpawn();
         }
     }
 
     public void StartSpawn(){
+        spawning = true;
         if(!SpawnsEnemy){
             Spawn();
             return;
@@ -46,6 +49,7 @@ public class Respawn_Point : MonoBehaviour
             }
             Debug.Log($"Spawned {spawnee.gameObject.name}. Set elem to {EnemyElement}? {SpawnsEnemy}");
         }
+        spawning = false;
     }
 
     public void SetSpawnee(GameObject new_spawnee){

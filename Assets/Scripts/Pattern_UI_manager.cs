@@ -48,11 +48,9 @@ public class Pattern_UI_manager : MonoBehaviour
 
     public void UpdateQueueColors(int new_type, int min_used, int max_used){
         //Iterates through the pattern record of levelmanager and sets all types/sprites -- Level_manager.instance.Pattern_record.Count
-        Debug.Log($"Updating patterns from 0 to {Level_manager.instance.Pattern_record.Count-1}");
         for(int i=0; i < Level_manager.instance.Pattern_record.Count; i++){
             bool used = (min_used >= i && i >= max_used);
             int ix = MAX_PATTERN_LEN - Level_manager.instance.Pattern_record.Count + i;
-            Debug.Log($"   Updating Pattern {i}, {ix}");
             SetType(ix, Level_manager.instance.Pattern_record[i], used);
         }
     }

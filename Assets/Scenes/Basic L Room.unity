@@ -915,6 +915,7 @@ MonoBehaviour:
   SpawneePrefab: {fileID: 328789305087572588, guid: 6a120e85c4b8215448cb02a44cba1de9, type: 3}
   SpawnsEnemy: 0
   EnemyElement: 0
+  p_Warning: {fileID: 0}
 --- !u!1001 &1356900562
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -998,7 +999,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1382201567}
-  - component: {fileID: 1382201568}
   m_Layer: 0
   m_Name: L room
   m_TagString: Untagged
@@ -1026,23 +1026,6 @@ Transform:
   - {fileID: 2010734083}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1382201568
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1382201566}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 170d2bb1bc9d1a24289d2045ad39b282, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  EnemyRanks:
-  - {fileID: 6162869850624354483, guid: 21239d46b243440e981c2ac40d36e17c, type: 3}
-  - {fileID: 4013348123896331718, guid: 99a087fe29b6c4851bf6ea9ea5c6b032, type: 3}
-  Amounts: 0100000002000000
-  allSpawners: []
 --- !u!1 &1491350787
 GameObject:
   m_ObjectHideFlags: 0
