@@ -56,3 +56,4 @@ public class Player_Controller : MonoBehaviour
         isBoosted = false;
         Debug.Log("Speed Boost Ended!");
     }
+}
