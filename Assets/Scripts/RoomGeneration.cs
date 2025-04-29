@@ -4,6 +4,10 @@ using UnityEngine;
 
 public class RoomGeneration : MonoBehaviour
 {
+    // Seed for the random number generator
+    public int Seed = 0;
+    private System.Random rng;
+
     // Number of rooms to generate
     public int NumRooms = 5;
 
@@ -33,20 +37,38 @@ public class RoomGeneration : MonoBehaviour
 
     // Dictionary of coordinates to Room GameObjects;
     // (0,0) is the Root Room
-    // Rooms adjacent to the Root Room: [NE, NW, SE, SW] have coordinates [(1,0), (0,1), (-1,0), (0,-1)] respectively
+    // Rooms adjacent to the Root Room: [NE, NW, SE, SW] have coordinates [(-1,0), (0,-1), (0,1), (1,0)] respectively
     // Other rooms will follow this same pattern
-    // i.e.: NE = +X
-    //       SE = -X
-    //       NW = +Z
-    //       SW = -Z
+    // i.e.: NE = -X
+    //       SE = +Z
+    //       NW = -Z
+    //       SW = +X
     [System.NonSerialized]
     public Dictionary<Vector2Int, GameObject> RoomMap = new();
 
     [System.NonSerialized]
+    public Dictionary<Direction, Vector2Int> DirectionMap = new()
+    {
+        { Direction.NE, new Vector2Int(-1, 0) },
+        { Direction.NW, new Vector2Int(0, -1) },
+        { Direction.SE, new Vector2Int(1, 0) },
+        { Direction.SW, new Vector2Int(0, 1) }
+    };
+
+    [System.NonSerialized]
+    public Stack<Vector2Int> RoomGenPath = new();
+
+    [System.NonSerialized]
+    public HashSet<Vector2Int> RoomGenVisited = new();
+
+    [System.NonSerialized]
     public float RoomWidth = 0;
+
+    
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        rng = new System.Random(Seed);
         Level = gameObject;
         InitializeRootRoom();
         GenerateLevel();
@@ -71,31 +93,65 @@ public class RoomGeneration : MonoBehaviour
 
         SpawnPoint.transform.position = new Vector3(0, 0, 0);
         SpawnPoint.transform.SetParent(RootRoom.transform);
-        // GameObject.FindWithTag("MainCamera").GetComponent<Camera_manager>().Player = SpawnPoint.GetComponent<Respawn_Point>().Spawnee;
         Destroy(SpawnPoint);
-        // Debug.Log(GameObject.FindWithTag("MainCamera").GetComponent<Camera_manager>().Player.name);
-        RoomMap.Add(new Vector2Int(0, 0), RootRoom);
+
+        Vector2Int startCoords = new(0, 0);
+        RoomMap.Add(startCoords, RootRoom);
+        RoomGenPath.Push(startCoords);
 
         RoomWidth = RootFloorCollider.GetComponent<Renderer>().bounds.extents.x * 2;
     }
 
     void GenerateLevel() {
-        // PSEUDOCODE:
-        // set a variable "currentRoom" to the Root Room -- (0, 0) in RoomMap
-        // for i from 1 to NumRooms, 1 because we've already generated the root room
-        //     Randomly select a direction from the currentRoom
-        //     If theres already a room in that direction
-        //         Re-select a direction
-        //     If there's not a room in that direction
-        //         Generate a new room in that direction
-        //     Add the new room to RoomMap with the coordinates of the new room.
-        //     Set the currentRoom to the new room.
-        // put the exit Door in the furthest room from the Root Room.
+        GenerateFloors();
     }
 
-    void AttemptRoom(Direction direction)
-    {
+    void GenerateFloors() {
+        while (RoomMap.Count < NumRooms) {
+            if (RoomGenPath.Count == 0) {
+                Debug.LogWarning("Room generation failed: couldn't reach target room count.");
+                return;
+            }
+            Direction nextDirection = Direction.NE; // Default direction
+            List<Direction> availableDirections = new();
+            Vector2Int currentCoords = RoomGenPath.Peek();
+            Vector2Int NECoords = currentCoords + DirectionMap[Direction.NE];
+            Vector2Int NWCoords = currentCoords + DirectionMap[Direction.NW];
+            Vector2Int SECoords = currentCoords + DirectionMap[Direction.SE];
+            Vector2Int SWCoords = currentCoords + DirectionMap[Direction.SW];
+            if (!RoomGenVisited.Contains(NECoords)) availableDirections.Add(Direction.NE);
+            if (!RoomGenVisited.Contains(NWCoords)) availableDirections.Add(Direction.NW);
+            if (!RoomGenVisited.Contains(SECoords)) availableDirections.Add(Direction.SE);
+            if (!RoomGenVisited.Contains(SWCoords)) availableDirections.Add(Direction.SW);
+            if (availableDirections.Count == 0)
+            {
+                // No available directions, so we need to backtrack
+                RoomGenPath.Pop();
+                continue;
+            }
+            else {
+                nextDirection = availableDirections[rng.Next(availableDirections.Count)];
+            }
+            Vector2Int nextCoords = currentCoords + DirectionMap[nextDirection];
+            InitializeNewRoom(nextCoords);
+            
+        }
+    }
 
+    void InitializeNewRoom(Vector2Int coords) {
+        GameObject newFloor = Instantiate(FloorPrefab);
+        newFloor.name = "Floor";
+        newFloor.transform.position = new Vector3(coords.x * RoomWidth, 0, coords.y * RoomWidth);
+
+        GameObject newRoom = new GameObject($"Room ({coords.x}, {coords.y})");
+        newRoom.transform.position = new Vector3(coords.x * RoomWidth, 0, coords.y * RoomWidth);
+
+        newRoom.transform.SetParent(Level.transform);
+        newFloor.transform.SetParent(newRoom.transform);
+        
+        RoomGenVisited.Add(coords);
+        RoomGenPath.Push(coords);
+        RoomMap.Add(coords, newRoom);
     }
 
     // Update is called once per frame
@@ -105,7 +161,7 @@ public class RoomGeneration : MonoBehaviour
     }
 }
 
-enum Direction
+public enum Direction
 {
     NE,
     NW,

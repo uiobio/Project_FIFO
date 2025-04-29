@@ -374,6 +374,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1461860e0fb68a04bb523af552369c16, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Seed: 293856
+  NumRooms: 10000
   RespawnPrefab: {fileID: 4492245601494859489, guid: 40fbdf475c75b434398201ede52751a2, type: 3}
   FloorPrefab: {fileID: 317940752858093605, guid: 1b4d4be3335a2f2499b4541c46447d7a, type: 3}
 --- !u!1660057539 &9223372036854775807
