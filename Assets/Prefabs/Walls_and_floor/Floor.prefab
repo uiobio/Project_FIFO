@@ -45,6 +45,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   SpawneePrefab: {fileID: 0}
+  time_delay: 1
+  SpawnsEnemy: 0
+  EnemyElement: 0
+  p_Warning: {fileID: 9013366387470994794, guid: afbd1451b6e92324ab01d4f76477c865, type: 3}
 --- !u!1 &1275949900092815500
 GameObject:
   m_ObjectHideFlags: 0
@@ -90,6 +94,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   SpawneePrefab: {fileID: 0}
+  time_delay: 1
+  SpawnsEnemy: 0
+  EnemyElement: 0
+  p_Warning: {fileID: 9013366387470994794, guid: afbd1451b6e92324ab01d4f76477c865, type: 3}
 --- !u!1 &1750056443057005603
 GameObject:
   m_ObjectHideFlags: 0
@@ -135,6 +143,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   SpawneePrefab: {fileID: 0}
+  time_delay: 1
+  SpawnsEnemy: 0
+  EnemyElement: 0
+  p_Warning: {fileID: 9013366387470994794, guid: afbd1451b6e92324ab01d4f76477c865, type: 3}
 --- !u!1 &2806999977245000848
 GameObject:
   m_ObjectHideFlags: 0
@@ -180,6 +192,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   SpawneePrefab: {fileID: 0}
+  time_delay: 1
+  SpawnsEnemy: 0
+  EnemyElement: 0
+  p_Warning: {fileID: 9013366387470994794, guid: afbd1451b6e92324ab01d4f76477c865, type: 3}
 --- !u!1 &3568182616494206834
 GameObject:
   m_ObjectHideFlags: 0
@@ -346,6 +362,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   SpawneePrefab: {fileID: 0}
+  time_delay: 1
+  SpawnsEnemy: 0
+  EnemyElement: 0
+  p_Warning: {fileID: 9013366387470994794, guid: afbd1451b6e92324ab01d4f76477c865, type: 3}
 --- !u!1 &4838132138850585187
 GameObject:
   m_ObjectHideFlags: 0
@@ -431,6 +451,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   SpawneePrefab: {fileID: 0}
+  time_delay: 1
+  SpawnsEnemy: 0
+  EnemyElement: 0
+  p_Warning: {fileID: 9013366387470994794, guid: afbd1451b6e92324ab01d4f76477c865, type: 3}
 --- !u!1 &6208157895778559423
 GameObject:
   m_ObjectHideFlags: 0
@@ -476,6 +500,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   SpawneePrefab: {fileID: 0}
+  time_delay: 1
+  SpawnsEnemy: 0
+  EnemyElement: 0
+  p_Warning: {fileID: 9013366387470994794, guid: afbd1451b6e92324ab01d4f76477c865, type: 3}
 --- !u!1 &6503148091658777385
 GameObject:
   m_ObjectHideFlags: 0
@@ -521,6 +549,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   SpawneePrefab: {fileID: 0}
+  time_delay: 1
+  SpawnsEnemy: 0
+  EnemyElement: 0
+  p_Warning: {fileID: 9013366387470994794, guid: afbd1451b6e92324ab01d4f76477c865, type: 3}
 --- !u!1 &8370582976273635920
 GameObject:
   m_ObjectHideFlags: 0
@@ -675,3 +707,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   SpawneePrefab: {fileID: 0}
+  time_delay: 1
+  SpawnsEnemy: 0
+  EnemyElement: 0
+  p_Warning: {fileID: 9013366387470994794, guid: afbd1451b6e92324ab01d4f76477c865, type: 3}

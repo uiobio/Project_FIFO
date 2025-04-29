@@ -24,6 +24,9 @@ public class Shop_room_setup : MonoBehaviour
     [SerializeField]
     private string wallDirection;
 
+    [SerializeField]
+    private List<int> preset_upgrade_ids = new List<int>();
+
     // List of the 3 upgrades this shop room will display
     List<Upgrade> shopItemUpgrades = new List<Upgrade>();
 
@@ -101,6 +104,9 @@ public class Shop_room_setup : MonoBehaviour
                 {
                     id = UnityEngine.Random.Range(0, Level_manager.instance.Upgrades.Count);
                 } while (Array.IndexOf(generatedIds, id) != -1);
+                if(i < preset_upgrade_ids.Count){
+                    id = i;
+                }
                 generatedIds[i] = id;
             }
             else

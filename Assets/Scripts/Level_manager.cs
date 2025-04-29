@@ -22,6 +22,9 @@ public class Level_manager : MonoBehaviour
     [SerializeField]
     public PatternFuncs PF;
 
+    [Header("Enemy Spawning")]
+    public float EnemySpawnWarningTime;
+
     [Header("UI")]
     [SerializeField] private GameObject mainUIPrefab;
     [SerializeField] private GameObject musicManagerPrefab;
@@ -247,7 +250,6 @@ public class Level_manager : MonoBehaviour
         if (Input.GetButtonDown("Dummy"))
         {
             Dummy();
-            UsePattern();
         }
 
         // Key inputs for testing patterns- feel free to delete/ignore
@@ -286,6 +288,10 @@ public class Level_manager : MonoBehaviour
     public void SetHealth(float val){
         PlayerHealth = val;
         healthBar.SetProgress(PlayerHealth/PlayerMaxHealth);
+    }
+
+    public void ResetPlayerHealth(){
+        SetHealth(PlayerMaxHealth);
     }
 
     //---------------------------------Functions for Patterns----------------------------

@@ -25,6 +25,8 @@ public class Pattern_UI_manager : MonoBehaviour
     float full_y;
     private List<RectTransform> RT = new List<RectTransform>();
 
+    private int MAX_PATTERN_LEN = 5; //this comes from Level_manager but I can't access it from there...
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -45,10 +47,13 @@ public class Pattern_UI_manager : MonoBehaviour
     }
 
     public void UpdateQueueColors(int new_type, int min_used, int max_used){
-        Debug.Log($"Updating Pattern UI {min_used} to {max_used}");
-        for(int i=Level_manager.instance.Pattern_record.Count-1; i>=0; i--){
+        //Iterates through the pattern record of levelmanager and sets all types/sprites -- Level_manager.instance.Pattern_record.Count
+        Debug.Log($"Updating patterns from 0 to {Level_manager.instance.Pattern_record.Count-1}");
+        for(int i=0; i < Level_manager.instance.Pattern_record.Count; i++){
             bool used = (min_used >= i && i >= max_used);
-            SetType(i, Level_manager.instance.Pattern_record[i], used);
+            int ix = MAX_PATTERN_LEN - Level_manager.instance.Pattern_record.Count + i;
+            Debug.Log($"   Updating Pattern {i}, {ix}");
+            SetType(ix, Level_manager.instance.Pattern_record[i], used);
         }
     }
 
@@ -64,18 +69,21 @@ public class Pattern_UI_manager : MonoBehaviour
     }
 
     void SetType(int img_ix, int element_ix, bool use){
+        //Sets img img_ix to element element_ix. uses S_Used or S_Unused based on 'use'
         Queue[img_ix].sprite = use? S_Used[element_ix] : S_Unused[element_ix];
         RT[img_ix].sizeDelta = sprite_size;
         RT[img_ix].anchoredPosition = SetPos(img_ix, full_y);
     }
 
     void SetEmpty(int img_ix){
+        //Sets img img_ix to empty
         Queue[img_ix].sprite = S_Empty;
         RT[img_ix].sizeDelta = empty_size;
         RT[img_ix].anchoredPosition = SetPos(img_ix, empty_y);
     }
 
     Vector2 SetPos(int ix, float y){
+        //Returns the position of image ix changing just the y
         return new Vector2(RT[ix].anchoredPosition.x, y);
     }
 
