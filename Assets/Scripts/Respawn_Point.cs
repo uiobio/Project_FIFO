@@ -34,7 +34,7 @@ public class Respawn_Point : MonoBehaviour
         Invoke("Spawn", Level_manager.instance.EnemySpawnWarningTime);
     }
 
-    void Spawn()
+    public void Spawn()
     {
         if(I_Warning != null){
             //Destroy the warning visuals/object

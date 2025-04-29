@@ -1,11 +1,19 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
 
 public class RoomGeneration : MonoBehaviour
 {
+    // If true, the seed for the random number generator will be randomized
+    public bool RandomSeed = false;
+
     // Seed for the random number generator
     public int Seed = 0;
+
+    // Weight for continuing to generate rooms in the same direction (higher = longer corridors, 1 is no extra weight)
+    public int SameDirectionWeight = 1;
     private System.Random rng;
 
     // Number of rooms to generate
@@ -68,6 +76,10 @@ public class RoomGeneration : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        if (RandomSeed) {
+            Seed = (int)DateTime.Now.Ticks;
+        }
+
         rng = new System.Random(Seed);
         Level = gameObject;
         InitializeRootRoom();
@@ -96,8 +108,22 @@ public class RoomGeneration : MonoBehaviour
         Destroy(SpawnPoint);
 
         Vector2Int startCoords = new(0, 0);
-        RoomMap.Add(startCoords, RootRoom);
+        RoomGenVisited.Add(startCoords);
         RoomGenPath.Push(startCoords);
+        RoomMap.Add(startCoords, RootRoom);
+
+        // We we don't want to generate rooms adjacent to the Root Room, so that the player has a clear initial direction to travel.
+        RoomGenVisited.Add(new Vector2Int(1, 1));
+        RoomGenVisited.Add(new Vector2Int(1, -1));
+        RoomGenVisited.Add(new Vector2Int(-1, 1));
+        RoomGenVisited.Add(new Vector2Int(-1, -1));
+        Direction initDirection = DirectionMap.Keys.ElementAt(rng.Next(DirectionMap.Count));
+        foreach (Direction dir in DirectionMap.Keys)
+        {
+            if (dir == initDirection) continue;
+            Vector2Int coords = startCoords + DirectionMap[dir];
+            RoomGenVisited.Add(coords);
+        }
 
         RoomWidth = RootFloorCollider.GetComponent<Renderer>().bounds.extents.x * 2;
     }
@@ -107,36 +133,37 @@ public class RoomGeneration : MonoBehaviour
     }
 
     void GenerateFloors() {
+        GenerationMode currentMode = GenerationMode.Hallway;
+        int roomsSinceLastSwitch = 0;
+        const int SwitchThreshold = 3;
+        Direction lastDirection = Direction.NE; // Default direction
         while (RoomMap.Count < NumRooms) {
             if (RoomGenPath.Count == 0) {
                 Debug.LogWarning("Room generation failed: couldn't reach target room count.");
                 return;
             }
-            Direction nextDirection = Direction.NE; // Default direction
-            List<Direction> availableDirections = new();
-            Vector2Int currentCoords = RoomGenPath.Peek();
-            Vector2Int NECoords = currentCoords + DirectionMap[Direction.NE];
-            Vector2Int NWCoords = currentCoords + DirectionMap[Direction.NW];
-            Vector2Int SECoords = currentCoords + DirectionMap[Direction.SE];
-            Vector2Int SWCoords = currentCoords + DirectionMap[Direction.SW];
-            if (!RoomGenVisited.Contains(NECoords)) availableDirections.Add(Direction.NE);
-            if (!RoomGenVisited.Contains(NWCoords)) availableDirections.Add(Direction.NW);
-            if (!RoomGenVisited.Contains(SECoords)) availableDirections.Add(Direction.SE);
-            if (!RoomGenVisited.Contains(SWCoords)) availableDirections.Add(Direction.SW);
-            if (availableDirections.Count == 0)
-            {
-                // No available directions, so we need to backtrack
-                RoomGenPath.Pop();
-                continue;
+            if (roomsSinceLastSwitch >= SwitchThreshold) {
+                if (rng.NextDouble() < 0.5) {
+                    currentMode = (currentMode == GenerationMode.Hallway) ? GenerationMode.BigRoom : GenerationMode.Hallway;
+                }
+                roomsSinceLastSwitch = 0;
             }
-            else {
-                nextDirection = availableDirections[rng.Next(availableDirections.Count)];
+            if (currentMode == GenerationMode.Hallway) {
+                GenerateSingleRoom(ref lastDirection);
+                roomsSinceLastSwitch++;
             }
-            Vector2Int nextCoords = currentCoords + DirectionMap[nextDirection];
-            InitializeNewRoom(nextCoords);
-            
+            else if (currentMode == GenerationMode.BigRoom) {
+                if (GenerateBigRoom()) {
+                    roomsSinceLastSwitch++;
+                }
+                else {
+                    // If failed to place a big room (no space), fallback to hallway
+                    currentMode = GenerationMode.Hallway;
+                }
+            }
         }
     }
+
 
     void InitializeNewRoom(Vector2Int coords) {
         GameObject newFloor = Instantiate(FloorPrefab);
@@ -154,6 +181,102 @@ public class RoomGeneration : MonoBehaviour
         RoomMap.Add(coords, newRoom);
     }
 
+    void GenerateSingleRoom(ref Direction lastDirection) {
+        if (RoomGenPath.Count == 0)
+        {
+            Debug.LogWarning("Room generation failed: couldn't reach target room count.");
+            return;
+        }
+        Direction nextDirection = Direction.NE; // Default direction
+        List<Direction> availableDirections = new();
+        Vector2Int currentCoords = RoomGenPath.Peek();
+        foreach (Direction dir in Enum.GetValues(typeof(Direction)))
+        {
+            Vector2Int neighborCoords = currentCoords + DirectionMap[dir];
+            if (!RoomGenVisited.Contains(neighborCoords))
+            {
+                availableDirections.Add(dir);
+            }
+        }
+        if (availableDirections.Count == 0)
+        {
+            // No available directions, so we need to backtrack
+            RoomGenPath.Pop();
+            return;
+        }
+
+        List<Direction> weightedDirections = new();
+        foreach (Direction dir in availableDirections)
+        {
+            if (dir == lastDirection)
+            {
+                // Favor continuing forward
+                for (int i = 0; i < SameDirectionWeight; i++) weightedDirections.Add(dir);
+            }
+            else
+            {
+                weightedDirections.Add(dir); // Normal chance
+            }
+        }
+
+        nextDirection = weightedDirections[rng.Next(weightedDirections.Count)];
+        Vector2Int nextCoords = currentCoords + DirectionMap[nextDirection];
+        InitializeNewRoom(nextCoords);
+        lastDirection = nextDirection;
+    }
+
+    bool GenerateBigRoom()
+    {
+        Vector2Int currentCoords = RoomGenPath.Peek();
+        List<Direction> availableDirections = new();
+
+        foreach (Direction dir in Enum.GetValues(typeof(Direction)))
+        {
+            Vector2Int neighborCoords = currentCoords + DirectionMap[dir];
+            if (!RoomGenVisited.Contains(neighborCoords))
+            {
+                availableDirections.Add(dir);
+            }
+        }
+
+        if (availableDirections.Count == 0)
+        {
+            RoomGenPath.Pop();
+            return false;
+        }
+
+        Direction baseDirection = availableDirections[rng.Next(availableDirections.Count)];
+        Vector2Int baseCoords = currentCoords + DirectionMap[baseDirection];
+
+        // Randomly pick big room size (2x2, 2x3, etc.)
+        int width = rng.Next(2, 4);  // 2 to 3
+        int height = rng.Next(2, 4); // 2 to 3
+
+        // Collect all coords we would occupy
+        List<Vector2Int> newCoords = new();
+        for (int x = 0; x < width; x++)
+        {
+            for (int y = 0; y < height; y++)
+            {
+                Vector2Int offset = new Vector2Int(x, y);
+                Vector2Int coord = baseCoords + offset;
+                if (RoomGenVisited.Contains(coord))
+                {
+                    return false; // Abort placing this big room
+                }
+                newCoords.Add(coord);
+            }
+        }
+
+        // Actually place the big room tiles
+        foreach (var coord in newCoords)
+        {
+            InitializeNewRoom(coord);
+        }
+
+        return true;
+    }
+
     // Update is called once per frame
     void Update()
     {
@@ -167,4 +290,10 @@ public enum Direction
     NW,
     SE,
     SW
+}
+
+public enum GenerationMode
+{
+    Hallway,
+    BigRoom
 }
