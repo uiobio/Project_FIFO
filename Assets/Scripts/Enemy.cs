@@ -10,6 +10,12 @@ public class Enemy : MonoBehaviour
 	public Vector3 cam_rot;
 	[SerializeField]
 	private int element;
+	[SerializeField]
+	private int num_chips;
+	[SerializeField]
+	private SpriteRenderer SR;
+
+	Color[] ElementColors = new Color[] {Color.yellow, Color.red, Color.cyan, Color.green};
 
     void Start()
 	{
@@ -19,7 +25,9 @@ public class Enemy : MonoBehaviour
 	void Update()
 	{
 		if (H.isDead){
+			Debug.Log($"ENEMY {gameObject.name} HAS DIED!!!");
 			Level_manager.instance.UpdatePattern(element);
+			Level_manager.instance.GainCoin(num_chips);
 			Destroy(gameObject);
 		}
 		healthBar.eulerAngles = cam_rot;
@@ -27,5 +35,6 @@ public class Enemy : MonoBehaviour
 
 	public void SetElement(int elem){
 		element = elem;
+		SR.color = ElementColors[elem];
 	}
 }

@@ -11,15 +11,33 @@ public class Respawn_Point : MonoBehaviour
     private bool SpawnsEnemy;
     [SerializeField]
     private int EnemyElement;
+    [SerializeField]
+    private GameObject p_Warning;
+    private GameObject I_Warning;
 
     // Start is called before the first frame update
     void Start()
     {
-        Spawn();
+        if(SpawneePrefab != null){
+            StartSpawn();
+        }
     }
 
-    public void Spawn()
+    public void StartSpawn(){
+        if(!SpawnsEnemy){
+            Spawn();
+            return;
+        }
+        I_Warning = Instantiate(p_Warning, transform);
+        Invoke("Spawn", Level_manager.instance.EnemySpawnWarningTime);
+    }
+
+    void Spawn()
     {
+        if(I_Warning != null){
+            //Destroy the warning visuals/object
+            Destroy(I_Warning);
+        }
         if(SpawneePrefab != null){
             spawnee = Instantiate(SpawneePrefab, transform.position, Quaternion.identity);
             //Set element if enemy
@@ -39,6 +57,6 @@ public class Respawn_Point : MonoBehaviour
         if(SpawnsEnemy){
             EnemyElement = Element;
         }
-        if (spawn) { Spawn(); }
+        if (spawn) { StartSpawn(); }
     }
 }

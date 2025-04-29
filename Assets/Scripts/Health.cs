@@ -79,7 +79,6 @@ public class Health : MonoBehaviour
         }
         else if (PB != null){
             PB.SetProgress(GetHealthPercentage());
-            Debug.Log($"{gameObject.name} updated Health");
         }
     }
 }
