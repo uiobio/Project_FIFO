@@ -712,7 +712,9 @@ public class Level_manager : MonoBehaviour
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode){
         Debug.Log($"In room {curr_room}");
-        ES.GenerateEnemies(curr_room);
+        if(ES != null){
+            ES.GenerateEnemies(curr_room);
+        }
     }
 }
 
