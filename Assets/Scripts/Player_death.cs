@@ -17,6 +17,7 @@ public class Player_death : MonoBehaviour
     {
         if( H.isDead ){
             Level_manager.instance.ResetPlayerHealth();
+            Level_manager.instance.ResetRoom();
             SceneManager.LoadScene(room_name);
         }
     }

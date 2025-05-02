@@ -258,6 +258,7 @@ MonoBehaviour:
   health: 40
   isDead: 0
   PB: {fileID: 376839091163493058}
+  p_dmg_msg: {fileID: 2591323535942314205, guid: 3caf79f6cc6836e4197ae5aa249feebc, type: 3}
 --- !u!114 &8653533770940608036
 MonoBehaviour:
   m_ObjectHideFlags: 0
