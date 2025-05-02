@@ -165,6 +165,7 @@ MonoBehaviour:
   health: 40
   isDead: 0
   PB: {fileID: 547693905571498814}
+  p_dmg_msg: {fileID: 2591323535942314205, guid: 3caf79f6cc6836e4197ae5aa249feebc, type: 3}
 --- !u!1 &4601289208719956107
 GameObject:
   m_ObjectHideFlags: 0

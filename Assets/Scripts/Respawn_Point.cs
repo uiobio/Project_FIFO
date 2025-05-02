@@ -14,6 +14,11 @@ public class Respawn_Point : MonoBehaviour
     [SerializeField]
     private GameObject p_Warning;
     private GameObject I_Warning;
+    private bool spawning;
+
+    void Awake(){
+        spawning = false;
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -24,6 +29,12 @@ public class Respawn_Point : MonoBehaviour
     }
 
     public void StartSpawn(){
+        if(spawning == true){
+            Debug.Log($"{gameObject.name} tried and failed to spawn");
+            return;
+        }
+        Debug.Log($"Setting spawning to TRUE for {gameObject.name}");
+        spawning = true;
         if(!SpawnsEnemy){
             Spawn();
             return;
@@ -46,12 +57,14 @@ public class Respawn_Point : MonoBehaviour
             }
             Debug.Log($"Spawned {spawnee.gameObject.name}. Set elem to {EnemyElement}? {SpawnsEnemy}");
         }
+        spawning = false;
     }
 
     public void SetSpawnee(GameObject new_spawnee){
         SetSpawnee(new_spawnee, false, false, -1);
     }
     public void SetSpawnee(GameObject new_spawnee, bool spawn, bool isEnemy, int Element){
+        Debug.Log("Setting Spawnee");
         SpawneePrefab = new_spawnee;
         SpawnsEnemy = isEnemy;
         if(SpawnsEnemy){
