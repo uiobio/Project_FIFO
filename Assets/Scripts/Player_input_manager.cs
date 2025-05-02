@@ -131,7 +131,7 @@ public class Player_input_manager : MonoBehaviour
             anim.SetBool("GoingN", dot_dir > 0); 
         }
         anim.SetBool("Running", movingN != new Vector3(0f, 0f, 0f));
-        Debug.Log($"Move: {moveDirection}, Proj: {Vector3.Project(moveDirection, v_N)}, magn: {dot_dir}");
+        // Debug.Log($"Move: {moveDirection}, Proj: {Vector3.Project(moveDirection, v_N)}, magn: {dot_dir}");
         Vector3 movingR = Vector3.Project(moveDirection, v_R);
         float dot_dirR = Vector3.Dot(movingR, v_R);
         SetAnimLR(dot_dirR > 0);

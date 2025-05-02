@@ -377,9 +377,14 @@ MonoBehaviour:
   RandomSeed: 1
   Seed: 13
   SameDirectionWeight: 2
-  NumRooms: 20
+  NumRooms: 1
   RespawnPrefab: {fileID: 4492245601494859489, guid: 40fbdf475c75b434398201ede52751a2, type: 3}
   FloorPrefab: {fileID: 317940752858093605, guid: 1b4d4be3335a2f2499b4541c46447d7a, type: 3}
+  ExitDoorPrefab: {fileID: 854805185570381957, guid: 77b3dfcdec4e31d4b8f189e2db34fab2, type: 3}
+  NEWallPrefab: {fileID: 0}
+  NWWallPrefab: {fileID: 0}
+  SEWallPrefab: {fileID: 0}
+  SWWallPrefab: {fileID: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

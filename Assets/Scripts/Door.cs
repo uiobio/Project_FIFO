@@ -5,8 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class Door : MonoBehaviour
 {
-    [SerializeField]
-    string room_name;
+    public string RoomName;
 
     void OnTriggerEnter(Collider other)
     {
@@ -17,7 +16,7 @@ public class Door : MonoBehaviour
         // Bugfix: made it so only the player can trigger the door.
         if (other.tag == "Player")
         {
-            SceneManager.LoadScene(room_name);
+            SceneManager.LoadScene(RoomName);
         }
     }
 }

@@ -22,6 +22,11 @@ public class RoomGeneration : MonoBehaviour
     // Prefabs
     public GameObject RespawnPrefab;
     public GameObject FloorPrefab;
+    public GameObject ExitDoorPrefab;
+    public GameObject NEWallPrefab;
+    public GameObject NWWallPrefab;
+    public GameObject SEWallPrefab;
+    public GameObject SWWallPrefab;
 
     // Root Room Stuff
     [System.NonSerialized]
@@ -162,8 +167,8 @@ public class RoomGeneration : MonoBehaviour
                 }
             }
         }
+        PlaceExitDoor();
     }
-
 
     void InitializeNewRoom(Vector2Int coords) {
         GameObject newFloor = Instantiate(FloorPrefab);
@@ -206,10 +211,8 @@ public class RoomGeneration : MonoBehaviour
         }
 
         List<Direction> weightedDirections = new();
-        foreach (Direction dir in availableDirections)
-        {
-            if (dir == lastDirection)
-            {
+        foreach (Direction dir in availableDirections) {
+            if (dir == lastDirection) {
                 // Favor continuing forward
                 for (int i = 0; i < SameDirectionWeight; i++) weightedDirections.Add(dir);
             }
@@ -225,22 +228,18 @@ public class RoomGeneration : MonoBehaviour
         lastDirection = nextDirection;
     }
 
-    bool GenerateBigRoom()
-    {
+    bool GenerateBigRoom() {
         Vector2Int currentCoords = RoomGenPath.Peek();
         List<Direction> availableDirections = new();
 
-        foreach (Direction dir in Enum.GetValues(typeof(Direction)))
-        {
+        foreach (Direction dir in Enum.GetValues(typeof(Direction))) {
             Vector2Int neighborCoords = currentCoords + DirectionMap[dir];
-            if (!RoomGenVisited.Contains(neighborCoords))
-            {
+            if (!RoomGenVisited.Contains(neighborCoords)) {
                 availableDirections.Add(dir);
             }
         }
 
-        if (availableDirections.Count == 0)
-        {
+        if (availableDirections.Count == 0) {
             RoomGenPath.Pop();
             return false;
         }
@@ -254,14 +253,11 @@ public class RoomGeneration : MonoBehaviour
 
         // Collect all coords we would occupy
         List<Vector2Int> newCoords = new();
-        for (int x = 0; x < width; x++)
-        {
-            for (int y = 0; y < height; y++)
-            {
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
                 Vector2Int offset = new Vector2Int(x, y);
                 Vector2Int coord = baseCoords + offset;
-                if (RoomGenVisited.Contains(coord))
-                {
+                if (RoomGenVisited.Contains(coord)) {
                     return false; // Abort placing this big room
                 }
                 newCoords.Add(coord);
@@ -269,18 +265,58 @@ public class RoomGeneration : MonoBehaviour
         }
 
         // Actually place the big room tiles
-        foreach (var coord in newCoords)
-        {
+        foreach (var coord in newCoords) {
             InitializeNewRoom(coord);
         }
 
         return true;
     }
 
-    // Update is called once per frame
-    void Update()
+    void PlaceExitDoor()
     {
-        
+        Queue<Vector2Int> frontier = new();
+        Dictionary<Vector2Int, int> distances = new();
+
+        Vector2Int startCoords = new(0, 0);
+        frontier.Enqueue(startCoords);
+        distances[startCoords] = 0;
+
+        while (frontier.Count > 0) {
+            Vector2Int current = frontier.Dequeue();
+            int currentDistance = distances[current];
+
+            foreach (Direction dir in DirectionMap.Keys) {
+                Vector2Int neighbor = current + DirectionMap[dir];
+                if (RoomMap.ContainsKey(neighbor) && !distances.ContainsKey(neighbor)) {
+                    frontier.Enqueue(neighbor);
+                    distances[neighbor] = currentDistance + 1;
+                }
+            }
+        }
+
+        // Filter rooms without NE neighbors
+        Vector2Int farthestValidRoom = startCoords;
+        int maxDistance = -1;
+        foreach (var kvp in distances) {
+            Vector2Int coords = kvp.Key;
+            Vector2Int neNeighbor = coords + DirectionMap[Direction.NE];
+            if (!RoomMap.ContainsKey(neNeighbor)) {
+                if (kvp.Value > maxDistance) {
+                    maxDistance = kvp.Value;
+                    farthestValidRoom = coords;
+                }
+            }
+        }
+
+        Debug.Log($"Farthest valid room is at {farthestValidRoom.x}, {farthestValidRoom.y}, distance: {maxDistance}");
+
+        GameObject farthestRoom = RoomMap[farthestValidRoom];
+
+        GameObject door = Instantiate(ExitDoorPrefab);
+        door.transform.position = new Vector3(farthestValidRoom.x * RoomWidth - RoomWidth / 2, 0, farthestValidRoom.y * RoomWidth);
+        door.transform.SetParent(farthestRoom.transform);
+        door.transform.Find("Square").localPosition = new Vector3(-0.2f, 0.19f, -0.35f);
+        door.GetComponent<Door>().RoomName = "Basic Shop Room";
     }
 }
 

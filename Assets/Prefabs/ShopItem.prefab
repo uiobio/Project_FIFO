@@ -77,7 +77,7 @@ GameObject:
   - component: {fileID: 8654368744275000089}
   - component: {fileID: 5586004378863692266}
   - component: {fileID: 7997883247724813756}
-  m_Layer: 0
+  m_Layer: 16
   m_Name: Collider
   m_TagString: ShopItem
   m_Icon: {fileID: 0}
@@ -171,7 +171,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
+  m_Size: {x: 1, y: 5, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!65 &5586004378863692266
 BoxCollider:
