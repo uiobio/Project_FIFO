@@ -10,6 +10,9 @@ public class Door : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
+        if(FindObjectsByType<Enemy>(FindObjectsSortMode.None).Length != 0){
+            return;
+        }
         GameState.Instance.roomCount++;
 
         // Load the Basic L Room scene when this is entered
