@@ -24,7 +24,9 @@ public class EnemySpawning : MonoBehaviour
         Respawn_Point[] allObjects = (Respawn_Point[])FindObjectsByType<Respawn_Point>(FindObjectsSortMode.None);
         foreach (Respawn_Point RP in allObjects)
         {
-            allSpawners.Add(RP.gameObject);
+            if(RP.name != "Respawn_point"){
+                allSpawners.Add(RP.gameObject);
+            }
         }
         SpawnEnemies(room);
     }

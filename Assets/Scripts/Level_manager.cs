@@ -13,7 +13,6 @@ public class Level_manager : MonoBehaviour
 
     public int curr_room;
     private EnemySpawning ES;
-    
 
     // Most upgrades the player can have at once
     public const int MAX_PLAYER_UPGRADES = 5;
@@ -708,6 +707,7 @@ public class Level_manager : MonoBehaviour
     public void ResetRoom(){
         Debug.Log("RESET ROOM!");
         curr_room = 0;
+        pat_man.ClearQueue();
     }
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode){

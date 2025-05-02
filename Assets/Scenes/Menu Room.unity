@@ -1208,6 +1208,10 @@ PrefabInstance:
       value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 3203375570371492845, guid: 4201026a094fdde4786da0df2069e0c2, type: 3}
+      propertyPath: p_dmg_msg
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 3203375570371492845, guid: 4201026a094fdde4786da0df2069e0c2, type: 3}
       propertyPath: Left_point
       value: 
       objectReference: {fileID: 952280546}
@@ -1267,7 +1271,6 @@ MonoBehaviour:
   EnemyRanks:
   - {fileID: 6162869850624354483, guid: 21239d46b243440e981c2ac40d36e17c, type: 3}
   - {fileID: 4013348123896331718, guid: 99a087fe29b6c4851bf6ea9ea5c6b032, type: 3}
-  Amounts: 0100000002000000
   allSpawners: []
 --- !u!1 &1491350787
 GameObject:
