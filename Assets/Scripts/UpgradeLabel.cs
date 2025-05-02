@@ -19,11 +19,7 @@ public class UpgradeLabel : MonoBehaviour
     [SerializeField]
     private string labelTextHotkeyInfoInsufficientFunds = "Not Enough Chips";
     [SerializeField]
-<<<<<<< HEAD
-    private string labelTextHotkeyInfoTrashcan = "(E) Recycle"; // Displays when the player is looking at the trashcan
-=======
     private string labelTextHotkeyInfoTrashcan = "(E) Recycle\n(MB1) Select"; // Displays when the player is looking at the trashcan
->>>>>>> origin
     [SerializeField]
     private string labelTextHotkeyInfoColor = "#87CEEB"; // Pale, electric blue, used for the "BUY" and "LEVEL UP" text.
     [SerializeField]
