@@ -182,7 +182,7 @@ public class Player_input_manager : MonoBehaviour
         // Dashes a with a speed specified by dashScalar and direction specified by orientation
         Cooldown_manager.instance.UpdateDashCooldown();
         rb.linearVelocity = orientation * dashSpeed;
-        dashCompleteTime = Time.time + (dashDistance / dashSpeed);
+        dashCompleteTime = Time.time + ((dashDistance * Level_manager.instance.hardwareAccelUpgradeModifier) / dashSpeed);
     }
 
     void Interact(GameObject interactable)

@@ -19,8 +19,12 @@ public class Trashcan : MonoBehaviour
     private float[] labelTriggerHitboxSize;
 
     // Instiantiated UI label object from the prefab
+<<<<<<< HEAD
+    private GameObject label;
+=======
     [System.NonSerialized]
     public GameObject label;
+>>>>>>> origin
 
     // The position of the center point of the top face of this ShopItem
     private Vector3 topFaceCenterPos;
@@ -66,7 +70,11 @@ public class Trashcan : MonoBehaviour
         float height = cubeRenderer.bounds.extents.y;
         topFaceCenterPos = center + new Vector3(0, height + 0.1f, 0);
 
+<<<<<<< HEAD
+        // Assign the pedastal sprite
+=======
         // Assign the trashcan sprite
+>>>>>>> origin
         spriteTransform = transform.Find("Sprite");
         spriteTransform.GetComponent<SpriteRenderer>().sprite = trashcanEmpty;
 
@@ -76,6 +84,10 @@ public class Trashcan : MonoBehaviour
     // Called when the player interacts with this instance's gameObject
     public void use()
     {
+<<<<<<< HEAD
+        //FIXME: make it so the selected upgrade is cleared from the player's loadout
+=======
+>>>>>>> origin
     }
 
     // Makes a single formatted string from this ShopItem's hotkey info, name, and description strings

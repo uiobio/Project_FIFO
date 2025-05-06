@@ -329,6 +329,8 @@ Transform:
   - {fileID: 338464110}
   m_Father: {fileID: 1962872921}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+<<<<<<< HEAD
+=======
 --- !u!1001 &610437861
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -386,6 +388,7 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4201026a094fdde4786da0df2069e0c2, type: 3}
+>>>>>>> origin
 --- !u!1 &874944015
 GameObject:
   m_ObjectHideFlags: 0
@@ -1054,6 +1057,8 @@ PrefabInstance:
       propertyPath: m_Name
       value: Trashcan
       objectReference: {fileID: 0}
+<<<<<<< HEAD
+=======
     - target: {fileID: 2245966294081068185, guid: 0c6383ee0839d464cabdb27f3deeddd0, type: 3}
       propertyPath: m_LocalRotation.w
       value: 0.3487927
@@ -1074,6 +1079,7 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.x
       value: 48.59
       objectReference: {fileID: 0}
+>>>>>>> origin
     - target: {fileID: 7184290979449012382, guid: 0c6383ee0839d464cabdb27f3deeddd0, type: 3}
       propertyPath: m_LocalPosition.x
       value: -0.027999979
@@ -2087,4 +2093,7 @@ SceneRoots:
   - {fileID: 1776268614}
   - {fileID: 2067782014}
   - {fileID: 3270094318285618684}
+<<<<<<< HEAD
+=======
   - {fileID: 610437861}
+>>>>>>> origin
