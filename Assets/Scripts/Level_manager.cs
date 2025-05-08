@@ -52,7 +52,7 @@ public class Level_manager : MonoBehaviour
     //FIXME: Add this list to a game_constants file
     [System.NonSerialized]
     public List<string> types = new List<string>() { "Earth", "Fire", "Ice", "Wind" };
-    [System.NonSerialized]
+    //[System.NonSerialized]
     public List<Color> typeColors = new List<Color>() { Color.green, Color.red, Color.blue, Color.cyan};
     static Pattern_UI_manager pat_man;
     [Header("Patterns")]
@@ -252,29 +252,6 @@ public class Level_manager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.P)) // Press 'P' to toggle pause
         {
             TogglePause();
-        }
-
-        if (Input.GetButtonDown("Dummy"))
-        {
-            Dummy();
-        }
-
-        // Key inputs for testing patterns- feel free to delete/ignore
-        if (Input.GetKeyDown("1"))
-        {
-            UpdatePattern(0);
-        }
-        if (Input.GetKeyDown("2"))
-        {
-            UpdatePattern(1);
-        }
-        if (Input.GetKeyDown("3"))
-        {
-            UpdatePattern(2);
-        }
-        if (Input.GetKeyDown("4"))
-        {
-            UpdatePattern(3);
         }
     }
 
