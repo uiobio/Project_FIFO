@@ -15,6 +15,9 @@ public class Health : MonoBehaviour
     [SerializeField]
     public ProgressBar PB;
 
+    [SerializeField]
+    public GameObject p_dmg_msg;
+
     void Start()
     {
         if (gameObject.tag == "Player"){
@@ -44,6 +47,7 @@ public class Health : MonoBehaviour
         {
             health += heal;
             UpdateHealth();
+            ShowDamageUI((int)(heal));
         }
     }
 
@@ -53,6 +57,7 @@ public class Health : MonoBehaviour
         {
             health -= damage;
             UpdateHealth();
+            ShowDamageUI((int)(-1 * damage));
         }
     }
 
@@ -79,6 +84,31 @@ public class Health : MonoBehaviour
         }
         else if (PB != null){
             PB.SetProgress(GetHealthPercentage());
+        }
+    }
+
+    private void ShowDamageUI(int dmg){
+        if(p_dmg_msg == null){
+            return;
+        }
+        //Create the damage number that appears by the enemy
+        Vector3 pos = gameObject.transform.position;
+        if(PB != null){
+            pos = PB.gameObject.transform.position;
+        }
+        GameObject GO = Instantiate(p_dmg_msg, pos, transform.rotation);
+        ShowDamage SD = GO.GetComponent<ShowDamage>();
+        SD.UpdateText(dmg);
+        if(gameObject.tag == "Player"){
+            if(dmg < 0){
+                SD.SetColor(Color.red);
+            }
+            else{
+                SD.SetColor(Color.green);
+            }
+        }
+        else{
+            SD.SetColor(Color.red);
         }
     }
 }

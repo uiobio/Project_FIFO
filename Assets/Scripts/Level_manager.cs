@@ -11,7 +11,9 @@ public class Level_manager : MonoBehaviour
 {
     public static Level_manager instance;
     public bool isPaused = false;
-    
+
+    public int curr_room;
+    private EnemySpawning ES;
 
     // Most upgrades the player can have at once
     public const int MAX_PLAYER_UPGRADES = 5;
@@ -167,11 +169,16 @@ public class Level_manager : MonoBehaviour
         {
             Destroy(gameObject); // Prevents duplicates on scene reload
         }
+
+        SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
     // Start is called before the first frame update
     void Start()
     { 
+        curr_room = 0;
+        ES = gameObject.GetComponent<EnemySpawning>();
+
         // Give self 0 coins to set HUD currency
         GainCoin(0);
         MusicManager = Instantiate(musicManagerPrefab);
@@ -385,7 +392,6 @@ public class Level_manager : MonoBehaviour
         //Right
         ((int, int), (int, int)) right = CheckPatterns(-1, start-1, end);
         (int, int) sub_right = right.Item1;
-        Debug.Log($"Comparing {left} to {right} :: {sub_left.Item1} > {sub_right.Item1}? {sub_left.Item1>sub_right.Item1}-{sub_left.Item2} > {sub_right.Item2}? {sub_left.Item2>sub_right.Item2}");
 
         if (sub_left.Item1 == sub_right.Item1){
             return sub_left.Item2 > sub_right.Item2 ? left : right;
@@ -767,4 +773,24 @@ public class Level_manager : MonoBehaviour
             Shop_room_setup.instance.UpdateShopItemLabel(upgrade);
         }
     }
+    
+    //Rooms
+    public void IncRoom(){
+        Debug.Log("NEXT ROOM!");
+        curr_room++;
+    }
+
+    public void ResetRoom(){
+        Debug.Log("RESET ROOM!");
+        curr_room = 0;
+        pat_man.ClearQueue();
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode){
+        Debug.Log($"In room {curr_room}");
+        if(ES != null){
+            ES.GenerateEnemies(curr_room);
+        }
+    }
 }
+
