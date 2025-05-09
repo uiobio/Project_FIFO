@@ -19,8 +19,11 @@ public class Respawn_Point : MonoBehaviour
     void Awake(){
         spawning = false;
     }
+<<<<<<< HEAD
 
     public GameObject Spawnee { get => spawnee; set => spawnee = value; }
+=======
+>>>>>>> baab94a4ab326b3e3fa3f23b045acd212d19d897
 
     // Start is called before the first frame update
     void Start()

@@ -895,6 +895,9 @@ MonoBehaviour:
   SpawnsEnemy: 0
   EnemyElement: 0
   p_Warning: {fileID: 0}
+<<<<<<< HEAD
+>>>>>>> baab94a4ab326b3e3fa3f23b045acd212d19d897
+=======
 >>>>>>> baab94a4ab326b3e3fa3f23b045acd212d19d897
 --- !u!1001 &1356900562
 PrefabInstance:

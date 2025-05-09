@@ -132,7 +132,10 @@ public class Player_input_manager : MonoBehaviour
         }
         anim.SetBool("Running", movingN != new Vector3(0f, 0f, 0f));
 <<<<<<< HEAD
+<<<<<<< HEAD
         // Debug.Log($"Move: {moveDirection}, Proj: {Vector3.Project(moveDirection, v_N)}, magn: {dot_dir}");
+=======
+>>>>>>> baab94a4ab326b3e3fa3f23b045acd212d19d897
 =======
 >>>>>>> baab94a4ab326b3e3fa3f23b045acd212d19d897
         Vector3 movingR = Vector3.Project(moveDirection, v_R);

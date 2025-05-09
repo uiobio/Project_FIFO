@@ -20,8 +20,11 @@ public class Door : MonoBehaviour
         if (other.tag == "Player")
         {
 <<<<<<< HEAD
+<<<<<<< HEAD
             SceneManager.LoadScene(RoomName);
 =======
+=======
+>>>>>>> baab94a4ab326b3e3fa3f23b045acd212d19d897
             Level_manager.instance.IncRoom();
 
             SceneManager.LoadScene(room_name);
