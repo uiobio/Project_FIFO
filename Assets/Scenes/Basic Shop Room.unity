@@ -975,7 +975,7 @@ MonoBehaviour:
   numSquaresBetweenEachShopItem: 5
   numSquaresFirstShopItemFromEdge: 2
   wallDirection: Northeast
-  preset_upgrade_ids: 00000000
+  preset_upgrade_ids: 
 --- !u!1001 &2067782014
 PrefabInstance:
   m_ObjectHideFlags: 0
