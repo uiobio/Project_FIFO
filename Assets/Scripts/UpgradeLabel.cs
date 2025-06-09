@@ -1,7 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-using System.Xml;
 using System;
 
 public class UpgradeLabel : MonoBehaviour
@@ -53,7 +52,7 @@ public class UpgradeLabel : MonoBehaviour
 
     public bool IsTrashcan { get; set; } = false; // Whether this label is for a trashcan or not
 
-    public void Initialize(Upgrade upgrade) 
+    public void Initialize(Upgrade upgrade)
     {
         // If we are given an upgrade object, then use that object's Name and Description for the label
         if (upgrade != null)
@@ -127,7 +126,7 @@ public class UpgradeLabel : MonoBehaviour
 
     private void RecalculateCorners()
     {
-        if(labelRectTransform != null)
+        if (labelRectTransform != null)
         {
             Vector3[] corners = new Vector3[4];
             labelRectTransform.GetWorldCorners(corners);
@@ -140,7 +139,7 @@ public class UpgradeLabel : MonoBehaviour
 
     // Force update/reload the canvases and TMP object to ensure the TMP object assigns its preferred height
     // Then use that height to set the height of the canvas
-    public void UpdateSize() 
+    public void UpdateSize()
     {
         RectTransform tmpText = (RectTransform)transform.Find("ItemLabelPanel").Find("TMP");
         RectTransform canvasRect = GetComponent<RectTransform>();
@@ -155,10 +154,13 @@ public class UpgradeLabel : MonoBehaviour
         string text = string.Empty;
         if (isHeaderDisplayed)
         {
-            if (!IsTrashcan) {
+            if (!IsTrashcan)
+            {
                 text += "<line-height=90%><size=110%><color=" + activeLabelTextHotkeyInfoColor + ">" + activeLabelTextHotkeyInfo + "</size></color>\n";
-                text += "<line-height=125%><size=75%><color=" + labelTextItemCostColor + "> Cost: " + labelTextItemCost.ToString() + " Chips</color></size>\n"; 
-            } else {
+                text += "<line-height=125%><size=75%><color=" + labelTextItemCostColor + "> Cost: " + labelTextItemCost.ToString() + " Chips</color></size>\n";
+            }
+            else
+            {
                 text += "<line-height=125%><size=110%><color=" + activeLabelTextHotkeyInfoColor + ">" + activeLabelTextHotkeyInfo + "</size></color>\n";
             }
         }
@@ -172,8 +174,10 @@ public class UpgradeLabel : MonoBehaviour
         return text;
     }
 
-    public void ChangeLabelTextBasedOnGameState(Upgrade upgrade) {
-        if (!IsTrashcan) {
+    public void ChangeLabelTextBasedOnGameState(Upgrade upgrade)
+    {
+        if (!IsTrashcan)
+        {
             // If player has enough currency to buy the upgrade...
             if (upgrade.Cost <= Level_manager.instance.Currency)
             {
@@ -208,14 +212,16 @@ public class UpgradeLabel : MonoBehaviour
                 activeLabelTextHotkeyInfoColor = labelTextHotkeyInfoSoldOutColor;
                 activeLabelTextHotkeyInfo = labelTextHotkeyInfoInsufficientFunds;
             }
-        } else
+        }
+        else
         {
             activeLabelTextHotkeyInfoColor = labelTextHotkeyInfoSoldOutColor;
             activeLabelTextHotkeyInfo = labelTextHotkeyInfoTrashcan;
         }
     }
 
-    public void SetNewUpgrade(Upgrade upgrade) { 
+    public void SetNewUpgrade(Upgrade upgrade)
+    {
         if (upgrade != null)
         {
             labelTextItemName = upgrade.Name;
