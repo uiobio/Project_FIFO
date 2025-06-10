@@ -28,10 +28,10 @@ public class Enemy : MonoBehaviour
 
 	void Update()
 	{
-		if (H.isDead){
+		if (H.IsDead){
 			Debug.Log($"ENEMY {gameObject.name} HAS DIED!!!");
-			Level_manager.instance.UpdatePattern(element);
-			Level_manager.instance.GainCoin(num_chips);
+			LevelManager.Instance.UpdatePattern(element);
+			LevelManager.Instance.GainCoin(num_chips);
 			Destroy(gameObject);
 		}
 		healthBar.eulerAngles = cam_rot;

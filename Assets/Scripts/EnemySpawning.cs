@@ -12,7 +12,7 @@ public class EnemySpawning : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        GenerateEnemies(Level_manager.instance.curr_room);
+        GenerateEnemies(LevelManager.Instance.CurrentRoom);
     }
 
     public void GenerateEnemies(int room){

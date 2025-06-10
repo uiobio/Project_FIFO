@@ -57,8 +57,8 @@ public class Upgrade_manager : MonoBehaviour
     private void InstantiateUpgradeUIIcon()
     {   
         // Icons are children of the "Upgrades" child of the Main UI canvas"
-        GameObject parentUI = Level_manager.instance.parentUI;
-        gameObject.transform.SetParent(Level_manager.instance.transform);
+        GameObject parentUI = LevelManager.Instance.ParentUI;
+        gameObject.transform.SetParent(LevelManager.Instance.transform);
         upgradeUIIcon = Instantiate(upgradePrefab.transform.GetChild(1).gameObject);
         upgradeUIIcon.transform.SetParent(parentUI.transform.Find("MainCanvas/Upgrades"));
         upgradeUIIcon.name = upgradeUIIcon.name + "_" + gameObject.name.Substring(gameObject.name.Length - 1, 1);
@@ -145,21 +145,21 @@ public class Upgrade_manager : MonoBehaviour
     // When the UI icon for this upgrade is clicked, update the index of the currently selected upgrade in the player held upgrades list in the level manager to reflect this.
     public void OnUIIconClick() {
         Debug.Log("Upgrade with name: " + upgrade.Name + " clicked! (Upgrade slot index " + upgradeIndex + ")");
-        Level_manager.instance.CurrentlySelectedUpgradeIndex = upgradeIndex;
+        LevelManager.Instance.CurrentlySelectedUpgradeIndex = upgradeIndex;
     }
 
     public void OnUIHoverEnter()
     {
-        if (Level_manager.instance.isPaused) 
+        if (LevelManager.Instance.IsPaused) 
         {
-            Level_manager.instance.isHoveringUpgradeIcon = true;
+            LevelManager.Instance.IsHoveringUpgradeIcon = true;
             Debug.Log("Hovered");
             upgradeUIIcon.GetComponent<RectTransform>().GetWorldCorners(UIIconCorners);
             UIIconCorners[0] += new Vector3(39, 24, 0);
             UIIconCorners[1] += new Vector3(39, -6, 0);
             UIIconCorners[2] += new Vector3(-39, -6, 0);
             UIIconCorners[3] += new Vector3(-39, 24, 0);
-            Level_manager.instance.CurrentlyHoveredUpgradeIndex = upgradeIndex;
+            LevelManager.Instance.CurrentlyHoveredUpgradeIndex = upgradeIndex;
             Label.GetComponent<RectTransform>().anchoredPosition = new Vector2(-440, -60);
             Label.transform.parent.Find("LineBL").gameObject.SetActive(true);
             Label.transform.parent.Find("LineTL").gameObject.SetActive(true);
@@ -174,7 +174,7 @@ public class Upgrade_manager : MonoBehaviour
 
     public void OnUIHoverExit()
     {
-        Level_manager.instance.isHoveringUpgradeIcon = false;
+        LevelManager.Instance.IsHoveringUpgradeIcon = false;
         Debug.Log("Unhovered");
         Label.SetActive(false);
         Label.transform.parent.Find("LineBL").gameObject.SetActive(false);

@@ -10,21 +10,20 @@ public class Health : MonoBehaviour
     [SerializeField]
     private float health = 100;
 
-    [SerializeField]
-    public bool isDead = false;
-    [SerializeField]
-    public ProgressBar PB;
+    public bool IsDead = false;
 
-    [SerializeField]
-    public GameObject p_dmg_msg;
+    public ProgressBar HealthBar;
+    public GameObject DmgMessage;
 
     void Start()
     {
-        if (gameObject.tag == "Player"){
-            maxHealth = Level_manager.instance.PlayerMaxHealth;
-            health = Level_manager.instance.PlayerHealth;
-            if (health == -1){
-                health = Level_manager.instance.PlayerMaxHealth;
+        if (gameObject.CompareTag("Player"))
+        {
+            maxHealth = LevelManager.Instance.PlayerMaxHealth;
+            health = LevelManager.Instance.PlayerHealth;
+            if (health == -1)
+            {
+                health = LevelManager.Instance.PlayerMaxHealth;
                 UpdateHealth();
             }
         }
@@ -32,7 +31,7 @@ public class Health : MonoBehaviour
 
     void Update()
     {
-        isDead = (health <= 0) ? true : false;
+        IsDead = health <= 0;
     }
 
     public void SetMaxHealth(float health)
@@ -47,7 +46,7 @@ public class Health : MonoBehaviour
         {
             health += heal;
             UpdateHealth();
-            ShowDamageUI((int)(heal));
+            ShowDamageUI((int)heal);
         }
     }
 
@@ -63,51 +62,65 @@ public class Health : MonoBehaviour
 
     public float GetHealthPercentage()
     {
-        float per = health/maxHealth;
-        return ((per < 0) ? 0 : ((per > 1) ? 1 : per));
+        float per = health / maxHealth;
+        return (per < 0) ? 0 : ((per > 1) ? 1 : per);
     }
 
     //Functions used to update the UI Healthbar
-    private void UpdateMax(){
-        if (gameObject.tag == "Player"){
+    private void UpdateMax()
+    {
+        if (gameObject.CompareTag("Player"))
+        {
             Debug.Log("PLAYER MAX HEALTH SET");
-            Level_manager.instance.SetMaxHealth(maxHealth);
+            LevelManager.Instance.SetMaxHealth(maxHealth);
         }
-        else if (PB != null){
-            PB.SetProgress(GetHealthPercentage());
-        }
-    }
-
-    private void UpdateHealth(){
-        if (gameObject.tag == "Player"){
-            Level_manager.instance.SetHealth(health);
-        }
-        else if (PB != null){
-            PB.SetProgress(GetHealthPercentage());
+        else if (HealthBar != null)
+        {
+            HealthBar.SetProgress(GetHealthPercentage());
         }
     }
 
-    private void ShowDamageUI(int dmg){
-        if(p_dmg_msg == null){
+    private void UpdateHealth()
+    {
+        if (gameObject.CompareTag("Player"))
+        {
+            LevelManager.Instance.SetHealth(health);
+        }
+        else if (HealthBar != null)
+        {
+            HealthBar.SetProgress(GetHealthPercentage());
+        }
+    }
+
+    private void ShowDamageUI(int dmg)
+    {
+        if (DmgMessage == null)
+        {
             return;
         }
+
         //Create the damage number that appears by the enemy
-        Vector3 pos = gameObject.transform.position;
-        if(PB != null){
-            pos = PB.gameObject.transform.position;
+        Vector3 damageMessagePosition = gameObject.transform.position;
+        if (HealthBar != null)
+        {
+            damageMessagePosition = HealthBar.gameObject.transform.position;
         }
-        GameObject GO = Instantiate(p_dmg_msg, pos, transform.rotation);
+        GameObject GO = Instantiate(DmgMessage, damageMessagePosition, transform.rotation);
         ShowDamage SD = GO.GetComponent<ShowDamage>();
         SD.UpdateText(dmg);
-        if(gameObject.tag == "Player"){
-            if(dmg < 0){
+        if (gameObject.tag == "Player")
+        {
+            if (dmg < 0)
+            {
                 SD.SetColor(Color.red);
             }
-            else{
+            else
+            {
                 SD.SetColor(Color.green);
             }
         }
-        else{
+        else
+        {
             SD.SetColor(Color.red);
         }
     }

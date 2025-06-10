@@ -81,11 +81,11 @@ public class ShopItem : MonoBehaviour
         label.SetActive(false);
     }
 
-    // Called when the player interacts with this instance's gameObject
+    // Called when the player interacts with this Instance's gameObject
     public void buy()
     {
         // Attempts to add the upgrade to the player's list. If this fails, cancel the buy.
-        if (!Level_manager.instance.AddPlayerUpgrade(upgrade, gameObject))
+        if (!LevelManager.Instance.AddPlayerUpgrade(upgrade, gameObject))
         {
             return;
         }

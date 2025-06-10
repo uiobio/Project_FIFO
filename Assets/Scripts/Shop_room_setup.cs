@@ -97,12 +97,12 @@ public class Shop_room_setup : MonoBehaviour
         for (int i = 0; i < numShopItems; i++)
         {
             // If there aren't enough upgrades loaded in the Upgrades list in the Level manager to create 3 random, distinct ShopItems, then do not attempt to randomize them
-            if (Level_manager.instance.Upgrades.Count > 3)
+            if (LevelManager.Instance.Upgrades.Count > 3)
             {
                 // If the randomly generated id has already been generated, keep trying
                 do
                 {
-                    id = UnityEngine.Random.Range(0, Level_manager.instance.Upgrades.Count);
+                    id = UnityEngine.Random.Range(0, LevelManager.Instance.Upgrades.Count);
                 } while (Array.IndexOf(generatedIds, id) != -1);
                 if(i < preset_upgrade_ids.Count){
                     id = i;
@@ -117,7 +117,7 @@ public class Shop_room_setup : MonoBehaviour
         // Add the upgrades corresponding to the selected Ids to the shopItemUpgrades list
         for (int i = 0; i < generatedIds.Length; i++)
         {
-            shopItemUpgrades.Add(Level_manager.instance.Upgrades[generatedIds[i]]);
+            shopItemUpgrades.Add(LevelManager.Instance.Upgrades[generatedIds[i]]);
         }
     }
 

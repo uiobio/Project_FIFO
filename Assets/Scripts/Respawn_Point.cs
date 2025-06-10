@@ -40,7 +40,7 @@ public class Respawn_Point : MonoBehaviour
             return;
         }
         I_Warning = Instantiate(p_Warning, transform);
-        Invoke("Spawn", Level_manager.instance.EnemySpawnWarningTime);
+        Invoke("Spawn", LevelManager.Instance.EnemySpawnWarningTime);
     }
 
     void Spawn()

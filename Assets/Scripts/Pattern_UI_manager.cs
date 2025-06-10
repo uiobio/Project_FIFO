@@ -43,15 +43,15 @@ public class Pattern_UI_manager : MonoBehaviour
         
         ClearQueue();
 
-        Level_manager.AddPatternUI(gameObject);
+        LevelManager.AddPatternUI(gameObject);
     }
 
     public void UpdateQueueColors(int new_type, int min_used, int max_used){
-        //Iterates through the pattern record of levelmanager and sets all types/sprites -- Level_manager.instance.Pattern_record.Count
-        for(int i=0; i < Level_manager.instance.Pattern_record.Count; i++){
+        //Iterates through the pattern record of levelmanager and sets all ElementTypes/sprites -- Level_manager.Instance.PatternRecord.Count
+        for(int i=0; i < LevelManager.Instance.PatternRecord.Count; i++){
             bool used = (min_used >= i && i >= max_used);
-            int ix = MAX_PATTERN_LEN - Level_manager.instance.Pattern_record.Count + i;
-            SetType(ix, Level_manager.instance.Pattern_record[i], used);
+            int ix = MAX_PATTERN_LEN - LevelManager.Instance.PatternRecord.Count + i;
+            SetType(ix, LevelManager.Instance.PatternRecord[i], used);
         }
     }
 

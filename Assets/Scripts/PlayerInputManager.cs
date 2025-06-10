@@ -3,19 +3,17 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public class Player_input_manager : MonoBehaviour
+public class PlayerInputManager : MonoBehaviour
 {
-    public static Player_input_manager instance;
+    public static PlayerInputManager Instance;
 
-    private void Awake() // makes Player_input_manager callable in any script: Player_input_manager.instance.[]
+    private void Awake() // makes PlayerInputManager callable in any script: PlayerInputManager.Instance.[]
     {
-        instance = this;
+        Instance = this;
     }
 
-    private Animator anim;
-    private SpriteRenderer SR;
-    private Vector3 v_N = new Vector3(-1f, 0f, -1f);
-    private Vector3 v_R = new Vector3(-1f, 0f, 1f);
+    private Animator animator;
+    private SpriteRenderer spriteRenderer;
 
     [Header("Movement")]
     // Player's movespeed
@@ -55,14 +53,13 @@ public class Player_input_manager : MonoBehaviour
     // Dynamically updated movement direction; Set to the zero vector when not moving
     private Vector3 moveDirection;
     // Effectively the same as the moveDirection, except when not moving, the orientation stores the last non-zero moveDirection to allow dashing while stationary.
-    private Vector3 orientation = new Vector3(0, 0, 1);
-    private Vector3 up = new Vector3(-1, 0, -1);
-    private Vector3 right = new Vector3(-1, 0, 1);
-    private Vector3 aimPoint = new Vector3(0, 0, 0);
+    private Vector3 orientation = new(0, 0, 1);
+    private Vector3 up = new(-1, 0, -1);
+    private Vector3 right = new(-1, 0, 1);
+    private Vector3 aimPoint = new(0, 0, 0);
 
     private Rigidbody rb;
     private Camera cam;
-
 
     // Start is called before the first frame update
     void Start()
@@ -77,8 +74,8 @@ public class Player_input_manager : MonoBehaviour
         AimToMousePoint();
         RotatePlayerToMousePoint();
 
-        anim = GetComponentInChildren<Animator>();
-        SR = GetComponentInChildren<SpriteRenderer>();
+        animator = GetComponentInChildren<Animator>();
+        spriteRenderer = GetComponentInChildren<SpriteRenderer>();
     }
 
     
@@ -90,7 +87,7 @@ public class Player_input_manager : MonoBehaviour
         {
             rb.linearVelocity = orientation.normalized * dashSpeed;
         }
-        else if (!Level_manager.instance.isPaused)
+        else if (!LevelManager.Instance.IsPaused)
         {
             // Called once per frame. Reads input & updates vars
             GetInput();
@@ -99,7 +96,7 @@ public class Player_input_manager : MonoBehaviour
         }
         
         // If dash input pressed and the dash is not on cooldown, execute the dash
-        if (dashInput && !Cooldown_manager.instance.IsDashOnCooldown)
+        if (dashInput && !CooldownManager.Instance.IsDashOnCooldown)
         {
             StartDash(moveDirection.normalized);
         }
@@ -109,35 +106,38 @@ public class Player_input_manager : MonoBehaviour
         {
             Interact(interactable);
         }
-        else if(interactInput){
+        else if (interactInput)
+        {
             // Use e for pattern activation if there's no interactable
-            Level_manager.instance.UsePattern();
+            LevelManager.Instance.UsePattern();
         }
 
         // If fireProjectile input pressed and the projectile is not on cooldown, fire the projectile
-        if (fireProjectileInput && !Cooldown_manager.instance.IsFireProjectileOnCooldown) 
+        if (fireProjectileInput && !CooldownManager.Instance.IsFireProjectileOnCooldown) 
         {
             FireProjectile();
         }
 
-        if (attackInput && !Cooldown_manager.instance.IsSlashOnCooldown && !Level_manager.instance.IsCurrentlySelectingUpgrade){
+        if (attackInput && !CooldownManager.Instance.IsSlashOnCooldown && !LevelManager.Instance.IsCurrentlySelectingUpgrade){
             BasicAttack();
         }
 
-        //Set animation based on if moving up or down
-        Vector3 movingN = Vector3.Project(moveDirection, v_N);
-        float dot_dir = Vector3.Dot(movingN, v_N);
-        if(movingN != new Vector3(0f, 0f, 0f)){ 
-            anim.SetBool("GoingN", dot_dir > 0); 
+        // Set animation based on if moving up or down
+        Vector3 movingUp = Vector3.Project(moveDirection, up);
+        float dotDirectionUp = Vector3.Dot(movingUp, right);
+        if(movingUp != Vector3.zero)
+        { 
+            animator.SetBool("GoingN", dotDirectionUp > 0); 
         }
-        anim.SetBool("Running", movingN != new Vector3(0f, 0f, 0f));
-        Vector3 movingR = Vector3.Project(moveDirection, v_R);
-        float dot_dirR = Vector3.Dot(movingR, v_R);
-        SetAnimLR(dot_dirR > 0);
+        animator.SetBool("Running", movingUp != Vector3.zero);
+        Vector3 movingRight = Vector3.Project(moveDirection, up);
+        float dotDirectionRight = Vector3.Dot(movingRight, right);
+        SetAnimLR(dotDirectionRight > 0);
     }
 
-    void SetAnimLR(bool facingRight){
-        SR.flipX = !facingRight;
+    private void SetAnimLR(bool facingRight)
+    {
+        spriteRenderer.flipX = !facingRight;
     }
 
     void FixedUpdate()
@@ -146,7 +146,7 @@ public class Player_input_manager : MonoBehaviour
         MovePlayer();
     }
 
-    void GetInput()
+    private void GetInput()
     {
         // Sets all input variables to their respective keybinds (as defined in Project Settings --> Input Manager)
         horizontalInput = Input.GetAxisRaw("Horizontal");
@@ -157,7 +157,7 @@ public class Player_input_manager : MonoBehaviour
         attackInput = Input.GetButtonDown("Fire1");
     }
 
-    void MovePlayer()
+    private void MovePlayer()
     {
         // Calculate moveDirection
         moveDirection = up * verticalInput + right * horizontalInput;
@@ -172,20 +172,20 @@ public class Player_input_manager : MonoBehaviour
         }
 
         // Add the forces in direction specified by moveDirection and speed specified by moveSpeed
-        float speed = moveSpeed * (Level_manager.instance.PF.isBoosted ? boostedMult : 1f);
+        float speed = moveSpeed * (LevelManager.Instance.PatternAbilityManager.isBoosted ? boostedMult : 1f);
         rb.AddForce(moveDirection.normalized * speed, ForceMode.Force);
         
     }
 
-    void StartDash(Vector3 vect)
+    private void StartDash(Vector3 vect)
     {
         // Dashes a with a speed specified by dashScalar and direction specified by orientation
-        Cooldown_manager.instance.UpdateDashCooldown();
+        CooldownManager.Instance.UpdateDashCooldown();
         rb.linearVelocity = orientation * dashSpeed;
         dashCompleteTime = Time.time + (dashDistance / dashSpeed);
     }
 
-    void Interact(GameObject interactable)
+    private void Interact(GameObject interactable)
     {
         // If the other GameObject is a ShopItem and the shop is active, buy the item.
         if (interactable.CompareTag("ShopItem") && interactable.GetComponent<ShopItem>().IsShopActive) 
@@ -201,27 +201,27 @@ public class Player_input_manager : MonoBehaviour
     }
 
     // Instantiates a projectile that moves toward the position defined by aimPoint at the time of firing
-    void FireProjectile()
+    private void FireProjectile()
     { 
         // Projectile starts at the position of the "nose" of the player
         GameObject projectile = Instantiate(projectilePrefab, new Vector3(transform.Find("Forward").position.x, ProjectilePlaneY, transform.Find("Forward").position.z), transform.rotation);
         projectile.transform.LookAt(aimPoint);
         projectile.layer = 7; // Set to PlayerProjectiles layer, this makes it so it can only hit enemies and obstacles, but not the player.
-        Cooldown_manager.instance.UpdateFireProjectileCooldown();
+        CooldownManager.Instance.UpdateFireProjectileCooldown();
     }
 
-    void BasicAttack()
+    private void BasicAttack()
     {
         GameObject Slash = Instantiate(slashPrefab, new Vector3(transform.Find("Forward").position.x, transform.position.y, transform.Find("Forward").position.z), transform.rotation);
         Slash.transform.parent = transform;
-        Cooldown_manager.instance.UpdateSlashCooldown();
-        anim.SetTrigger("Slash");
+        CooldownManager.Instance.UpdateSlashCooldown();
+        animator.SetTrigger("Slash");
     }
 
     // Calculates the world position on the projectile firing plane to which the mouse is pointing
-    void AimToMousePoint()
+    private void AimToMousePoint()
     {
-        Plane plane = new Plane(Vector3.up, -1 * ProjectilePlaneY);
+        Plane plane = new(Vector3.up, -1 * ProjectilePlaneY);
         Ray ray = cam.ScreenPointToRay(Input.mousePosition);
         if (plane.Raycast(ray, out float hit))
         {
@@ -230,10 +230,10 @@ public class Player_input_manager : MonoBehaviour
     }
 
     // Rotates the player towards the aimPoint
-    void RotatePlayerToMousePoint()
+    private void RotatePlayerToMousePoint()
     {
-        Vector3 direction = new Vector3(aimPoint.x, transform.position.y, aimPoint.z);
-        direction = direction - transform.position;
+        Vector3 direction = new(aimPoint.x, transform.position.y, aimPoint.z);
+        direction -= transform.position;
         Quaternion targetRotation = Quaternion.LookRotation(direction);
         transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * 20f);
     }
@@ -244,7 +244,7 @@ public class Player_input_manager : MonoBehaviour
     // It's a coroutine and not a function so it can run alongside Update() blocks, without interrupting core game processes.
     public IEnumerator SelectAndConfirmReplace(Upgrade newUpgrade, GameObject shop)
     {
-        Level_manager levelManager = Level_manager.instance;
+        LevelManager levelManager = LevelManager.Instance;
         levelManager.IsCurrentlySelectingUpgrade = true;
         yield return null; // Wait one frame so no extraneous inputs can leak through
         while (true)
@@ -278,7 +278,7 @@ public class Player_input_manager : MonoBehaviour
 
     public IEnumerator SelectAndConfirmRecycle(GameObject trashcan)
     {
-        Level_manager levelManager = Level_manager.instance;
+        LevelManager levelManager = LevelManager.Instance;
         levelManager.IsCurrentlySelectingRecycle = true;
         yield return null; // Wait one frame so no extraneous inputs can leak through
         while (true)

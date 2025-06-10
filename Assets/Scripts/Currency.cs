@@ -20,7 +20,7 @@ public class Currency : MonoBehaviour
     void OnTriggerEnter(Collider c){
         if(c.tag == "Player"){
             Debug.Log("Coin hit by player!");
-            Level_manager.instance.GainCoin(value);
+            LevelManager.Instance.GainCoin(value);
             Destroy(gameObject);
         }
     }

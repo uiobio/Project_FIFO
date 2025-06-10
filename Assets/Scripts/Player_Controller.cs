@@ -7,7 +7,7 @@ public class Player_Controller : MonoBehaviour
     public static Player_Controller controller;
     public float normalSpeed = 5f; // Default movement speed
     public float boostedSpeed = 7.5f; // 1.5x speed boost
-    public float boostDuration = 30f * Level_manager.instance.hardwareAccelUpgradeModifier; // base 30 seconds duration 
+    public float boostDuration = 30f * LevelManager.Instance.hardwareAccelUpgradeModifier; // base 30 seconds duration 
     private bool isBoosted = false;
     private Rigidbody rb;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -35,7 +35,7 @@ public class Player_Controller : MonoBehaviour
 
     public void UpgradeBoost()
     {
-        StartCoroutine(SpeedBoost(Level_manager.instance.bootUpUpgradeModifierValue, Level_manager.instance.bootUpUpgradeModifier));
+        StartCoroutine(SpeedBoost(LevelManager.Instance.bootUpUpgradeModifierValue, LevelManager.Instance.bootUpUpgradeModifier));
     }
 
     IEnumerator SpeedBoost()

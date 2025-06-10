@@ -179,13 +179,13 @@ public class UpgradeLabel : MonoBehaviour
         if (!IsTrashcan)
         {
             // If player has enough currency to buy the upgrade...
-            if (upgrade.Cost <= Level_manager.instance.Currency)
+            if (upgrade.Cost <= LevelManager.Instance.Currency)
             {
                 // If the player does not currently hold this upgrade, then...
-                if (Array.IndexOf(Level_manager.instance.PlayerHeldUpgradeIds, upgrade.Id) <= -1)
+                if (Array.IndexOf(LevelManager.Instance.PlayerHeldUpgradeIds, upgrade.Id) <= -1)
                 {
                     // If the player is at or exceeding the upgrade slot limit
-                    if (Level_manager.instance.PlayerHeldUpgrades.Count >= Level_manager.MAX_PLAYER_UPGRADES)
+                    if (LevelManager.Instance.PlayerHeldUpgrades.Count >= LevelManager.MAX_PLAYER_UPGRADES)
                     {
                         // Set the text to indicate the slots are full, set the text color to match
                         activeLabelTextHotkeyInfoColor = labelTextHotkeyInfoSoldOutColor;

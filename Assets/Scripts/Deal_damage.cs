@@ -14,7 +14,7 @@ public class Deal_damage : MonoBehaviour
     {
         if (c.gameObject.GetComponent<Health>() != null)
         {
-            damage = baseDamage + Level_manager.instance.precisionUpgradeModifier; // Recalculate damage on every hit, based on upgrade/pattern modifiers
+            damage = baseDamage + LevelManager.Instance.precisionUpgradeModifier; // Recalculate damage on every hit, based on upgrade/pattern modifiers
             Health health = c.gameObject.GetComponent<Health>();
             health.TakeDamage(damage);
         }

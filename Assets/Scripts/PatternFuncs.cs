@@ -5,7 +5,7 @@ using System.Collections;
 public class PatternFuncs : MonoBehaviour
 {
     [Header("Speed Boost (Pair)")]
-    [Tooltip("The speed boost multiplier is controller by Player_input_manager script on the player")]
+    [Tooltip("The speed boost multiplier is controller by PlayerInputManager script on the player")]
     [SerializeField]
     float boostDuration = 30f;
     public bool isBoosted = false;
@@ -31,6 +31,6 @@ public class PatternFuncs : MonoBehaviour
     }
 
     public void DamageSweep(){
-        Instantiate(DamageSweepPrefab, Level_manager.instance.Left_point.position, Quaternion.Euler(0f, -45f, 0f));
+        Instantiate(DamageSweepPrefab, LevelManager.Instance.LeftPoint.position, Quaternion.Euler(0f, -45f, 0f));
     }
 }

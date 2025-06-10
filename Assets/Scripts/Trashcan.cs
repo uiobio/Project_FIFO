@@ -73,7 +73,7 @@ public class Trashcan : MonoBehaviour
         label.SetActive(false);
     }
 
-    // Called when the player interacts with this instance's gameObject
+    // Called when the player interacts with this Instance's gameObject
     public void use()
     {
     }

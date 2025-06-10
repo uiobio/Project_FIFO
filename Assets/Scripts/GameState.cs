@@ -46,7 +46,7 @@ public class GameState : MonoBehaviour
     {
         // if (Instance != null && Instance != this)
         // {
-        //     // if there's an instance other than this, destroy it
+        //     // if there's an Instance other than this, destroy it
         //     Destroy(this);
         // }
         // else

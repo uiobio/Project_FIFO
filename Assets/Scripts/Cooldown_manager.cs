@@ -6,7 +6,7 @@ public class Cooldown_manager : MonoBehaviour
 {
     public static Cooldown_manager instance;
 
-    private void Awake() // makes Cooldown_manager callable in any script: Cooldown_manager.instance.[]
+    private void Awake() // makes Cooldown_manager callable in any script: Cooldown_manager.Instance.[]
     {
         instance = this;
     }

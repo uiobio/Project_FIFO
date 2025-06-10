@@ -15,9 +15,9 @@ public class Player_death : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if( H.isDead ){
-            Level_manager.instance.ResetPlayerHealth();
-            Level_manager.instance.ResetRoom();
+        if( H.IsDead ){
+            LevelManager.Instance.ResetPlayerHealth();
+            LevelManager.Instance.ResetRoom();
             SceneManager.LoadScene(room_name);
         }
     }

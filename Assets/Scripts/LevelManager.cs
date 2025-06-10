@@ -1,36 +1,29 @@
-using System.Collections;
 using System.Collections.Generic;
 using System;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using TMPro;
-using System.Linq;
 
-public class Level_manager : MonoBehaviour
+public class LevelManager : MonoBehaviour
 {
-    public static Level_manager instance;
-    public bool isPaused = false;
+    public static LevelManager Instance;
+    public bool IsPaused = false;
 
-    public int curr_room;
-    private EnemySpawning ES;
+    [System.NonSerialized] public GameObject MusicManager;
 
-    // Most upgrades the player can have at once
-    public const int MAX_PLAYER_UPGRADES = 5;
-
-    // The longest an element pattern can be
-    public const int MAX_PATTERN_LEN = 5;
-
-    [SerializeField]
-    public PatternFuncs PF;
-
-    [Header("Enemy Spawning")]
-    public float EnemySpawnWarningTime;
+    [Header("Currency")]
+    public int Currency;
 
     [Header("UI")]
+    public float PlayerHealth = -1;
+    public float PlayerMaxHealth = 20;
     [SerializeField] private GameObject mainUIPrefab;
     [SerializeField] private GameObject musicManagerPrefab;
-    public GameObject parentUI;
+    [SerializeField] private GameObject upgradePrefab;
+    [SerializeField] private ProgressBar healthBar;
+    [SerializeField] private TMP_Text currencyText;
+    public GameObject ParentUI;
     private GameObject upgradesUI;
     private GameObject pauseMenuUI;
     private GameObject healthBarUI;
@@ -38,75 +31,37 @@ public class Level_manager : MonoBehaviour
     private Button pauseButton;
     private Button quitButton;
     private Button menuButton;
-    [SerializeField] private GameObject upgradePrefab;
-    [SerializeField] private ProgressBar healthBar;
-    [SerializeField] private TMP_Text T_Currency;
-    [SerializeField] public float PlayerHealth = -1;
-    [SerializeField] public float PlayerMaxHealth = 20;
+    private static PatternUIManager patternUIManager;
 
+    [Header("Enemy Spawning")]
+    public float EnemySpawnWarningTime;
+    public int CurrentRoom;
+    private EnemySpawning enemySpawner;
 
-    public float UpgradeIconUnplugOffset; // how far the upgrade UI icons "unplug" when you select them
-    [System.NonSerialized] public GameObject MusicManager;
-
-
-    //FIXME: Add this list to a game_constants file
-    [System.NonSerialized]
-    public List<string> types = new List<string>() { "Earth", "Fire", "Ice", "Wind" };
-    //[System.NonSerialized]
-    public List<Color> typeColors = new List<Color>() { Color.green, Color.red, Color.blue, Color.cyan};
-    static Pattern_UI_manager pat_man;
     [Header("Patterns")]
-    [SerializeField]
-    (int, int) currentPattern = (-1, -1);
-
-    [SerializeField]
-    public Transform Left_point;
-    [SerializeField]
-    public Transform Right_point;
-
-
-    //FIXME: Add this to a game_constants file
-    [System.NonSerialized]
-    public List<List<(int, string, Action)>> Patterns = new List<List<(int, string, Action)>>();
-
-
-    //FIXME: Add to game_constants
-    [System.NonSerialized]
-    public List<Upgrade> Upgrades = new List<Upgrade>();
-
-    //[System.NonSerialized]
-    [SerializeField]
-    public List<int> Pattern_record = new List<int>();
-
-    // The upgrades the player currently has
-    [System.NonSerialized]
-    public List<Upgrade> PlayerHeldUpgrades = new List<Upgrade>();
-
-    // The UI icon gameObjects for the upgrades that the player currently has
-    public List<GameObject> PlayerHeldUpgradeIcons = new List<GameObject>();
-
-    // The upgrade the player clicks on when replacing/selling
-    [System.NonSerialized]
-    public int CurrentlySelectedUpgradeIndex = 0;
-
-    // The upgrade the player is hovering over when paused
-    [System.NonSerialized]
-    public int CurrentlyHoveredUpgradeIndex = 0;
-
-    [System.NonSerialized]
-    public bool isHoveringUpgradeIcon = false;
-
-    // If the player is currently selecting an upgrade to replace/sell
-    [System.NonSerialized]
-    public bool IsCurrentlySelectingUpgrade = false;
-
-    [System.NonSerialized]
-    public bool IsCurrentlySelectingRecycle = false;
-
+    // The longest an element pattern can be
+    public const int MAX_PATTERN_LEN = 5;
+    public PatternFuncs PatternAbilityManager;
+    public List<int> PatternRecord = new();
+    public Transform LeftPoint; // Used for pattern functions that require a leftmost point in the room, like Damage Sweep
+    public Transform RightPoint; // Used for pattern functions that require a rightmost point in the room, like Damage Sweep
+    [SerializeField] private (int, int) currentPattern = (-1, -1);
+    [System.NonSerialized] public List<string> ElementTypes = new() { "Earth", "Fire", "Ice", "Wind" };
+    [System.NonSerialized] public List<Color> ElementTypeColors = new() { Color.green, Color.red, Color.blue, Color.cyan };
+    [System.NonSerialized] public List<List<(int, string, Action)>> Patterns = new();
+    
     [Header("Upgrades")]
+    public const int MAX_PLAYER_UPGRADES = 5; // Most upgrades the player can have at once
+    public float UpgradeIconUnplugOffset; // how far the upgrade UI icons "unplug" when you select 
     public int[] PlayerHeldUpgradeIds = new int[MAX_PLAYER_UPGRADES];
-
-    public int Currency;
+    public List<GameObject> PlayerHeldUpgradeIcons = new(); // The UI icon gameObjects for the upgrades that the player currently has
+    [System.NonSerialized] public List<Upgrade> Upgrades = new();
+    [System.NonSerialized] public List<Upgrade> PlayerHeldUpgrades = new();
+    [System.NonSerialized] public int CurrentlyHoveredUpgradeIndex = 0; // The upgrade the player is hovering over when paused
+    [System.NonSerialized] public bool IsHoveringUpgradeIcon = false; // If the player is currently hovering an upgrade icon
+    [System.NonSerialized] public int CurrentlySelectedUpgradeIndex = 0;  // The upgrade the player clicks on when replacing/discarding
+    [System.NonSerialized] public bool IsCurrentlySelectingUpgrade = false; // If the player is currently selecting an upgrade to replace
+    [System.NonSerialized] public bool IsCurrentlySelectingRecycle = false; // If the player is currently selecting an upgrade to discard
 
     // Upgrade modifiers indicate the amount of effect an upgrade actually applies during runtime
     public int precisionUpgradeModifier = 0;
@@ -120,10 +75,7 @@ public class Level_manager : MonoBehaviour
     public int greedyUpgradeModifier = 0;
     public int thornsUpgradeModifier = 0;
 
-
     // Upgrade values are the fixed amount that the upgrade should affect by
-    // FIXME: add all upgrade values to game_constants file
-    [System.NonSerialized]
     public int precisionUpgradeModifierValue = 3;
     public int hardwareAccelUpgradeModifierValue = 10;
     public int twoBirdsUpgradeModifierValue = 10;
@@ -135,31 +87,32 @@ public class Level_manager : MonoBehaviour
     public int greedyUpgradeModifierValue = 5;
     public int thornsUpgradeModifierValue = 10;
 
-    private void Awake() //Makes levelmanager callable in any script: Level_manager.instance.[]
+    //-------------------------------------Instantiation----------------------------------------
+    private void Awake() //Makes levelmanager callable in any script: LevelManager.Instance.[]
     {
-        if (instance == null)
+        if (Instance == null)
         {
-            instance = this;
+            Instance = this;
             DontDestroyOnLoad(gameObject);
 
-            //Instantiate the main UI
-            parentUI = Instantiate(mainUIPrefab);
-            parentUI.name = "UI";
-            parentUI.transform.Find("MainCanvas").GetComponent<Canvas>().sortingOrder = 1000;
-            DontDestroyOnLoad(parentUI);
+            // Instantiate the main UI
+            ParentUI = Instantiate(mainUIPrefab);
+            ParentUI.name = "UI";
+            ParentUI.transform.Find("MainCanvas").GetComponent<Canvas>().sortingOrder = 1000;
+            DontDestroyOnLoad(ParentUI);
 
-            //Get HUD elements to keep them up to date
-            healthBarUI = parentUI.transform.Find("MainCanvas/Healthbar").gameObject;
-            healthBar = parentUI.GetComponent<ProgressBar>();
-            T_Currency = parentUI.transform.Find("MainCanvas/Healthbar/Currency").GetComponent<TMP_Text>();
+            // Get HUD elements to keep them up to date
+            healthBarUI = ParentUI.transform.Find("MainCanvas/Healthbar").gameObject;
+            healthBar = ParentUI.GetComponent<ProgressBar>();
+            currencyText = ParentUI.transform.Find("MainCanvas/Healthbar/Currency").GetComponent<TMP_Text>();
 
-            //Assign the upgradesUI gameobject for easier access
-            upgradesUI = parentUI.transform.Find("MainCanvas/Upgrades").gameObject;
+            // Assign the upgradesUI gameobject for easier access
+            upgradesUI = ParentUI.transform.Find("MainCanvas/Upgrades").gameObject;
 
-            //Assign the pauseMenuUI gameobject for easier access
-            pauseMenuUI = parentUI.transform.Find("MainCanvas/PauseMenu").gameObject;
+            // Assign the pauseMenuUI gameobject for easier access
+            pauseMenuUI = ParentUI.transform.Find("MainCanvas/PauseMenu").gameObject;
 
-            //Get Buttons for PauseMenu
+            // Get Buttons for PauseMenu
             resumeButton = pauseMenuUI.transform.Find("ResumeButton").GetComponent<Button>();
             pauseButton = pauseMenuUI.transform.Find("PauseButton").GetComponent<Button>();
             quitButton = pauseMenuUI.transform.Find("QuitButton").GetComponent<Button>();
@@ -176,34 +129,45 @@ public class Level_manager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     { 
-        curr_room = 0;
-        ES = gameObject.GetComponent<EnemySpawning>();
+        CurrentRoom = 0;
+        enemySpawner = gameObject.GetComponent<EnemySpawning>();
 
         // Give self 0 coins to set HUD currency
         GainCoin(0);
         MusicManager = Instantiate(musicManagerPrefab);
 
         // FIXME: Setting up the Patterns List should be move to gameconstants when one exists.
-        //Create lists for all of the Patterns
-        List<(int, string, Action)> Len1_Patterns = new List<(int, string, Action)>();
-        List<(int, string, Action)> Len2_Patterns = new List<(int, string, Action)>() {
-            (11, "Pair", PF.StartSpeedBoost) };
-        List<(int, string, Action)> Len3_Patterns = new List<(int, string, Action)>() {
-            (121, "Sandwich", PF.DamageSweep), (111, "Three of a kind", PF.DamageSweep)
+        // Create lists for all of the Patterns
+        List<(int, string, Action)> Len1Patterns = new();
+        List<(int, string, Action)> Len2Patterns = new() {
+            (11, "Pair", PatternAbilityManager.StartSpeedBoost) 
         };
-        List<(int, string, Action)> Len4_Patterns = new List<(int, string, Action)>() {
-            (1221, "Big Sandwich", PF.DamageSweep), (1111, "Four of a kind", PF.DamageSweep), (4321, "Rainbow", PF.DamageSweep), (2211, "Two Pair", PF.DamageSweep), (1321, "Mini Club", PF.DamageSweep)
+        List<(int, string, Action)> Len3Patterns = new() {
+            (121, "Sandwich", PatternAbilityManager.DamageSweep), 
+            (111, "Three of a kind", PatternAbilityManager.DamageSweep)
         };
-        List<(int, string, Action)> Len5_Patterns = new List<(int, string, Action)>() {
-            (12121, "Big Mac", PF.DamageSweep), (11111, "Five of a kind", PF.DamageSweep), (14321, "Club Sandwich", PF.DamageSweep), (22211, "Full House", PF.DamageSweep), (12321, "Double Decker", PF.DamageSweep), (11211, "Fat Sandwich", PF.DamageSweep)
+        List<(int, string, Action)> Len4Patterns = new() {
+            (1221, "Big Sandwich", PatternAbilityManager.DamageSweep), 
+            (1111, "Four of a kind", PatternAbilityManager.DamageSweep), 
+            (4321, "Rainbow", PatternAbilityManager.DamageSweep), 
+            (2211, "Two Pair", PatternAbilityManager.DamageSweep), 
+            (1321, "Mini Club", PatternAbilityManager.DamageSweep)
+        };
+        List<(int, string, Action)> Len5Patterns = new() {
+            (12121, "Big Mac", PatternAbilityManager.DamageSweep), 
+            (11111, "Five of a kind", PatternAbilityManager.DamageSweep), 
+            (14321, "Club Sandwich", PatternAbilityManager.DamageSweep), 
+            (22211, "Full House", PatternAbilityManager.DamageSweep), 
+            (12321, "Double Decker", PatternAbilityManager.DamageSweep), 
+            (11211, "Fat Sandwich", PatternAbilityManager.DamageSweep)
         };
 
-        //Add all of the Patterns to the Patterns double list
-        Patterns.Add(Len1_Patterns);
-        Patterns.Add(Len2_Patterns);
-        Patterns.Add(Len3_Patterns);
-        Patterns.Add(Len4_Patterns);
-        Patterns.Add(Len5_Patterns);
+        // Add all of the Patterns to the Patterns double list
+        Patterns.Add(Len1Patterns);
+        Patterns.Add(Len2Patterns);
+        Patterns.Add(Len3Patterns);
+        Patterns.Add(Len4Patterns);
+        Patterns.Add(Len5Patterns);
 
         resumeButton.onClick.AddListener(ResumeGame);
         pauseButton.onClick.AddListener(PauseGame);
@@ -214,8 +178,7 @@ public class Level_manager : MonoBehaviour
 
         // FIXME: add to game_constants
         // Add all upgrades to the Upgrade list; move to game_constants when one exists
-        // See the constructor for the Upgrade class in 'Upgrade_manager.cs' to find detailed info about parameters.
-        // Only one upgrade sprite asset is finished (Precision, as of 02/28), so all others will use the default
+        // See the constructor for the Upgrade class in 'UpgradeManager.cs' to find detailed info about parameters.
         Upgrades.Add(new Upgrade("Precision", "Deal +[X] extra damage on every hit (currently adding [N] damage)", (float)precisionUpgradeModifierValue, (float)precisionUpgradeModifier, "", 0, 5, "Assets/Sprites/Upgrades/whetstone.png", "Assets/Sprites/Upgrades/whetstoneVert.png", "red"));
         Upgrades.Add(new Upgrade("Hardware Acceleration", "Increase dash range by [X]%", (float)hardwareAccelUpgradeModifierValue, (float)hardwareAccelUpgradeModifier, "", 0, 5, "Assets/Sprites/Upgrades/hardwareAccel.png", "Assets/Sprites/Upgrades/hardwareAccelVert.png", "purple"));
         Upgrades.Add(new Upgrade("Two Birds", "Your attacks hit twice, second attack does [X]% and also applies on-hit effects", (float)twoBirdsUpgradeModifierValue, (float)twoBirdsUpgradeModifier, "", 0, 5, "Assets/Sprites/Upgrades/twobirds.png", "Assets/Sprites/Upgrades/twobirdsVert.png", "red"));
@@ -238,12 +201,27 @@ public class Level_manager : MonoBehaviour
 
         // Instantiate the UI icons of those held upgrades
         InstantiateIcons();
-        parentUI.transform.Find("MainCanvas/Upgrades/LineBL").gameObject.SetActive(false);
-        parentUI.transform.Find("MainCanvas/Upgrades/LineTL").gameObject.SetActive(false);
-        parentUI.transform.Find("MainCanvas/Upgrades/LineTR").gameObject.SetActive(false);
-        parentUI.transform.Find("MainCanvas/Upgrades/LineBR").gameObject.SetActive(false);
-        parentUI.transform.Find("MainCanvas/Upgrades/HoverSquare").gameObject.SetActive(false);
-        parentUI.transform.Find("MainCanvas/Upgrades/Label").gameObject.SetActive(false);
+        ParentUI.transform.Find("MainCanvas/Upgrades/LineBL").gameObject.SetActive(false);
+        ParentUI.transform.Find("MainCanvas/Upgrades/LineTL").gameObject.SetActive(false);
+        ParentUI.transform.Find("MainCanvas/Upgrades/LineTR").gameObject.SetActive(false);
+        ParentUI.transform.Find("MainCanvas/Upgrades/LineBR").gameObject.SetActive(false);
+        ParentUI.transform.Find("MainCanvas/Upgrades/HoverSquare").gameObject.SetActive(false);
+        ParentUI.transform.Find("MainCanvas/Upgrades/Label").gameObject.SetActive(false);
+    }
+
+    // Instantiates upgrade UI icons according to the PlayerHeldUpgrades list
+    private void InstantiateIcons()
+    {
+        for (int i = 0; i < PlayerHeldUpgrades.Count; i++)
+        {
+            GameObject uiIcon = Instantiate(upgradePrefab);
+            uiIcon.name = uiIcon.name + "_" + i.ToString();
+            uiIcon.GetComponent<UpgradeManager>().upgrade = PlayerHeldUpgrades[i];
+            uiIcon.GetComponent<UpgradeManager>().upgradeIndex = i;
+            uiIcon.GetComponent<UpgradeManager>().upgrade.UIOrShopItem = "UI";
+            uiIcon.GetComponent<UpgradeManager>().CreateGameObjects();
+            PlayerHeldUpgradeIcons.Add(uiIcon);
+        }
     }
 
     // Update is called once per frame
@@ -255,32 +233,40 @@ public class Level_manager : MonoBehaviour
         }
     }
 
+    // Dummy function to test key input
     void Dummy()
     {
         Debug.Log("Dummy key pressed");
     }
 
-    public void GainCoin(int val) {
+    //---------------------------------------Functions for Currency-----------------------------------
+    public void GainCoin(int val)
+    {
         Currency += val;
-        T_Currency.text = Currency.ToString() + " CHIPS";
+        currencyText.text = Currency.ToString() + " CHIPS";
     }
 
-    public void SetMaxHealth(float val){
+    //--------------------------------------Functions for Player Health------------------------------------
+    public void SetMaxHealth(float val)
+    {
         PlayerMaxHealth = val;
     }
 
-    public void SetHealth(float val){
+    public void SetHealth(float val)
+    {
         PlayerHealth = val;
         healthBar.SetProgress(PlayerHealth/PlayerMaxHealth);
     }
 
-    public void ResetPlayerHealth(){
+    public void ResetPlayerHealth()
+    {
         SetHealth(PlayerMaxHealth);
     }
 
-    //---------------------------------Functions for Patterns----------------------------
-    public static void AddPatternUI(GameObject new_pat_man){
-        pat_man = new_pat_man.GetComponent<Pattern_UI_manager>();
+    //----------------------------------------Functions for Patterns------------------------------------
+    public static void AddPatternUI(GameObject patternManager)
+    {
+        patternUIManager = patternManager.GetComponent<PatternUIManager>();
     }
 
     public void UpdatePattern(int type) {
@@ -289,167 +275,186 @@ public class Level_manager : MonoBehaviour
         AddToPattern(type);
         ((int, int), (int, int)) ActivePattern = CheckPatterns();
         (int, int) success = ActivePattern.Item1;
-        (int, int) subpat = ActivePattern.Item2;
-        string pat = "";
+        (int, int) subPattern = ActivePattern.Item2;
+        string pattern = "";
         if (success.Item1 != -1)
         {
-            pat = Patterns[success.Item1][success.Item2].Item2;
+            pattern = Patterns[success.Item1][success.Item2].Item2;
         }
 
         currentPattern = success;
-        if (pat_man != null){
-            pat_man.UpdatePatternName(pat);
-            pat_man.UpdateQueueColors(type, subpat.Item1, subpat.Item2);
+        if (patternUIManager != null)
+        {
+            patternUIManager.UpdatePatternName(pattern);
+            patternUIManager.UpdateQueueColors(type, subPattern.Item1, subPattern.Item2);
         }
     }
 
-    void AddToPattern(int type)
+    private void AddToPattern(int type)
     {
         Debug.Log($"Add to Pattern {type}");
-        //Add the passed type to the pattern_record
-        Pattern_record.Add(type);
-        if (Pattern_record.Count > MAX_PATTERN_LEN) {
-            Pattern_record.Remove(Pattern_record[0]);
+        // Add the passed type to the PatternRecord
+        PatternRecord.Add(type);
+        if (PatternRecord.Count > MAX_PATTERN_LEN)
+        {
+            PatternRecord.Remove(PatternRecord[0]);
         }
     }
 
-    int TypeToChar(){
-        return TypeToChar(Pattern_record.Count, 0);
-    }
-    int TypeToChar(int start, int end)
+    private int TypeToChar()
     {
-        //Translates the 5 most recent slain enemy types to a 5 int number to compare with patterns
+        return TypeToChar(PatternRecord.Count, 0);
+    }
+
+    private int TypeToChar(int start, int end)
+    {
+        // Translates the 5 most recent slain enemy ElementTypes to a 5 int number to compare with patterns
         int ret = 0;
         int counter = 1;
 
-        Dictionary<int, int> Translations = new Dictionary<int, int>();
-        //Iterate from most recent to oldest of saved types
+        Dictionary<int, int> Translations = new();
+        // Iterate from most recent to oldest of saved ElementTypes
         for (int i = start; i >= end; i--)
         {
-            int t = Pattern_record[i];
+            int t = PatternRecord[i];
             if (!Translations.ContainsKey(t))
             {
                 Translations.Add(t, counter);
                 counter++;
             }
-            ret += (int)(Mathf.Pow(10, start-i) * Translations[t]);
+            ret += (int)(Mathf.Pow(10, start - i) * Translations[t]);
         }
         return ret;
     }
 
-    ((int, int), (int, int)) CheckPatterns(){
-        return CheckPatterns(-1, Pattern_record.Count-1, 0);
-    }
-    ((int, int), (int, int)) CheckPatterns(int Seq_in, int start, int end)
+    private ((int, int), (int, int)) CheckPatterns()
     {
-        if(Seq_in == 0){return ((-1, -1), (-1, -1)); }
-        int Seq = Seq_in;
-        if(Seq_in == -1){
-            if (start < end){
+        return CheckPatterns(-1, PatternRecord.Count - 1, 0);
+    }
+
+    private ((int, int), (int, int)) CheckPatterns(int seqIn, int start, int end)
+    {
+        if (seqIn == 0) { return ((-1, -1), (-1, -1)); }
+        int seq = seqIn;
+        if (seqIn == -1)
+        {
+            if (start < end)
+            {
                 return ((-1, -1), (-1, -1));
             }
-            Seq = TypeToChar(start, end);
+            seq = TypeToChar(start, end);
         }
 
-        int l = start-end;
-        int s = Pattern_record.Count - 1;
-        //Loop through all patterns of size and smaller
+        int l = start - end;
+        int s = PatternRecord.Count - 1;
+        // Loop through all patterns of size and smaller
         for (int i = 0; i < Patterns[l].Count; i++)
         {
-            if (Patterns[l][i].Item1 == Seq)
+            if (Patterns[l][i].Item1 == seq)
             {
-                //Found Matching Pattern! Return the name
+                // Found Matching Pattern! Return the name
                 return ((l, i), (start, end));
             }
         }
-        //Go to smaller pattern if no pattern found in that list.
-        //Left
-        ((int, int), (int, int)) left = CheckPatterns(-1, start, end+1);
-        (int, int) sub_left = left.Item1;
-        //Right
-        ((int, int), (int, int)) right = CheckPatterns(-1, start-1, end);
-        (int, int) sub_right = right.Item1;
+        // Go to smaller pattern if no pattern found in that list.
+        // Left
+        ((int, int), (int, int)) left = CheckPatterns(-1, start, end + 1);
+        (int, int) subLeft = left.Item1;
+        // Right
+        ((int, int), (int, int)) right = CheckPatterns(-1, start - 1, end);
+        (int, int) subRight = right.Item1;
 
-        if (sub_left.Item1 == sub_right.Item1){
-            return sub_left.Item2 > sub_right.Item2 ? left : right;
+        if (subLeft.Item1 == subRight.Item1)
+        {
+            return subLeft.Item2 > subRight.Item2 ? left : right;
         }
-        return sub_left.Item1 > sub_right.Item1 ? left : right;
+        return subLeft.Item1 > subRight.Item1 ? left : right;
     }
 
-    public void UsePattern(){
-        //Use the current Pattern's ability
+    public void UsePattern()
+    {
+        // Use the current Pattern's ability
         string patternName = "";
-        if(currentPattern.Item1 != -1){
-            //Update the name for debugging and use ability
+        if (currentPattern.Item1 != -1)
+        {
+            // Update the name for debugging and use ability
             patternName = Patterns[currentPattern.Item1][currentPattern.Item2].Item2;
-            int l = currentPattern.Item1; //length
-            int j = currentPattern.Item2; //index
-            Patterns[l][j].Item3();
+            int len = currentPattern.Item1;
+            int index = currentPattern.Item2;
+            Patterns[len][index].Item3();
         }
         Debug.Log($"Using {currentPattern}: {patternName}");
-        //Reset the pattern state
+        // Reset the pattern state
         currentPattern = (-1, -1);
         ClearPatternQueue();
-        pat_man.ClearQueue();
+        patternUIManager.ClearQueue();
     }
 
-    void ClearPatternQueue(){
-        Pattern_record.RemoveAll(c => true);
+    private void ClearPatternQueue()
+    {
+        PatternRecord.RemoveAll(c => true);
     }
 
-    //Sets the leftmost and rightmost points of the room - used for pattern func sweeps
-    public void SetLeftPoint(Transform t){
-        Left_point = t;
-    }
-    public void SetRightPoint(Transform t){
-        Right_point = t;        
+    // Sets the leftmost and rightmost points of the room - used for pattern func sweeps
+    public void SetLeftPoint(Transform t)
+    {
+        LeftPoint = t;
     }
 
-    // Pause menu
+    public void SetRightPoint(Transform t)
+    {
+        RightPoint = t;        
+    }
 
+    //-------------------------------------Functions for Pause Menu-------------------------------------
     public void TogglePause()
     {
-        if (!isPaused)
+        if (!IsPaused)
+        {
             PauseGame();
+        }
         else
+        {
             ResumeGame();
+        }
     }
 
-    void PauseGame()
+    private void PauseGame()
     {
-        isPaused = true;
+        IsPaused = true;
         pauseMenuUI.SetActive(true); // Show menu
-        MusicManager.GetComponent<MusicManager>().AudioSource.Pause();
+        MusicManager.GetComponent<MusicManager>().AudioSource.Pause(); // Pause Music
         Time.timeScale = 0f; // Pause game
     }
 
-    void ResumeGame()
+    private void ResumeGame()
     {
-        isPaused = false;
-        isHoveringUpgradeIcon = false;
+        IsPaused = false;
+        IsHoveringUpgradeIcon = false;
         pauseMenuUI.SetActive(false); // Hide menu
-        MusicManager.GetComponent<MusicManager>().AudioSource.UnPause();
+        MusicManager.GetComponent<MusicManager>().AudioSource.UnPause(); // Unpause Music
         Time.timeScale = 1f; // Resume game
     }
 
-    void QuitGame()
+    private void QuitGame()
     {
         Time.timeScale = 1f; // Reset before quitting
         Application.Quit(); // Works only in a built game
 
-#if UNITY_EDITOR
-        UnityEditor.EditorApplication.isPlaying = false; // ✅ Stops play mode in the Unity Editor
-#endif
+        #if UNITY_EDITOR
+            UnityEditor.EditorApplication.isPlaying = false; // Stops play mode in the Unity Editor
+        #endif
     }
 
-    void GoToMainMenu()
+    private void GoToMainMenu()
     {
         Time.timeScale = 1f; // Reset before loading new scene
-        isPaused = false;
+        IsPaused = false;
         pauseMenuUI.SetActive(false); // Hide menu
         SceneManager.LoadScene("Menu Room"); // Replace with actual Main Menu scene name
     }
 
+    //---------------------------------Functions for Buying & Selling Upgrades------------------------------------
     // Adds upgrades to the PlayerHeldUpgrades list based on the array of upgrade Ids
     public void SetPlayerHeldUpgradesFromIds()
     {
@@ -463,21 +468,6 @@ public class Level_manager : MonoBehaviour
         }
 
 
-    }
-
-    // Instantiates upgrade UI icons according to the PlayerHeldUpgrades list
-    void InstantiateIcons()
-    {
-        for (int i = 0; i < PlayerHeldUpgrades.Count; i++)
-        {
-            GameObject uiIcon = Instantiate(upgradePrefab);
-            uiIcon.name = uiIcon.name + "_" + i.ToString();
-            uiIcon.GetComponent<Upgrade_manager>().upgrade = PlayerHeldUpgrades[i];
-            uiIcon.GetComponent<Upgrade_manager>().upgradeIndex = i;
-            uiIcon.GetComponent<Upgrade_manager>().upgrade.UIOrShopItem = "UI";
-            uiIcon.GetComponent<Upgrade_manager>().CreateGameObjects();
-            PlayerHeldUpgradeIcons.Add(uiIcon);
-        }
     }
 
     // Adds an upgrade to the player's held list
@@ -523,9 +513,9 @@ public class Level_manager : MonoBehaviour
             GameObject upgradeUIIcon = Instantiate(upgradePrefab);
             upgradeUIIcon.SetActive(false);
             upgrade.UIOrShopItem = "UI";
-            upgradeUIIcon.GetComponent<Upgrade_manager>().upgrade = upgrade;
-            upgradeUIIcon.GetComponent<Upgrade_manager>().upgradeIndex = index;
-            upgradeUIIcon.GetComponent<Upgrade_manager>().CreateGameObjects();
+            upgradeUIIcon.GetComponent<UpgradeManager>().upgrade = upgrade;
+            upgradeUIIcon.GetComponent<UpgradeManager>().upgradeIndex = index;
+            upgradeUIIcon.GetComponent<UpgradeManager>().CreateGameObjects();
             upgradeUIIcon.SetActive(true);
 
             // UI icon is added to the PlayerHeldUpgradeIcons list
@@ -538,24 +528,24 @@ public class Level_manager : MonoBehaviour
             return false;
         }
     }
-    // Functionality: Starts a coroutine defined in Player_input_manager that prompts the player to select and confirm which upgrade they want to swap
+    // Functionality: Starts a coroutine defined in PlayerInputManager that prompts the player to select and confirm which upgrade they want to swap
     //                Player can leave the radius if they choose not to confirm and this effectively cancels the coroutine.
     // Params:
     //  Upgrade newUpgrade: the upgrade you want to replace the one in the player list with
     //  GameObject shop: the ShopItem that the incoming upgrade is correspondent with
-    void ReplacePlayerUpgrade(Upgrade newUpgrade, GameObject shop)
+    private void ReplacePlayerUpgrade(Upgrade newUpgrade, GameObject shop)
     {
-        StartCoroutine(Player_input_manager.instance.SelectAndConfirmReplace(newUpgrade, shop));
+        StartCoroutine(PlayerInputManager.Instance.SelectAndConfirmReplace(newUpgrade, shop));
     }
 
-    // Functionality: Starts a coroutine defined in Player_input_manager that prompts the player to select and confirm which upgrade they want to recycle
+    // Functionality: Starts a coroutine defined in PlayerInputManager that prompts the player to select and confirm which upgrade they want to recycle
     //                Player can leave the radius if they choose not to confirm and this effectively cancels the coroutine.
     public void RecyclePlayerUpgrade(GameObject trashcan)
     {
-        StartCoroutine(Player_input_manager.instance.SelectAndConfirmRecycle(trashcan));
+        StartCoroutine(PlayerInputManager.Instance.SelectAndConfirmRecycle(trashcan));
     }
 
-    // Called within the coroutine SelectAndConfirmReplace in Player_input_manager (structured this way to keep all player inputs inside that script... it's a bit clunky but it works)
+    // Called within the coroutine SelectAndConfirmReplace in PlayerInputManager (structured this way to keep all player inputs inside that script... it's a bit clunky but it works)
     // Updates all the necessary lists that track the player's currently held upgrades
     // Updates the UI with the new upgrade's icon and destroys the old upgrade's icon.
     public void SwapOutUpgrade(Upgrade newUpgrade, GameObject shop, Vector2 originalSlotPosition)
@@ -568,28 +558,28 @@ public class Level_manager : MonoBehaviour
         GameObject upgradeUIIcon = Instantiate(upgradePrefab);
         upgradeUIIcon.SetActive(false);
         newUpgrade.UIOrShopItem = "UI";
-        upgradeUIIcon.GetComponent<Upgrade_manager>().upgrade = newUpgrade;
-        upgradeUIIcon.GetComponent<Upgrade_manager>().upgradeIndex = CurrentlySelectedUpgradeIndex;
-        upgradeUIIcon.GetComponent<Upgrade_manager>().CreateGameObjects();
+        upgradeUIIcon.GetComponent<UpgradeManager>().upgrade = newUpgrade;
+        upgradeUIIcon.GetComponent<UpgradeManager>().upgradeIndex = CurrentlySelectedUpgradeIndex;
+        upgradeUIIcon.GetComponent<UpgradeManager>().CreateGameObjects();
         upgradeUIIcon.SetActive(true);
 
-        Destroy(PlayerHeldUpgradeIcons[CurrentlySelectedUpgradeIndex].GetComponent<Upgrade_manager>().upgradeUIIcon);
+        Destroy(PlayerHeldUpgradeIcons[CurrentlySelectedUpgradeIndex].GetComponent<UpgradeManager>().upgradeUIIcon);
         Destroy(PlayerHeldUpgradeIcons[CurrentlySelectedUpgradeIndex]);
         
 
-        Debug.Log("Replacing upgrade: " + PlayerHeldUpgradeIcons[CurrentlySelectedUpgradeIndex].GetComponent<Upgrade_manager>().upgrade.Name + " (Upgrade slot index " + CurrentlySelectedUpgradeIndex + ")");
+        Debug.Log("Replacing upgrade: " + PlayerHeldUpgradeIcons[CurrentlySelectedUpgradeIndex].GetComponent<UpgradeManager>().upgrade.Name + " (Upgrade slot index " + CurrentlySelectedUpgradeIndex + ")");
         PlayerHeldUpgradeIcons[CurrentlySelectedUpgradeIndex] = upgradeUIIcon;
-        upgradeUIIcon.GetComponent<Upgrade_manager>().upgradeUIIcon.GetComponent<RectTransform>().anchoredPosition = originalSlotPosition;
+        upgradeUIIcon.GetComponent<UpgradeManager>().upgradeUIIcon.GetComponent<RectTransform>().anchoredPosition = originalSlotPosition;
         GainCoin(-1 * newUpgrade.Cost);
         shop.GetComponent<ShopItem>().destroyChildren();
     }
 
-    // Called within the coroutine SelectAndConfirmRecycle in Player_input_manager (structured this way to keep all player inputs inside that script... it's a bit clunky but it works)
+    // Called within the coroutine SelectAndConfirmRecycle in PlayerInputManager (structured this way to keep all player inputs inside that script... it's a bit clunky but it works)
     // Updates all lists that track the player's currently held upgrades
     // Updates the UI with the new upgrade's icon and destroys the old upgrade's icon
     // Moves all UI icons up to fill the gap left by the old upgrade
-    public void RemoveUpgrade(GameObject trashcan) {
-
+    public void RemoveUpgrade(GameObject trashcan) 
+    {
         // Modifiers go poof
         RemoveUpgradeModifiers(PlayerHeldUpgrades[CurrentlySelectedUpgradeIndex]);
         Upgrade upgrade = PlayerHeldUpgrades[CurrentlySelectedUpgradeIndex];
@@ -615,15 +605,15 @@ public class Level_manager : MonoBehaviour
         PlayerHeldUpgrades.RemoveAt(CurrentlySelectedUpgradeIndex);
 
         // Destroy the UI gameObject and remove it form the list
-        Destroy(PlayerHeldUpgradeIcons[CurrentlySelectedUpgradeIndex].GetComponent<Upgrade_manager>().upgradeUIIcon);
+        Destroy(PlayerHeldUpgradeIcons[CurrentlySelectedUpgradeIndex].GetComponent<UpgradeManager>().upgradeUIIcon);
         Destroy(PlayerHeldUpgradeIcons[CurrentlySelectedUpgradeIndex]);
         PlayerHeldUpgradeIcons.RemoveAt(CurrentlySelectedUpgradeIndex);
 
         // Move all UI icons up to fill the gap left by the old upgrade
         for (int i = CurrentlySelectedUpgradeIndex; i < PlayerHeldUpgradeIcons.Count; ++i)
         {
-            PlayerHeldUpgradeIcons[i].GetComponent<Upgrade_manager>().upgradeUIIcon.GetComponent<RectTransform>().anchoredPosition += new Vector2(0, 108);
-            PlayerHeldUpgradeIcons[i].GetComponent<Upgrade_manager>().upgradeIndex = i;
+            PlayerHeldUpgradeIcons[i].GetComponent<UpgradeManager>().upgradeUIIcon.GetComponent<RectTransform>().anchoredPosition += new Vector2(0, 108);
+            PlayerHeldUpgradeIcons[i].GetComponent<UpgradeManager>().upgradeIndex = i;
         }
 
         // Shift all Ids left by one, and set the last Id to -1
@@ -639,8 +629,10 @@ public class Level_manager : MonoBehaviour
 
     // Called when upgrades are added to the player held upgrades list, essentially applies the effects of upgrades.
     // POST-MVP: implement more effects
-    void ApplyUpgradeModifiers(Upgrade upgrade) {
-        switch (upgrade.Name) {
+    private void ApplyUpgradeModifiers(Upgrade upgrade) 
+    {
+        switch (upgrade.Name) 
+        {
             case "Precision":
                 precisionUpgradeModifier += precisionUpgradeModifierValue;
                 upgrade.N = precisionUpgradeModifier;
@@ -686,15 +678,16 @@ public class Level_manager : MonoBehaviour
                 break;
         }
         upgrade.UpdateDesc();
-        if (Shop_room_setup.instance != null) 
+        if (ShopRoomSetup.Instance != null) 
         {
-            Shop_room_setup.instance.UpdateShopItemLabel(upgrade);
+            ShopRoomSetup.Instance.UpdateShopItemLabel(upgrade);
         }
     }
 
     // Called when upgrades are removed from the player held upgrades list, essentially removes the effects of upgrades.
     // POST-MVP: implement more effects
-    void RemoveUpgradeModifiers(Upgrade upgrade) {
+    private void RemoveUpgradeModifiers(Upgrade upgrade) 
+    {
         switch (upgrade.Name)
         {
             case "Precision":
@@ -742,28 +735,31 @@ public class Level_manager : MonoBehaviour
                 break;
         }
         upgrade.UpdateDesc();
-        if (Shop_room_setup.instance != null)
+        if (ShopRoomSetup.Instance != null)
         {
-            Shop_room_setup.instance.UpdateShopItemLabel(upgrade);
+            ShopRoomSetup.Instance.UpdateShopItemLabel(upgrade);
         }
     }
-    
-    //Rooms
-    public void IncRoom(){
+
+    //---------------------------------Functions for Tracking # of Rooms Visited------------------------------------
+    public void IncRoom()
+    {
         Debug.Log("NEXT ROOM!");
-        curr_room++;
+        CurrentRoom++;
     }
 
-    public void ResetRoom(){
+    public void ResetRoom()
+    {
         Debug.Log("RESET ROOM!");
-        curr_room = 0;
-        pat_man.ClearQueue();
+        CurrentRoom = 0;
+        patternUIManager.ClearQueue();
     }
 
-    private void OnSceneLoaded(Scene scene, LoadSceneMode mode){
-        Debug.Log($"In room {curr_room}");
-        if(ES != null){
-            ES.GenerateEnemies(curr_room);
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        Debug.Log($"In room {CurrentRoom}");
+        if(enemySpawner != null){
+            enemySpawner.GenerateEnemies(CurrentRoom);
         }
     }
 }
