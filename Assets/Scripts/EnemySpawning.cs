@@ -21,8 +21,8 @@ public class EnemySpawning : MonoBehaviour
             return;
         }
         // Get all Respawn points
-        Respawn_Point[] allObjects = (Respawn_Point[])FindObjectsByType<Respawn_Point>(FindObjectsSortMode.None);
-        foreach (Respawn_Point RP in allObjects)
+        RespawnPoint[] allObjects = (RespawnPoint[])FindObjectsByType<RespawnPoint>(FindObjectsSortMode.None);
+        foreach (RespawnPoint RP in allObjects)
         {
             if(RP.name != "Respawn_point"){
                 allSpawners.Add(RP.gameObject);
@@ -44,12 +44,12 @@ public class EnemySpawning : MonoBehaviour
         }
         else{
             for(int i=0; i < _rank.Count; i++){
-                //Select random position for enemy of rank i
+                // Select random position for enemy of rank i
                 int p_rand = (int)Random.Range(0f, (float)allSpawners.Count-1);
                 int r = _rank[i];
                 int element = GetElement();
-                //Spawn enemy of rank r at position p_rand
-                allSpawners[p_rand].GetComponent<Respawn_Point>().SetSpawnee(EnemyRanks[r], true, true, element);
+                // Spawn enemy of rank r at position p_rand
+                allSpawners[p_rand].GetComponent<RespawnPoint>().SetSpawnee(EnemyRanks[r], true, true, element);
                 Debug.Log($"Set {EnemyRanks[r].name} to spawn at position {p_rand}");
                 allSpawners.RemoveAt(p_rand);
             }

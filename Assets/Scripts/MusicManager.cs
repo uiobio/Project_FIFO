@@ -3,20 +3,20 @@ using UnityEngine.SceneManagement;
 
 public class MusicManager : MonoBehaviour
 {
-    public static MusicManager instance;
+    public static MusicManager Instance;
     public AudioSource AudioSource;
     public AudioClip AudioClip;
 
     private void Awake()
     {
-        if (instance == null)
+        if (Instance == null)
         {
             AudioSource = GetComponent<AudioSource>();
             if (AudioSource == null)
             {
                 AudioSource = gameObject.AddComponent<AudioSource>();
             }
-            instance = this;
+            Instance = this;
             DontDestroyOnLoad(gameObject);
         }
         else {
@@ -48,12 +48,6 @@ public class MusicManager : MonoBehaviour
         {
             Debug.LogWarning("Could not find audio for scene named: " + scene.name);
         }
-    }
-
-    private void Start()
-    {
-        // If game starts directly in a scene, manually call OnSceneLoaded
-        // OnSceneLoaded(SceneManager.GetActiveScene(), LoadSceneMode.Single);
     }
 
     private void OnDestroy()

@@ -1,24 +1,25 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class Player_death : MonoBehaviour
+public class PlayerDeath : MonoBehaviour
 {
-    private Health H;
-    public string room_name;
+    public string RoomName;
+    private Health health;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        H = gameObject.GetComponent<Health>();
+        health = gameObject.GetComponent<Health>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if( H.IsDead ){
+        if (health.IsDead)
+        {
             LevelManager.Instance.ResetPlayerHealth();
             LevelManager.Instance.ResetRoom();
-            SceneManager.LoadScene(room_name);
+            SceneManager.LoadScene(RoomName);
         }
     }
 }

@@ -179,16 +179,16 @@ public class LevelManager : MonoBehaviour
         // FIXME: add to game_constants
         // Add all upgrades to the Upgrade list; move to game_constants when one exists
         // See the constructor for the Upgrade class in 'UpgradeManager.cs' to find detailed info about parameters.
-        Upgrades.Add(new Upgrade("Precision", "Deal +[X] extra damage on every hit (currently adding [N] damage)", (float)precisionUpgradeModifierValue, (float)precisionUpgradeModifier, "", 0, 5, "Assets/Sprites/Upgrades/whetstone.png", "Assets/Sprites/Upgrades/whetstoneVert.png", "red"));
+        Upgrades.Add(new Upgrade("Precision", "Deal +[X] extra Damage on every hit (currently adding [N] Damage)", (float)precisionUpgradeModifierValue, (float)precisionUpgradeModifier, "", 0, 5, "Assets/Sprites/Upgrades/whetstone.png", "Assets/Sprites/Upgrades/whetstoneVert.png", "red"));
         Upgrades.Add(new Upgrade("Hardware Acceleration", "Increase dash range by [X]%", (float)hardwareAccelUpgradeModifierValue, (float)hardwareAccelUpgradeModifier, "", 0, 5, "Assets/Sprites/Upgrades/hardwareAccel.png", "Assets/Sprites/Upgrades/hardwareAccelVert.png", "purple"));
         Upgrades.Add(new Upgrade("Two Birds", "Your attacks hit twice, second attack does [X]% and also applies on-hit effects", (float)twoBirdsUpgradeModifierValue, (float)twoBirdsUpgradeModifier, "", 0, 5, "Assets/Sprites/Upgrades/twobirds.png", "Assets/Sprites/Upgrades/twobirdsVert.png", "red"));
-        Upgrades.Add(new Upgrade("Fortified", "Enemy projectiles deal [X]% less damage", (float)fortifiedUpgradeModifierValue, (float)fortifiedUpgradeModifier, "", 0, 5, "Assets/Sprites/Upgrades/fortify.png", "Assets/Sprites/Upgrades/fortifyVert.png", "green"));
+        Upgrades.Add(new Upgrade("Fortified", "Enemy projectiles deal [X]% less Damage", (float)fortifiedUpgradeModifierValue, (float)fortifiedUpgradeModifier, "", 0, 5, "Assets/Sprites/Upgrades/fortify.png", "Assets/Sprites/Upgrades/fortifyVert.png", "green"));
         Upgrades.Add(new Upgrade("Boot Up", "Gain a [X]% speed boost for the first [N] sec of each room", (float)bootUpUpgradeModifierValue, (float)bootUpUpgradeModifier, "", 0, 5, "Assets/Sprites/Upgrades/bootUp.png", "Assets/Sprites/Upgrades/bootUpVert.png", "purple"));
-        Upgrades.Add(new Upgrade("Spice of Life", "Gain [X]% additional damage for each unique combo used this run", (float)spiceLifeUpgradeModifierValue, (float)spiceLifeUpgradeModifierValue, "", 0, 5, "Assets/Sprites/Upgrades/spiceOfLife.png", "Assets/Sprites/Upgrades/spiceOfLifeVert.png", "red"));
+        Upgrades.Add(new Upgrade("Spice of Life", "Gain [X]% additional Damage for each unique combo used this run", (float)spiceLifeUpgradeModifierValue, (float)spiceLifeUpgradeModifierValue, "", 0, 5, "Assets/Sprites/Upgrades/spiceOfLife.png", "Assets/Sprites/Upgrades/spiceOfLifeVert.png", "red"));
         Upgrades.Add(new Upgrade("git restore", "When entering a new non-shop room, restore [X]% of max health", (float)gitRestoreUpgradeModifierValue, (float)gitRestoreUpgradeModifier, "", 0, 5, "Assets/Sprites/Upgrades/gitRestore.png", "Assets/Sprites/Upgrades/gitRestoreVert.png", "green"));
         Upgrades.Add(new Upgrade("Bloodthirsty", "Gain [X] health upon killing [N] enemies", (float)bloodthirstyUpgradeModifierValue, (float)bloodthirstyUpgradeModifier, "", 0, 5, "Assets/Sprites/Upgrades/bloodthirsty.png", "Assets/Sprites/Upgrades/bloodthirstVert.png", "red"));
         Upgrades.Add(new Upgrade("Greedy", "Gain [X]% more gold from enemy kills", (float)greedyUpgradeModifierValue, (float)greedyUpgradeModifier, "", 0, 5, "Assets/Sprites/Upgrades/chipMagnet.png", "Assets/Sprites/Upgrades/chipMagnetVert.png", "yellow"));
-        Upgrades.Add(new Upgrade("Thorns", "When you take damage, deal [X]% to the enemy that hit you", (float)thornsUpgradeModifierValue, (float)thornsUpgradeModifier, "", 0, 5, "Assets/Sprites/Upgrades/thorns.png", "Assets/Sprites/Upgrades/thornsVert.png", "green"));
+        Upgrades.Add(new Upgrade("Thorns", "When you take Damage, deal [X]% to the enemy that hit you", (float)thornsUpgradeModifierValue, (float)thornsUpgradeModifier, "", 0, 5, "Assets/Sprites/Upgrades/thorns.png", "Assets/Sprites/Upgrades/thornsVert.png", "green"));
 
         // Id should always = index in Upgrades list
         for (int i = 0; i < Upgrades.Count; i++)
@@ -286,7 +286,7 @@ public class LevelManager : MonoBehaviour
         if (patternUIManager != null)
         {
             patternUIManager.UpdatePatternName(pattern);
-            patternUIManager.UpdateQueueColors(type, subPattern.Item1, subPattern.Item2);
+            patternUIManager.UpdateQueueColors(subPattern.Item1, subPattern.Item2);
         }
     }
 

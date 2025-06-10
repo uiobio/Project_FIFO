@@ -64,17 +64,17 @@ public class ShopRoomSetup : MonoBehaviour
             GameObject shopItemUpgrade = Instantiate(shopItemUpgradePrefab, center + new Vector3(0, height + 0.12f, 0), Quaternion.identity);
 
             // Give the label and upgrade each a reference to the appropriate Upgrade object.
-            shopItemUpgrade.GetComponent<Upgrade_manager>().upgrade = shopItemUpgrades[i];
+            shopItemUpgrade.GetComponent<UpgradeManager>().Upgrade = shopItemUpgrades[i];
             shopItem.GetComponent<ShopItem>().Upgrade = shopItemUpgrades[i];
 
             // Tell the Upgrade_manager that we want to make a ShopItem (rather than a UI icon)
-            shopItemUpgrade.GetComponent<Upgrade_manager>().upgrade.UIOrShopItem = "ShopItem";
-            shopItemUpgrade.GetComponent<Upgrade_manager>().shopItem = shopItem.transform;
-            shopItemUpgrade.GetComponent<Upgrade_manager>().wallDirection = wallDirection;
-            shopItemUpgrade.GetComponent<Upgrade_manager>().CreateGameObjects();
+            shopItemUpgrade.GetComponent<UpgradeManager>().Upgrade.UIOrShopItem = "ShopItem";
+            shopItemUpgrade.GetComponent<UpgradeManager>().ShopItem = shopItem.transform;
+            shopItemUpgrade.GetComponent<UpgradeManager>().WallDirection = wallDirection;
+            shopItemUpgrade.GetComponent<UpgradeManager>().CreateGameObjects();
 
-            shopItem.name = "Upgrade ShopItem " + shopItemUpgrade.GetComponent<Upgrade_manager>().upgrade.Name;
-            shopItemUpgrade.name = "Data for Upgrade ShopItem " + shopItemUpgrade.GetComponent<Upgrade_manager>().upgrade.Name;
+            shopItem.name = "Upgrade ShopItem " + shopItemUpgrade.GetComponent<UpgradeManager>().Upgrade.Name;
+            shopItemUpgrade.name = "Data for Upgrade ShopItem " + shopItemUpgrade.GetComponent<UpgradeManager>().Upgrade.Name;
 
             shopItemUpgradeGameObjects.Add(shopItem);
         }

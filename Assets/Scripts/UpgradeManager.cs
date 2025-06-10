@@ -209,7 +209,7 @@ public class Upgrade
     //  string name: name of upgrade
     //  string desc: description of what the upgrade does. Format variables (if present) with square brackets i.e. "[x]%" or "[type]" to replace them with the scalars automatically.
     //               Percent signs should be left outside the brackets.
-    //  float x: some scalar that controls the power of the upgrade i.e. Deal [x] more damage per hit. Set to 0.0f if not used.
+    //  float x: some scalar that controls the power of the upgrade i.e. Deal [x] more Damage per hit. Set to 0.0f if not used.
     //  float n: some scalar that controls the power of the upgrade. Set to 0.0f if not used.
     //  string type: the type of enemy that the upgrade affects. Set to "" if not used.
     //  int id: index of upgrade in game_constants array. Must be unique to this upgrade.

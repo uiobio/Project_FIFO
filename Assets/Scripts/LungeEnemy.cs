@@ -3,12 +3,12 @@ using UnityEngine;
 
 public class LungeEnemy : MonoBehaviour
 {
-    public float detectionRadius = 5f;
-    public float lungeForce = 10f; // Was 20f before — now shorter lunge
-    public float lungeDelay = 0.5f;
-    public float recoveryTime = 1.5f;
-    public float movementSpeed = 2f;
-    public int damage = 10;
+    public float DetectionRadius = 5f;
+    public float LungeForce = 10f; // Was 20f before — now shorter lunge
+    public float LungeDelay = 0.5f;
+    public float RecoveryTime = 1.5f;
+    public float MovementSpeed = 2f;
+    public int Damage = 10;
 
     private Transform player;
     private Rigidbody rb;
@@ -27,7 +27,7 @@ public class LungeEnemy : MonoBehaviour
 
         float distance = Vector3.Distance(transform.position, player.position);
 
-        if (distance <= detectionRadius)
+        if (distance <= DetectionRadius)
         {
             StartCoroutine(Lunge());
         }
@@ -35,7 +35,7 @@ public class LungeEnemy : MonoBehaviour
         {
             // Slowly move towards the player
             Vector3 direction = (player.position - transform.position).normalized;
-            rb.MovePosition(transform.position + direction * movementSpeed * Time.fixedDeltaTime);
+            rb.MovePosition(transform.position + direction * MovementSpeed * Time.fixedDeltaTime);
         }
     }
 
@@ -44,11 +44,11 @@ public class LungeEnemy : MonoBehaviour
         isLunging = true;
 
         Vector3 direction = (player.position - transform.position).normalized;
-        yield return new WaitForSeconds(lungeDelay); // Wind-up
+        yield return new WaitForSeconds(LungeDelay); // Wind-up
 
-        rb.AddForce(direction * lungeForce, ForceMode.VelocityChange); // Quick burst forward
+        rb.AddForce(direction * LungeForce, ForceMode.VelocityChange); // Quick burst forward
 
-        yield return new WaitForSeconds(recoveryTime); // After-lunge pause
+        yield return new WaitForSeconds(RecoveryTime); // After-lunge pause
         isLunging = false;
     }
 
@@ -61,7 +61,7 @@ public class LungeEnemy : MonoBehaviour
             Health playerHealth = collision.gameObject.GetComponent<Health>();
             if (playerHealth != null)
             {
-                playerHealth.TakeDamage(damage);
+                playerHealth.TakeDamage(Damage);
             }
         }
     }

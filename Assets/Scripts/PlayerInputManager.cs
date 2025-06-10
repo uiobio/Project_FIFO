@@ -172,7 +172,7 @@ public class PlayerInputManager : MonoBehaviour
         }
 
         // Add the forces in direction specified by moveDirection and speed specified by moveSpeed
-        float speed = moveSpeed * (LevelManager.Instance.PatternAbilityManager.isBoosted ? boostedMult : 1f);
+        float speed = moveSpeed * (LevelManager.Instance.PatternAbilityManager.IsBoosted ? boostedMult : 1f);
         rb.AddForce(moveDirection.normalized * speed, ForceMode.Force);
         
     }
@@ -250,7 +250,7 @@ public class PlayerInputManager : MonoBehaviour
         while (true)
         {
             int tempIndex = levelManager.CurrentlySelectedUpgradeIndex;
-            RectTransform upgradeIconTransform = levelManager.PlayerHeldUpgradeIcons[levelManager.CurrentlySelectedUpgradeIndex].GetComponent<Upgrade_manager>().upgradeUIIcon.GetComponent<RectTransform>();
+            RectTransform upgradeIconTransform = levelManager.PlayerHeldUpgradeIcons[levelManager.CurrentlySelectedUpgradeIndex].GetComponent<UpgradeManager>().UpgradeUIIcon.GetComponent<RectTransform>();
             Vector2 originalPosition = upgradeIconTransform.anchoredPosition;
             upgradeIconTransform.anchoredPosition = new Vector2(upgradeIconTransform.anchoredPosition.x + levelManager.UpgradeIconUnplugOffset, upgradeIconTransform.anchoredPosition.y);
             shop.GetComponent<ShopItem>().Label.GetComponent<UpgradeLabel>().ActiveLabelTextHotkeyInfo = "(E) Confirm \n (MB1) Select \n<size=80%><color=" + shop.GetComponent<ShopItem>().Label.GetComponent<UpgradeLabel>().LabelTextHotkeyInfoColor + "> Replace [<i>" + levelManager.PlayerHeldUpgrades[levelManager.CurrentlySelectedUpgradeIndex].Name + "</i>] with the following upgrade?</color><size=100%>";
@@ -286,7 +286,7 @@ public class PlayerInputManager : MonoBehaviour
             int tempIndex = levelManager.CurrentlySelectedUpgradeIndex;
             if (levelManager.PlayerHeldUpgradeIcons[levelManager.CurrentlySelectedUpgradeIndex] != null)
             {
-                RectTransform upgradeIconTransform = levelManager.PlayerHeldUpgradeIcons[levelManager.CurrentlySelectedUpgradeIndex].GetComponent<Upgrade_manager>().upgradeUIIcon.GetComponent<RectTransform>();
+                RectTransform upgradeIconTransform = levelManager.PlayerHeldUpgradeIcons[levelManager.CurrentlySelectedUpgradeIndex].GetComponent<UpgradeManager>().UpgradeUIIcon.GetComponent<RectTransform>();
                 Vector2 originalPosition = upgradeIconTransform.anchoredPosition;
                 upgradeIconTransform.anchoredPosition = new Vector2(upgradeIconTransform.anchoredPosition.x + levelManager.UpgradeIconUnplugOffset, upgradeIconTransform.anchoredPosition.y);
 

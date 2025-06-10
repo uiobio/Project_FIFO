@@ -4,17 +4,17 @@ using UnityEngine;
 
 public class Deal_damage : MonoBehaviour
 {
-    // Fixed base damage (treat as const, its only not const to allow unity to serialize it)
+    // Fixed base Damage (treat as const, its only not const to allow unity to serialize it)
     public float baseDamage = 15.0f;
 
-    // How much damage is actually dealt by the attack
+    // How much Damage is actually dealt by the attack
     private float damage = 0;
 
     private void OnTriggerEnter(Collider c)
     {
         if (c.gameObject.GetComponent<Health>() != null)
         {
-            damage = baseDamage + LevelManager.Instance.precisionUpgradeModifier; // Recalculate damage on every hit, based on upgrade/pattern modifiers
+            damage = baseDamage + LevelManager.Instance.precisionUpgradeModifier; // Recalculate Damage on every hit, based on upgrade/pattern modifiers
             Health health = c.gameObject.GetComponent<Health>();
             health.TakeDamage(damage);
         }

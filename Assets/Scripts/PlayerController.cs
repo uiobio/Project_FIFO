@@ -1,13 +1,12 @@
 using UnityEngine;
 using System.Collections;
-using Unity.VisualScripting;
 
-public class Player_Controller : MonoBehaviour
+public class PlayerController : MonoBehaviour
 {
-    public static Player_Controller controller;
-    public float normalSpeed = 5f; // Default movement speed
-    public float boostedSpeed = 7.5f; // 1.5x speed boost
-    public float boostDuration = 30f * LevelManager.Instance.hardwareAccelUpgradeModifier; // base 30 seconds duration 
+    public static PlayerController Controller;
+    public float NormalSpeed = 5f; // Default movement speed
+    public float BoostedSpeed = 7.5f; // 1.5x speed boost
+    public float BoostDuration = 30f * LevelManager.Instance.hardwareAccelUpgradeModifier; // base 30 seconds duration 
     private bool isBoosted = false;
     private Rigidbody rb;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -23,7 +22,7 @@ public class Player_Controller : MonoBehaviour
         float moveHorizontal = Input.GetAxis("Horizontal");
         float moveVertical = Input.GetAxis("Vertical");
 
-        Vector3 movement = new Vector3(moveHorizontal, 0.0f, moveVertical) * (isBoosted ? boostedSpeed : normalSpeed) * Time.deltaTime;
+        Vector3 movement = (isBoosted ? BoostedSpeed : NormalSpeed) * Time.deltaTime * new Vector3(moveHorizontal, 0.0f, moveVertical);
         rb.MovePosition(rb.position + movement);
 
         // Trigger speed boost when 'R' is pressed
@@ -43,7 +42,7 @@ public class Player_Controller : MonoBehaviour
         isBoosted = true;
         Debug.Log("Speed Boost Activated!");
 
-        yield return new WaitForSeconds(boostDuration); // Wait for 30 seconds
+        yield return new WaitForSeconds(BoostDuration); // Wait for 30 seconds
 
         isBoosted = false;
         Debug.Log("Speed Boost Ended!");
@@ -51,15 +50,15 @@ public class Player_Controller : MonoBehaviour
 
     IEnumerator SpeedBoost(float boost, float duration)
     {
-        float temp = boostedSpeed;
-        boostedSpeed = boost;
+        float temp = BoostedSpeed;
+        BoostedSpeed = boost;
         isBoosted = true;
         Debug.Log("Speed Boost Activated!");
 
         yield return new WaitForSeconds(duration);
 
         isBoosted = false;
-        boostedSpeed = temp;
+        BoostedSpeed = temp;
         Debug.Log("Speed Boost Ended!");
     }
 }

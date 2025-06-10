@@ -99,7 +99,7 @@ public class Health : MonoBehaviour
             return;
         }
 
-        //Create the damage number that appears by the enemy
+        //Create the Damage number that appears by the enemy
         Vector3 damageMessagePosition = gameObject.transform.position;
         if (HealthBar != null)
         {

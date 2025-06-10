@@ -3,13 +3,13 @@ using UnityEngine.SceneManagement;
 
 public class DoorSceneChange : MonoBehaviour
 {
-    public string sceneName; // Name of the scene to load
+    public string SceneName; // Name of the scene to load
 
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
         {
-            SceneManager.LoadScene(sceneName);
+            SceneManager.LoadScene(SceneName);
         }
     }
 }
