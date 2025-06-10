@@ -216,9 +216,9 @@ public class LevelManager : MonoBehaviour
         {
             GameObject uiIcon = Instantiate(upgradePrefab);
             uiIcon.name = uiIcon.name + "_" + i.ToString();
-            uiIcon.GetComponent<UpgradeManager>().upgrade = PlayerHeldUpgrades[i];
-            uiIcon.GetComponent<UpgradeManager>().upgradeIndex = i;
-            uiIcon.GetComponent<UpgradeManager>().upgrade.UIOrShopItem = "UI";
+            uiIcon.GetComponent<UpgradeManager>().Upgrade = PlayerHeldUpgrades[i];
+            uiIcon.GetComponent<UpgradeManager>().UpgradeIndex = i;
+            uiIcon.GetComponent<UpgradeManager>().Upgrade.UIOrShopItem = "UI";
             uiIcon.GetComponent<UpgradeManager>().CreateGameObjects();
             PlayerHeldUpgradeIcons.Add(uiIcon);
         }
@@ -513,8 +513,8 @@ public class LevelManager : MonoBehaviour
             GameObject upgradeUIIcon = Instantiate(upgradePrefab);
             upgradeUIIcon.SetActive(false);
             upgrade.UIOrShopItem = "UI";
-            upgradeUIIcon.GetComponent<UpgradeManager>().upgrade = upgrade;
-            upgradeUIIcon.GetComponent<UpgradeManager>().upgradeIndex = index;
+            upgradeUIIcon.GetComponent<UpgradeManager>().Upgrade = upgrade;
+            upgradeUIIcon.GetComponent<UpgradeManager>().UpgradeIndex = index;
             upgradeUIIcon.GetComponent<UpgradeManager>().CreateGameObjects();
             upgradeUIIcon.SetActive(true);
 
@@ -558,20 +558,20 @@ public class LevelManager : MonoBehaviour
         GameObject upgradeUIIcon = Instantiate(upgradePrefab);
         upgradeUIIcon.SetActive(false);
         newUpgrade.UIOrShopItem = "UI";
-        upgradeUIIcon.GetComponent<UpgradeManager>().upgrade = newUpgrade;
-        upgradeUIIcon.GetComponent<UpgradeManager>().upgradeIndex = CurrentlySelectedUpgradeIndex;
+        upgradeUIIcon.GetComponent<UpgradeManager>().Upgrade = newUpgrade;
+        upgradeUIIcon.GetComponent<UpgradeManager>().UpgradeIndex = CurrentlySelectedUpgradeIndex;
         upgradeUIIcon.GetComponent<UpgradeManager>().CreateGameObjects();
         upgradeUIIcon.SetActive(true);
 
-        Destroy(PlayerHeldUpgradeIcons[CurrentlySelectedUpgradeIndex].GetComponent<UpgradeManager>().upgradeUIIcon);
+        Destroy(PlayerHeldUpgradeIcons[CurrentlySelectedUpgradeIndex].GetComponent<UpgradeManager>().UpgradeUIIcon);
         Destroy(PlayerHeldUpgradeIcons[CurrentlySelectedUpgradeIndex]);
         
 
-        Debug.Log("Replacing upgrade: " + PlayerHeldUpgradeIcons[CurrentlySelectedUpgradeIndex].GetComponent<UpgradeManager>().upgrade.Name + " (Upgrade slot index " + CurrentlySelectedUpgradeIndex + ")");
+        Debug.Log("Replacing upgrade: " + PlayerHeldUpgradeIcons[CurrentlySelectedUpgradeIndex].GetComponent<UpgradeManager>().Upgrade.Name + " (Upgrade slot index " + CurrentlySelectedUpgradeIndex + ")");
         PlayerHeldUpgradeIcons[CurrentlySelectedUpgradeIndex] = upgradeUIIcon;
-        upgradeUIIcon.GetComponent<UpgradeManager>().upgradeUIIcon.GetComponent<RectTransform>().anchoredPosition = originalSlotPosition;
+        upgradeUIIcon.GetComponent<UpgradeManager>().UpgradeUIIcon.GetComponent<RectTransform>().anchoredPosition = originalSlotPosition;
         GainCoin(-1 * newUpgrade.Cost);
-        shop.GetComponent<ShopItem>().destroyChildren();
+        shop.GetComponent<ShopItem>().DestroyChildren();
     }
 
     // Called within the coroutine SelectAndConfirmRecycle in PlayerInputManager (structured this way to keep all player inputs inside that script... it's a bit clunky but it works)
@@ -587,33 +587,33 @@ public class LevelManager : MonoBehaviour
         // Trashcan sprite is the same as the recycled upgrade color
         if (upgrade.Color == "green")
         {
-            trashcan.transform.Find("Sprite").GetComponent<SpriteRenderer>().sprite = trashcan.GetComponent<Trashcan>().trashcanGreen;
+            trashcan.transform.Find("Sprite").GetComponent<SpriteRenderer>().sprite = trashcan.GetComponent<Trashcan>().TrashcanGreen;
         }
         else if (upgrade.Color == "purple")
         {
-            trashcan.transform.Find("Sprite").GetComponent<SpriteRenderer>().sprite = trashcan.GetComponent<Trashcan>().trashcanPurple;
+            trashcan.transform.Find("Sprite").GetComponent<SpriteRenderer>().sprite = trashcan.GetComponent<Trashcan>().TrashcanPurple;
         }
         else if (upgrade.Color == "red") {
-            trashcan.transform.Find("Sprite").GetComponent<SpriteRenderer>().sprite = trashcan.GetComponent<Trashcan>().trashcanRed;
+            trashcan.transform.Find("Sprite").GetComponent<SpriteRenderer>().sprite = trashcan.GetComponent<Trashcan>().TrashcanRed;
         }
         else if (upgrade.Color == "yellow")
         {
-            trashcan.transform.Find("Sprite").GetComponent<SpriteRenderer>().sprite = trashcan.GetComponent<Trashcan>().trashcanYellow;
+            trashcan.transform.Find("Sprite").GetComponent<SpriteRenderer>().sprite = trashcan.GetComponent<Trashcan>().TrashcanYellow;
         }
 
         // Remove the upgrade data
         PlayerHeldUpgrades.RemoveAt(CurrentlySelectedUpgradeIndex);
 
         // Destroy the UI gameObject and remove it form the list
-        Destroy(PlayerHeldUpgradeIcons[CurrentlySelectedUpgradeIndex].GetComponent<UpgradeManager>().upgradeUIIcon);
+        Destroy(PlayerHeldUpgradeIcons[CurrentlySelectedUpgradeIndex].GetComponent<UpgradeManager>().UpgradeUIIcon);
         Destroy(PlayerHeldUpgradeIcons[CurrentlySelectedUpgradeIndex]);
         PlayerHeldUpgradeIcons.RemoveAt(CurrentlySelectedUpgradeIndex);
 
         // Move all UI icons up to fill the gap left by the old upgrade
         for (int i = CurrentlySelectedUpgradeIndex; i < PlayerHeldUpgradeIcons.Count; ++i)
         {
-            PlayerHeldUpgradeIcons[i].GetComponent<UpgradeManager>().upgradeUIIcon.GetComponent<RectTransform>().anchoredPosition += new Vector2(0, 108);
-            PlayerHeldUpgradeIcons[i].GetComponent<UpgradeManager>().upgradeIndex = i;
+            PlayerHeldUpgradeIcons[i].GetComponent<UpgradeManager>().UpgradeUIIcon.GetComponent<RectTransform>().anchoredPosition += new Vector2(0, 108);
+            PlayerHeldUpgradeIcons[i].GetComponent<UpgradeManager>().UpgradeIndex = i;
         }
 
         // Shift all Ids left by one, and set the last Id to -1
@@ -624,7 +624,7 @@ public class LevelManager : MonoBehaviour
         }
         
         // Deactivate the label
-        trashcan.GetComponent<Trashcan>().label.SetActive(false);
+        trashcan.GetComponent<Trashcan>().UILabel.SetActive(false);
     }
 
     // Called when upgrades are added to the player held upgrades list, essentially applies the effects of upgrades.

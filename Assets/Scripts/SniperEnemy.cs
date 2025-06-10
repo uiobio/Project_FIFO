@@ -2,11 +2,11 @@ using UnityEngine;
 
 public class SniperEnemy : MonoBehaviour
 {
-    public GameObject projectilePrefab;
-    public Transform firePoint;
-    public float fireRate = 2f;
-    public float projectileSpeed = 50f;
-    public float detectionRange = 30f;
+    public GameObject ProjectilePrefab;
+    public Transform FirePoint;
+    public float FireRate = 2f;
+    public float ProjectileSpeed = 50f;
+    public float DetectionRange = 30f;
 
     private Transform player;
     private float fireCooldown = 0f;
@@ -23,18 +23,18 @@ public class SniperEnemy : MonoBehaviour
         fireCooldown -= Time.deltaTime;
 
         float distanceToPlayer = Vector3.Distance(transform.position, player.position);
-        if (fireCooldown <= 0f && distanceToPlayer <= detectionRange)
+        if (fireCooldown <= 0f && distanceToPlayer <= DetectionRange)
         {
             ShootAtPlayer();
-            fireCooldown = fireRate;
+            fireCooldown = FireRate;
         }
     }
 
     void ShootAtPlayer()
     {
-        Vector3 direction = (player.position - firePoint.position).normalized;
-        GameObject bullet = Instantiate(projectilePrefab, firePoint.position, Quaternion.LookRotation(direction));
+        Vector3 direction = (player.position - FirePoint.position).normalized;
+        GameObject bullet = Instantiate(ProjectilePrefab, FirePoint.position, Quaternion.LookRotation(direction));
         Rigidbody rb = bullet.GetComponent<Rigidbody>();
-        rb.linearVelocity = direction * projectileSpeed;
+        rb.linearVelocity = direction * ProjectileSpeed;
     }
 }

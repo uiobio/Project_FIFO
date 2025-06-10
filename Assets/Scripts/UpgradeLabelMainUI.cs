@@ -94,10 +94,10 @@ public class UpgradeLabelMainUI : MonoBehaviour
         LineTR.GetComponent<ScreenSpaceLine>().fromPos = new Vector2(corners[2][0] - 3, corners[2][1] - 3);
         LineBR.GetComponent<ScreenSpaceLine>().fromPos = new Vector2(corners[3][0] - 3, corners[3][1] + 3);
 
-        LineBL.GetComponent<ScreenSpaceLine>().toPos = new Vector2(upgradeIconCorners[0][0], upgradeIconCorners[0][1]);
-        LineTL.GetComponent<ScreenSpaceLine>().toPos = new Vector2(upgradeIconCorners[1][0], upgradeIconCorners[1][1]);
-        LineTR.GetComponent<ScreenSpaceLine>().toPos = new Vector2(upgradeIconCorners[2][0], upgradeIconCorners[2][1]);
-        LineBR.GetComponent<ScreenSpaceLine>().toPos = new Vector2(upgradeIconCorners[3][0], upgradeIconCorners[3][1]);
+        LineBL.GetComponent<ScreenSpaceLine>().ToPos = new Vector2(upgradeIconCorners[0][0], upgradeIconCorners[0][1]);
+        LineTL.GetComponent<ScreenSpaceLine>().ToPos = new Vector2(upgradeIconCorners[1][0], upgradeIconCorners[1][1]);
+        LineTR.GetComponent<ScreenSpaceLine>().ToPos = new Vector2(upgradeIconCorners[2][0], upgradeIconCorners[2][1]);
+        LineBR.GetComponent<ScreenSpaceLine>().ToPos = new Vector2(upgradeIconCorners[3][0], upgradeIconCorners[3][1]);
 
         HoverSquare.GetComponent<RectTransform>().anchoredPosition = new Vector2((upgradeIconCorners[1][0] + upgradeIconCorners[2][0]) / 2, (upgradeIconCorners[1][1] + upgradeIconCorners[0][1]) / 2);
         HoverSquare.GetComponent<RectTransform>().sizeDelta = new Vector2(upgradeIconCorners[2][0] - upgradeIconCorners[1][0], upgradeIconCorners[1][1] - upgradeIconCorners[0][1]);

@@ -190,7 +190,7 @@ public class PlayerInputManager : MonoBehaviour
         // If the other GameObject is a ShopItem and the shop is active, buy the item.
         if (interactable.CompareTag("ShopItem") && interactable.GetComponent<ShopItem>().IsShopActive) 
         {
-            interactable.GetComponent<ShopItem>().buy();
+            interactable.GetComponent<ShopItem>().Buy();
             return;
         }
         if (interactable.CompareTag("Trashcan") && interactable.GetComponent<Trashcan>().IsTrashcanActive)

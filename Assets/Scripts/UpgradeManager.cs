@@ -3,36 +3,36 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using System.IO;
 
-public class Upgrade_manager : MonoBehaviour
+public class UpgradeManager : MonoBehaviour
 {
-    // This prefab is a self-reference to this gameObject's prefab. Used mostly for clarity.
-    public GameObject upgradePrefab;
+    // The screen space positions of the corners of this gameObject (unused if this upgrade is a shopItem).
+    private Vector3[] uiIconCorners = new Vector3[4];
 
     // This prefab is a reference to the upgrade's UI label (unused if this upgrade is a shopItem)
-    private GameObject MainUI;
+    private GameObject mainUI;
+
+    // This prefab is a self-reference to this gameObject's prefab. Used mostly for clarity.
+    public GameObject UpgradePrefab;
 
     // The upgrade this gameObject is working with 
-    public Upgrade upgrade;
+    public Upgrade Upgrade;
 
     // The transform of the shopItem this upgrade is associated with, if it exists (unused if this upgrade is a UI icon)
     [System.NonSerialized]
-    public Transform shopItem;
+    public Transform ShopItem;
 
     // The wall the shopItems are placed on (unused if this upgrade is a UI icon)
     [System.NonSerialized]
-    public string wallDirection;
+    public string WallDirection;
 
     // The index of this upgrade within the PlayerHeldUpgrades list in the Level manager (unused if this upgrade is a ShopItem)
-    public int upgradeIndex;
+    public int UpgradeIndex;
 
     // The GameObject that will be instantiated if this upgrade is a UI icon
-    public GameObject upgradeUIIcon;
+    public GameObject UpgradeUIIcon;
 
     // The UI label corresponding to this upgrade (unused if this upgrade is a shopItem)
     public GameObject Label;
-
-    // The screen space positions of the corners of this gameObject (unused if this upgrade is a shopItem).
-    private Vector3[] UIIconCorners = new Vector3[4];
 
     void Start()
     {
@@ -42,11 +42,11 @@ public class Upgrade_manager : MonoBehaviour
     // Makes different GameObjects depending on whether the upgrade is supposed to be a UI icon or ShopItem.
     public void CreateGameObjects()
     {
-        if (upgrade.UIOrShopItem.Equals("UI"))
+        if (Upgrade.UIOrShopItem.Equals("UI"))
         {
             InstantiateUpgradeUIIcon();
         }
-        else if (upgrade.UIOrShopItem.Equals("ShopItem"))
+        else if (Upgrade.UIOrShopItem.Equals("ShopItem"))
         {
             InstantiateUpgradeShopItem();
         }
@@ -59,35 +59,35 @@ public class Upgrade_manager : MonoBehaviour
         // Icons are children of the "Upgrades" child of the Main UI canvas"
         GameObject parentUI = LevelManager.Instance.ParentUI;
         gameObject.transform.SetParent(LevelManager.Instance.transform);
-        upgradeUIIcon = Instantiate(upgradePrefab.transform.GetChild(1).gameObject);
-        upgradeUIIcon.transform.SetParent(parentUI.transform.Find("MainCanvas/Upgrades"));
-        upgradeUIIcon.name = upgradeUIIcon.name + "_" + gameObject.name.Substring(gameObject.name.Length - 1, 1);
+        UpgradeUIIcon = Instantiate(UpgradePrefab.transform.GetChild(1).gameObject);
+        UpgradeUIIcon.transform.SetParent(parentUI.transform.Find("MainCanvas/Upgrades"));
+        UpgradeUIIcon.name = UpgradeUIIcon.name + "_" + gameObject.name.Substring(gameObject.name.Length - 1, 1);
 
         // Icons render on bottom layer
-        upgradeUIIcon.transform.SetSiblingIndex(0);
+        UpgradeUIIcon.transform.SetSiblingIndex(0);
 
         // Get the image data from the file path, convert to a Sprite, and set the Image to the Sprite.
-        byte[] imageBytes = GetImageBytes(upgrade.SpriteFilePath);
+        byte[] imageBytes = GetImageBytes(Upgrade.SpriteFilePath);
         Texture2D tex = new(2, 2, TextureFormat.RGBA32, false);
         ImageConversion.LoadImage(tex, imageBytes);
         Texture2D scaledTex = new(150, 102, TextureFormat.RGBA32, false);
         Graphics.ConvertTexture(tex, scaledTex);
         Sprite sprite = Sprite.Create(scaledTex, new Rect(0, 0, scaledTex.width, scaledTex.height), new Vector2(0.5f, 0.5f));
-        Image uiImage = upgradeUIIcon.GetComponent<Image>();
+        Image uiImage = UpgradeUIIcon.GetComponent<Image>();
         uiImage.sprite = sprite;
 
         // Set the position based on which player held upgrade index this is, set the size according to a 1920 x 1080 resolution
-        Vector2 pos = new Vector2(108, 691 - (108) * upgradeIndex);
-        upgradeUIIcon.GetComponent<RectTransform>().anchoredPosition = pos;
-        upgradeUIIcon.GetComponent<RectTransform>().sizeDelta = new Vector2(150, 102);
-        upgradeUIIcon.GetComponent<RectTransform>().GetWorldCorners(UIIconCorners);
-        UIIconCorners[0] += new Vector3(39, 24, 0);
-        UIIconCorners[1] += new Vector3(39, -6, 0);
-        UIIconCorners[2] += new Vector3(-39, -6, 0);
-        UIIconCorners[3] += new Vector3(-39, 24, 0);
-        upgradeUIIcon.SetActive(true);
-        MainUI = GameObject.Find("UI");
-        Label = MainUI.transform.Find("MainCanvas/Upgrades/Label").gameObject;
+        Vector2 pos = new Vector2(108, 691 - (108) * UpgradeIndex);
+        UpgradeUIIcon.GetComponent<RectTransform>().anchoredPosition = pos;
+        UpgradeUIIcon.GetComponent<RectTransform>().sizeDelta = new Vector2(150, 102);
+        UpgradeUIIcon.GetComponent<RectTransform>().GetWorldCorners(uiIconCorners);
+        uiIconCorners[0] += new Vector3(39, 24, 0);
+        uiIconCorners[1] += new Vector3(39, -6, 0);
+        uiIconCorners[2] += new Vector3(-39, -6, 0);
+        uiIconCorners[3] += new Vector3(-39, 24, 0);
+        UpgradeUIIcon.SetActive(true);
+        mainUI = GameObject.Find("UI");
+        Label = mainUI.transform.Find("MainCanvas/Upgrades/Label").gameObject;
         Label.GetComponent<UpgradeLabelMainUI>().Initialize();
     }
 
@@ -95,19 +95,19 @@ public class Upgrade_manager : MonoBehaviour
     private void InstantiateUpgradeShopItem()
     {
         Transform upgradeShopItem;
-        upgradeShopItem = Instantiate(upgradePrefab.transform.GetChild(0), transform.position + new Vector3(0, 0.585f, 0), Quaternion.Euler(new Vector3(48.59f, -135, 0)));
+        upgradeShopItem = Instantiate(UpgradePrefab.transform.GetChild(0), transform.position + new Vector3(0, 0.585f, 0), Quaternion.Euler(new Vector3(48.59f, -135, 0)));
 
-        upgradeShopItem.transform.SetParent(shopItem);
-        upgradeShopItem.gameObject.name = "Upgrade ShopItem Icon " + upgrade.Name;
+        upgradeShopItem.transform.SetParent(ShopItem);
+        upgradeShopItem.gameObject.name = "Upgrade ShopItem Icon " + Upgrade.Name;
 
         // Makes the material of the mesh an image of the upgrade
-        if (!File.Exists(upgrade.SpriteFilePathVert))
+        if (!File.Exists(Upgrade.SpriteFilePathVert))
         {
-            Debug.LogError($"Image file not found at path: {upgrade.SpriteFilePathVert}");
+            Debug.LogError($"Image file not found at path: {Upgrade.SpriteFilePathVert}");
             return;
         }
 
-        byte[] imageBytes = File.ReadAllBytes(upgrade.SpriteFilePathVert);
+        byte[] imageBytes = File.ReadAllBytes(Upgrade.SpriteFilePathVert);
         Texture2D texture = new Texture2D(2, 2); // placeholder size
 
         if (texture.LoadImage(imageBytes))
@@ -143,9 +143,10 @@ public class Upgrade_manager : MonoBehaviour
     }
 
     // When the UI icon for this upgrade is clicked, update the index of the currently selected upgrade in the player held upgrades list in the level manager to reflect this.
-    public void OnUIIconClick() {
-        Debug.Log("Upgrade with name: " + upgrade.Name + " clicked! (Upgrade slot index " + upgradeIndex + ")");
-        LevelManager.Instance.CurrentlySelectedUpgradeIndex = upgradeIndex;
+    public void OnUIIconClick()
+    {
+        Debug.Log("Upgrade with name: " + Upgrade.Name + " clicked! (Upgrade slot index " + UpgradeIndex + ")");
+        LevelManager.Instance.CurrentlySelectedUpgradeIndex = UpgradeIndex;
     }
 
     public void OnUIHoverEnter()
@@ -154,12 +155,12 @@ public class Upgrade_manager : MonoBehaviour
         {
             LevelManager.Instance.IsHoveringUpgradeIcon = true;
             Debug.Log("Hovered");
-            upgradeUIIcon.GetComponent<RectTransform>().GetWorldCorners(UIIconCorners);
-            UIIconCorners[0] += new Vector3(39, 24, 0);
-            UIIconCorners[1] += new Vector3(39, -6, 0);
-            UIIconCorners[2] += new Vector3(-39, -6, 0);
-            UIIconCorners[3] += new Vector3(-39, 24, 0);
-            LevelManager.Instance.CurrentlyHoveredUpgradeIndex = upgradeIndex;
+            UpgradeUIIcon.GetComponent<RectTransform>().GetWorldCorners(uiIconCorners);
+            uiIconCorners[0] += new Vector3(39, 24, 0);
+            uiIconCorners[1] += new Vector3(39, -6, 0);
+            uiIconCorners[2] += new Vector3(-39, -6, 0);
+            uiIconCorners[3] += new Vector3(-39, 24, 0);
+            LevelManager.Instance.CurrentlyHoveredUpgradeIndex = UpgradeIndex;
             Label.GetComponent<RectTransform>().anchoredPosition = new Vector2(-440, -60);
             Label.transform.parent.Find("LineBL").gameObject.SetActive(true);
             Label.transform.parent.Find("LineTL").gameObject.SetActive(true);
@@ -167,8 +168,8 @@ public class Upgrade_manager : MonoBehaviour
             Label.transform.parent.Find("LineBR").gameObject.SetActive(true);
             Label.transform.parent.Find("HoverSquare").gameObject.SetActive(true);
             Label.SetActive(true);
-            Label.GetComponent<UpgradeLabelMainUI>().upgradeIconCorners = UIIconCorners;
-            Label.GetComponent<UpgradeLabelMainUI>().MakeFullFormattedString(upgrade);
+            Label.GetComponent<UpgradeLabelMainUI>().upgradeIconCorners = uiIconCorners;
+            Label.GetComponent<UpgradeLabelMainUI>().MakeFullFormattedString(Upgrade);
         }
     }
 

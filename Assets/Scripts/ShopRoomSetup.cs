@@ -2,15 +2,15 @@ using UnityEngine;
 using System;
 using System.Collections.Generic;
 
-public class Shop_room_setup : MonoBehaviour
+public class ShopRoomSetup : MonoBehaviour
 {
-    public static Shop_room_setup instance;
+    public static ShopRoomSetup Instance;
     [Header("Shop")]
     // The ShopItem prefab
     [SerializeField]
-    private GameObject ShopItemPrefab;
+    private GameObject shopItemPrefab;
     [SerializeField]
-    private GameObject ShopItemUpgradePrefab;
+    private GameObject shopItemUpgradePrefab;
     // How many ShopItems in the room
     [SerializeField]
     private int numShopItems;
@@ -23,19 +23,17 @@ public class Shop_room_setup : MonoBehaviour
     // Which wall to line the ShopItems up on
     [SerializeField]
     private string wallDirection;
-
     [SerializeField]
-    private List<int> preset_upgrade_ids = new List<int>();
+    private List<int> presetUpgradeIds = new List<int>();
 
     // List of the 3 upgrades this shop room will display
     List<Upgrade> shopItemUpgrades = new List<Upgrade>();
-
     // List of the 3 gameObjects associated with the upgrades
     List<GameObject> shopItemUpgradeGameObjects = new List<GameObject>();
 
     private void Awake()
     {
-        instance = this;
+        Instance = this;
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -52,22 +50,22 @@ public class Shop_room_setup : MonoBehaviour
             // 1.5f is to account for the fact that the position is calculated from the center of each ShopItem (so the expected "distance between" is effectively shortened by 2/3)
             if (wallDirection.Equals("Northwest"))
             {
-                shopItem = Instantiate(ShopItemPrefab, new Vector3(2.5f, 0, 2.5f) + new Vector3(0, 0, -0.471875f * i * numSquaresBetweenEachShopItem + -0.471875f * numSquaresFirstShopItemFromEdge), Quaternion.identity);
+                shopItem = Instantiate(shopItemPrefab, new Vector3(2.5f, 0, 2.5f) + new Vector3(0, 0, -0.471875f * i * numSquaresBetweenEachShopItem + -0.471875f * numSquaresFirstShopItemFromEdge), Quaternion.identity);
             }
             else
             {
-                shopItem = Instantiate(ShopItemPrefab, ShopItemPrefab.transform.position + new Vector3(-0.471875f * i * numSquaresBetweenEachShopItem + -0.471875f * numSquaresFirstShopItemFromEdge, 0, 0), Quaternion.identity);
+                shopItem = Instantiate(shopItemPrefab, shopItemPrefab.transform.position + new Vector3(-0.471875f * i * numSquaresBetweenEachShopItem + -0.471875f * numSquaresFirstShopItemFromEdge, 0, 0), Quaternion.identity);
             }
             Renderer cubeRenderer = shopItem.gameObject.transform.Find("Collider").GetComponent<MeshRenderer>();
             Vector3 center = cubeRenderer.bounds.center;
             float height = cubeRenderer.bounds.extents.y;
 
             // 0.12f is a good height above the Shop to make the upgrade icon appear more 3D
-            GameObject shopItemUpgrade = Instantiate(ShopItemUpgradePrefab, center + new Vector3(0, height + 0.12f, 0), Quaternion.identity);
+            GameObject shopItemUpgrade = Instantiate(shopItemUpgradePrefab, center + new Vector3(0, height + 0.12f, 0), Quaternion.identity);
 
             // Give the label and upgrade each a reference to the appropriate Upgrade object.
             shopItemUpgrade.GetComponent<Upgrade_manager>().upgrade = shopItemUpgrades[i];
-            shopItem.GetComponent<ShopItem>().upgrade = shopItemUpgrades[i];
+            shopItem.GetComponent<ShopItem>().Upgrade = shopItemUpgrades[i];
 
             // Tell the Upgrade_manager that we want to make a ShopItem (rather than a UI icon)
             shopItemUpgrade.GetComponent<Upgrade_manager>().upgrade.UIOrShopItem = "ShopItem";
@@ -104,7 +102,7 @@ public class Shop_room_setup : MonoBehaviour
                 {
                     id = UnityEngine.Random.Range(0, LevelManager.Instance.Upgrades.Count);
                 } while (Array.IndexOf(generatedIds, id) != -1);
-                if(i < preset_upgrade_ids.Count){
+                if(i < presetUpgradeIds.Count){
                     id = i;
                 }
                 generatedIds[i] = id;

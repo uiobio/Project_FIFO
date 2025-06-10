@@ -11,7 +11,7 @@ public class ShopItemCollider : MonoBehaviour
         // Update the text to reflect changes in game state
         if (other.gameObject.CompareTag("Player") && !shopItem.Bought)
         {
-            shopItem.Label.GetComponent<UpgradeLabel>().ChangeLabelTextBasedOnGameState(shopItem.upgrade);
+            shopItem.Label.GetComponent<UpgradeLabel>().ChangeLabelTextBasedOnGameState(shopItem.Upgrade);
             shopItem.MakeFullFormattedTextString();
             shopItem.Label.SetActive(true);
             // Update the TextMeshPro component according to the new active text
