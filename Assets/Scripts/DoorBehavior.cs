@@ -2,22 +2,22 @@ using UnityEngine;
 
 public class DoorBehavior : MonoBehaviour
 {
-    public bool isQuitDoor = false; // Flag to determine if this is the quit door
+    public bool IsQuitDoor = false; // Flag to determine if this is the quit door
 
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
         {
-            if (isQuitDoor)
+            if (IsQuitDoor)
             {
                 // Quit the application
                 Debug.Log("Quitting the game...");
                 Application.Quit();
 
                 // Note: Application.Quit will not work in the editor; use UnityEditor.EditorApplication.isPlaying = false; for testing in the editor.
-                #if UNITY_EDITOR
+#if UNITY_EDITOR
                 UnityEditor.EditorApplication.isPlaying = false;
-                #endif
+#endif
             }
             else
             {

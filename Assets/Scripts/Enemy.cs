@@ -3,8 +3,8 @@ using UnityEngine;
 public class Enemy : MonoBehaviour
 {
 	[SerializeField]
-	private Health H;
-	[SerializeField] 
+	private Health health;
+	[SerializeField]
 	private Transform healthBar;
 	[SerializeField]
 	public Vector3 cam_rot;
@@ -16,19 +16,20 @@ public class Enemy : MonoBehaviour
 	private SpriteRenderer SR;
 
 	[SerializeField]
-	Color[] ElementColors = new Color[] {Color.yellow, Color.red, Color.cyan, Color.green};
+	Color[] ElementColors = new Color[] { Color.yellow, Color.red, Color.cyan, Color.green };
 
 	[SerializeField]
 	private Animator anim;
 
-    void Start()
+	void Start()
 	{
-		H = gameObject.GetComponent<Health>();
+		health = gameObject.GetComponent<Health>();
 	}
 
 	void Update()
 	{
-		if (H.IsDead){
+		if (health.IsDead)
+		{
 			Debug.Log($"ENEMY {gameObject.name} HAS DIED!!!");
 			LevelManager.Instance.UpdatePattern(element);
 			LevelManager.Instance.GainCoin(num_chips);
@@ -37,16 +38,19 @@ public class Enemy : MonoBehaviour
 		healthBar.eulerAngles = cam_rot;
 	}
 
-	public void SetElement(int elem){
+	public void SetElement(int elem)
+	{
 		//Sets the element variable and sets animator (if exists) or sprite color
 		element = elem;
 		anim = gameObject.GetComponentInChildren<Animator>();
-		if (anim != null){
+		if (anim != null)
+		{
 			SR.color = Color.white;
 			anim.SetInteger("Element", elem);
 			anim.SetTrigger("SetElement");
 		}
-		else{
+		else
+		{
 			SR.color = ElementColors[elem];
 		}
 	}

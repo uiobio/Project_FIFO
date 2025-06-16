@@ -1,14 +1,12 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class Cooldown_manager : MonoBehaviour
+public class CooldownManager : MonoBehaviour
 {
-    public static Cooldown_manager instance;
+    public static CooldownManager Instance;
 
     private void Awake() // makes Cooldown_manager callable in any script: Cooldown_manager.Instance.[]
     {
-        instance = this;
+        Instance = this;
     }
 
     [Header("Cooldowns")]
@@ -37,11 +35,13 @@ public class Cooldown_manager : MonoBehaviour
     void Update()
     {
         // If dash is on cooldown and the cooldown timer is over, take the dash off cooldown
-        if (isDashOnCooldown && Time.time >= dashCooldownCompleteTime) {
+        if (isDashOnCooldown && Time.time >= dashCooldownCompleteTime)
+        {
             isDashOnCooldown = false;
         }
 
-        if (isFireProjectileOnCooldown && Time.time >= fireProjectileCooldownCompleteTime) { 
+        if (isFireProjectileOnCooldown && Time.time >= fireProjectileCooldownCompleteTime)
+        {
             isFireProjectileOnCooldown = false;
         }
 
@@ -53,7 +53,7 @@ public class Cooldown_manager : MonoBehaviour
 
     // Called when dash executed
     public void UpdateDashCooldown()
-    {   
+    {
         // Put the dash on cooldown and set the time for when it should come off cooldown
         isDashOnCooldown = true;
         dashCooldownCompleteTime = Time.time + dashCooldownLength;
@@ -92,7 +92,7 @@ public class Cooldown_manager : MonoBehaviour
     public float FireProjectileCooldownLength
     {
         get { return fireProjectileCooldownLength; }
-        set {  fireProjectileCooldownLength = value; }
+        set { fireProjectileCooldownLength = value; }
     }
 
     public float FireProjectileCooldownCompleteTime

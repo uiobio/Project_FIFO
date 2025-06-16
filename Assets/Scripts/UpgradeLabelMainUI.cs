@@ -89,10 +89,10 @@ public class UpgradeLabelMainUI : MonoBehaviour
     {
         labelRectTransform.Find("Panel").GetComponent<RectTransform>().GetWorldCorners(corners);
 
-        LineBL.GetComponent<ScreenSpaceLine>().fromPos = new Vector2(corners[0][0] + 3, corners[0][1] + 3);
-        LineTL.GetComponent<ScreenSpaceLine>().fromPos = new Vector2(corners[1][0] + 3, corners[1][1] - 3);
-        LineTR.GetComponent<ScreenSpaceLine>().fromPos = new Vector2(corners[2][0] - 3, corners[2][1] - 3);
-        LineBR.GetComponent<ScreenSpaceLine>().fromPos = new Vector2(corners[3][0] - 3, corners[3][1] + 3);
+        LineBL.GetComponent<ScreenSpaceLine>().FromPos = new Vector2(corners[0][0] + 3, corners[0][1] + 3);
+        LineTL.GetComponent<ScreenSpaceLine>().FromPos = new Vector2(corners[1][0] + 3, corners[1][1] - 3);
+        LineTR.GetComponent<ScreenSpaceLine>().FromPos = new Vector2(corners[2][0] - 3, corners[2][1] - 3);
+        LineBR.GetComponent<ScreenSpaceLine>().FromPos = new Vector2(corners[3][0] - 3, corners[3][1] + 3);
 
         LineBL.GetComponent<ScreenSpaceLine>().ToPos = new Vector2(upgradeIconCorners[0][0], upgradeIconCorners[0][1]);
         LineTL.GetComponent<ScreenSpaceLine>().ToPos = new Vector2(upgradeIconCorners[1][0], upgradeIconCorners[1][1]);

@@ -6,11 +6,12 @@ using UnityEngine.SceneManagement;
 public class Door : MonoBehaviour
 {
     [SerializeField]
-    string room_name;
+    string RoomName;
 
     void OnTriggerEnter(Collider other)
     {
-        if(FindObjectsByType<Enemy>(FindObjectsSortMode.None).Length != 0){
+        if (FindObjectsByType<Enemy>(FindObjectsSortMode.None).Length != 0)
+        {
             return;
         }
         GameState.Instance.roomCount++;
@@ -22,7 +23,7 @@ public class Door : MonoBehaviour
         {
             LevelManager.Instance.IncRoom();
 
-            SceneManager.LoadScene(room_name);
+            SceneManager.LoadScene(RoomName);
         }
     }
 }
