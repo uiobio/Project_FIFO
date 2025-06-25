@@ -642,7 +642,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 515201a068e346f47890351358d364e8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  room_name: 
+  RoomName: 
 --- !u!114 &645881730
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -655,7 +655,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b8057d3c71af4a65a31ba2c1d879ad6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isQuitDoor: 1
+  IsQuitDoor: 1
 --- !u!1 &728174724
 GameObject:
   m_ObjectHideFlags: 0
@@ -1348,7 +1348,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 515201a068e346f47890351358d364e8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  room_name: Basic L Room
+  RoomName: Basic L Room
 --- !u!65 &1803580478
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1450,7 +1450,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b8057d3c71af4a65a31ba2c1d879ad6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isQuitDoor: 0
+  IsQuitDoor: 0
 --- !u!114 &1803580483
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1463,7 +1463,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b3d17465a3c764e1c9531e80cb584350, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sceneName: Basic L Room
+  SceneName: 
 --- !u!1 &1832450786
 GameObject:
   m_ObjectHideFlags: 0
@@ -1508,10 +1508,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 018b788d1a60a254fa651c1f680e51a0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SpawneePrefab: {fileID: 328789305087572588, guid: 6a120e85c4b8215448cb02a44cba1de9, type: 3}
-  SpawnsEnemy: 0
-  EnemyElement: 0
-  p_Warning: {fileID: 0}
+  spawneePrefab: {fileID: 328789305087572588, guid: 6a120e85c4b8215448cb02a44cba1de9, type: 3}
+  spawnsEnemy: 0
+  enemyElement: 0
+  pWarning: {fileID: 0}
 --- !u!1 &2055872956
 GameObject:
   m_ObjectHideFlags: 0
@@ -1803,10 +1803,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 018b788d1a60a254fa651c1f680e51a0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SpawneePrefab: {fileID: 0}
-  SpawnsEnemy: 0
-  EnemyElement: 0
-  p_Warning: {fileID: 9013366387470994794, guid: afbd1451b6e92324ab01d4f76477c865, type: 3}
+  spawneePrefab: {fileID: 0}
+  spawnsEnemy: 0
+  enemyElement: 0
+  pWarning: {fileID: 0}
 --- !u!4 &1228005617732482184
 Transform:
   m_ObjectHideFlags: 0
@@ -1851,10 +1851,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 018b788d1a60a254fa651c1f680e51a0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SpawneePrefab: {fileID: 0}
-  SpawnsEnemy: 0
-  EnemyElement: 0
-  p_Warning: {fileID: 9013366387470994794, guid: afbd1451b6e92324ab01d4f76477c865, type: 3}
+  spawneePrefab: {fileID: 0}
+  spawnsEnemy: 0
+  enemyElement: 0
+  pWarning: {fileID: 0}
 --- !u!114 &1719236833696232974
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1867,10 +1867,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 018b788d1a60a254fa651c1f680e51a0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SpawneePrefab: {fileID: 0}
-  SpawnsEnemy: 0
-  EnemyElement: 0
-  p_Warning: {fileID: 9013366387470994794, guid: afbd1451b6e92324ab01d4f76477c865, type: 3}
+  spawneePrefab: {fileID: 0}
+  spawnsEnemy: 0
+  enemyElement: 0
+  pWarning: {fileID: 0}
 --- !u!1 &1750056444413664911
 GameObject:
   m_ObjectHideFlags: 0
@@ -1973,10 +1973,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 018b788d1a60a254fa651c1f680e51a0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SpawneePrefab: {fileID: 0}
-  SpawnsEnemy: 0
-  EnemyElement: 0
-  p_Warning: {fileID: 9013366387470994794, guid: afbd1451b6e92324ab01d4f76477c865, type: 3}
+  spawneePrefab: {fileID: 0}
+  spawnsEnemy: 0
+  enemyElement: 0
+  pWarning: {fileID: 0}
 --- !u!1 &2389469741575606436
 GameObject:
   m_ObjectHideFlags: 0
@@ -2498,10 +2498,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 018b788d1a60a254fa651c1f680e51a0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SpawneePrefab: {fileID: 0}
-  SpawnsEnemy: 0
-  EnemyElement: 0
-  p_Warning: {fileID: 9013366387470994794, guid: afbd1451b6e92324ab01d4f76477c865, type: 3}
+  spawneePrefab: {fileID: 0}
+  spawnsEnemy: 0
+  enemyElement: 0
+  pWarning: {fileID: 0}
 --- !u!4 &4464856087530464393
 Transform:
   m_ObjectHideFlags: 0
@@ -2677,10 +2677,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 018b788d1a60a254fa651c1f680e51a0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SpawneePrefab: {fileID: 0}
-  SpawnsEnemy: 0
-  EnemyElement: 0
-  p_Warning: {fileID: 9013366387470994794, guid: afbd1451b6e92324ab01d4f76477c865, type: 3}
+  spawneePrefab: {fileID: 0}
+  spawnsEnemy: 0
+  enemyElement: 0
+  pWarning: {fileID: 0}
 --- !u!224 &5508739921386856247
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2839,10 +2839,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 018b788d1a60a254fa651c1f680e51a0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SpawneePrefab: {fileID: 0}
-  SpawnsEnemy: 0
-  EnemyElement: 0
-  p_Warning: {fileID: 9013366387470994794, guid: afbd1451b6e92324ab01d4f76477c865, type: 3}
+  spawneePrefab: {fileID: 0}
+  spawnsEnemy: 0
+  enemyElement: 0
+  pWarning: {fileID: 0}
 --- !u!4 &7423916940347509908
 Transform:
   m_ObjectHideFlags: 0
@@ -2870,10 +2870,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 018b788d1a60a254fa651c1f680e51a0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SpawneePrefab: {fileID: 0}
-  SpawnsEnemy: 0
-  EnemyElement: 0
-  p_Warning: {fileID: 9013366387470994794, guid: afbd1451b6e92324ab01d4f76477c865, type: 3}
+  spawneePrefab: {fileID: 0}
+  spawnsEnemy: 0
+  enemyElement: 0
+  pWarning: {fileID: 0}
 --- !u!114 &7559453030127956848
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2886,10 +2886,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 018b788d1a60a254fa651c1f680e51a0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SpawneePrefab: {fileID: 0}
-  SpawnsEnemy: 0
-  EnemyElement: 0
-  p_Warning: {fileID: 9013366387470994794, guid: afbd1451b6e92324ab01d4f76477c865, type: 3}
+  spawneePrefab: {fileID: 0}
+  spawnsEnemy: 0
+  enemyElement: 0
+  pWarning: {fileID: 0}
 --- !u!114 &7696051878996609104
 MonoBehaviour:
   m_ObjectHideFlags: 0

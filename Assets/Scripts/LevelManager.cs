@@ -135,7 +135,7 @@ public class LevelManager : MonoBehaviour
         // Give self 0 coins to set HUD currency
         GainCoin(0);
         MusicManager = Instantiate(musicManagerPrefab);
-
+        PatternAbilityManager = PatternFuncs.Instance;
         // FIXME: Setting up the Patterns List should be move to gameconstants when one exists.
         // Create lists for all of the Patterns
         List<(int, string, Action)> Len1Patterns = new();

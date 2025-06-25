@@ -908,21 +908,13 @@ MonoBehaviour:
   - {fileID: 2852349253928312364}
   - {fileID: 7894092664444487874}
   - {fileID: 6633018430067980608}
-  t_pattern: {fileID: 4599662623187231677}
-  S_Unused:
-  - {fileID: -856615811, guid: 83caad73679a3a74197dec09e9afb2b2, type: 3}
-  - {fileID: -1572519620, guid: 83caad73679a3a74197dec09e9afb2b2, type: 3}
-  - {fileID: 872628596, guid: 83caad73679a3a74197dec09e9afb2b2, type: 3}
-  - {fileID: -237742461, guid: 83caad73679a3a74197dec09e9afb2b2, type: 3}
-  S_Used:
-  - {fileID: 917468380, guid: 83caad73679a3a74197dec09e9afb2b2, type: 3}
-  - {fileID: -1945734859, guid: 83caad73679a3a74197dec09e9afb2b2, type: 3}
-  - {fileID: -1308069693, guid: 83caad73679a3a74197dec09e9afb2b2, type: 3}
-  - {fileID: -1627811281, guid: 83caad73679a3a74197dec09e9afb2b2, type: 3}
-  S_Empty: {fileID: 21300000, guid: 8939bef908072e34780cf69814dfe86c, type: 3}
-  empty_size: {x: 43, y: 48}
-  sprite_size: {x: 54, y: 61}
-  middle_diff: 14
+  PatternText: {fileID: 4599662623187231677}
+  SpriteUnused: []
+  SpriteUsed: []
+  SpriteEmpty: {fileID: 21300000, guid: 8939bef908072e34780cf69814dfe86c, type: 3}
+  emptySize: {x: 0, y: 0}
+  spriteSize: {x: 0, y: 0}
+  middleDiff: 0
 --- !u!1 &3239809392890379957
 GameObject:
   m_ObjectHideFlags: 0
@@ -2078,10 +2070,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c71b61cbf0cda28419f29267ae7e0142, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fromPos: {x: 0, y: 0, z: 0}
-  toPos: {x: 0, y: 0, z: 0}
-  line: {fileID: 374799370824570641}
-  lineImage: {fileID: 5715474760679656017}
+  FromPos: {x: 0, y: 0, z: 0}
+  ToPos: {x: 0, y: 0, z: 0}
+  Line: {fileID: 374799370824570641}
+  LineImage: {fileID: 5715474760679656017}
 --- !u!1 &6480623489157901864
 GameObject:
   m_ObjectHideFlags: 0
@@ -2351,12 +2343,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 53294437a32eea745ba19e382c5af2b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ProgressImage: {fileID: 3795783029663577744}
-  DefaultSpeed: 1
-  OnProgress:
+  progressImage: {fileID: 3795783029663577744}
+  defaultSpeed: 1
+  onProgress:
     m_PersistentCalls:
       m_Calls: []
-  OnCompleted:
+  onCompleted:
     m_PersistentCalls:
       m_Calls: []
 --- !u!1 &7027488769881469653
@@ -2409,10 +2401,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c71b61cbf0cda28419f29267ae7e0142, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fromPos: {x: 0, y: 0, z: 0}
-  toPos: {x: 0, y: 0, z: 0}
-  line: {fileID: 967972086215347564}
-  lineImage: {fileID: 6994631627008548139}
+  FromPos: {x: 0, y: 0, z: 0}
+  ToPos: {x: 0, y: 0, z: 0}
+  Line: {fileID: 967972086215347564}
+  LineImage: {fileID: 6994631627008548139}
 --- !u!222 &2501479116146569275
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -2501,10 +2493,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c71b61cbf0cda28419f29267ae7e0142, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fromPos: {x: 0, y: 0, z: 0}
-  toPos: {x: 0, y: 0, z: 0}
-  line: {fileID: 6665677448523890754}
-  lineImage: {fileID: 164562712921699565}
+  FromPos: {x: 0, y: 0, z: 0}
+  ToPos: {x: 0, y: 0, z: 0}
+  Line: {fileID: 6665677448523890754}
+  LineImage: {fileID: 164562712921699565}
 --- !u!222 &3910269675535500661
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -3097,10 +3089,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c71b61cbf0cda28419f29267ae7e0142, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fromPos: {x: 0, y: 0, z: 0}
-  toPos: {x: 0, y: 0, z: 0}
-  line: {fileID: 4032819030357135438}
-  lineImage: {fileID: 8570730018902811397}
+  FromPos: {x: 0, y: 0, z: 0}
+  ToPos: {x: 0, y: 0, z: 0}
+  Line: {fileID: 4032819030357135438}
+  LineImage: {fileID: 8570730018902811397}
 --- !u!222 &695071307356770289
 CanvasRenderer:
   m_ObjectHideFlags: 0

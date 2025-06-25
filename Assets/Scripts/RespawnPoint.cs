@@ -37,6 +37,7 @@ public class RespawnPoint : MonoBehaviour
             Debug.Log($"{gameObject.name} tried and failed to spawn");
             return;
         }
+        Debug.Log(spawnsEnemy);
         Debug.Log($"Setting spawning to TRUE for {gameObject.name}");
         spawning = true;
         if (!spawnsEnemy)

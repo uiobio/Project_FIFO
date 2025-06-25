@@ -668,11 +668,11 @@ MonoBehaviour:
   - 2
   - 2
   - 2
-  trashcanEmpty: {fileID: 21300000, guid: 75d78651653e9de4d8a53b2e4e2d29c8, type: 3}
-  trashcanGreen: {fileID: -2101470962, guid: 8eb50c40019199d4ab5100a33b1fb0f9, type: 3}
-  trashcanPurple: {fileID: -1597344342, guid: 8eb50c40019199d4ab5100a33b1fb0f9, type: 3}
-  trashcanRed: {fileID: -36268678, guid: 8eb50c40019199d4ab5100a33b1fb0f9, type: 3}
-  trashcanYellow: {fileID: 1346195465, guid: 8eb50c40019199d4ab5100a33b1fb0f9, type: 3}
+  TrashcanEmpty: {fileID: 0}
+  TrashcanGreen: {fileID: 0}
+  TrashcanPurple: {fileID: 0}
+  TrashcanRed: {fileID: 0}
+  TrashcanYellow: {fileID: 0}
 --- !u!1 &1740929156
 GameObject:
   m_ObjectHideFlags: 0
@@ -717,10 +717,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 018b788d1a60a254fa651c1f680e51a0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SpawneePrefab: {fileID: 328789305087572588, guid: 6a120e85c4b8215448cb02a44cba1de9, type: 3}
-  SpawnsEnemy: 0
-  EnemyElement: 0
-  p_Warning: {fileID: 0}
+  spawneePrefab: {fileID: 328789305087572588, guid: 6a120e85c4b8215448cb02a44cba1de9, type: 3}
+  spawnsEnemy: 0
+  enemyElement: 0
+  pWarning: {fileID: 0}
 --- !u!1 &1776268613
 GameObject:
   m_ObjectHideFlags: 0
@@ -969,13 +969,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1f9cbb59992540e489c7c4004a1b4f1f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ShopItemPrefab: {fileID: 684560450688701559, guid: ed619964653b1ee4eae10833d2ec936d, type: 3}
-  ShopItemUpgradePrefab: {fileID: 4524767290060870829, guid: a7ed141474d227344ac9614b1cd31c3a, type: 3}
+  shopItemPrefab: {fileID: 0}
+  shopItemUpgradePrefab: {fileID: 0}
   numShopItems: 3
   numSquaresBetweenEachShopItem: 5
   numSquaresFirstShopItemFromEdge: 2
   wallDirection: Northeast
-  preset_upgrade_ids: 
+  presetUpgradeIds: 
 --- !u!1001 &2067782014
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1212,7 +1212,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 515201a068e346f47890351358d364e8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  room_name: Basic L Room
+  RoomName: 
 --- !u!4 &557083697832522092
 Transform:
   m_ObjectHideFlags: 0
@@ -1265,10 +1265,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 018b788d1a60a254fa651c1f680e51a0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SpawneePrefab: {fileID: 0}
-  SpawnsEnemy: 0
-  EnemyElement: 0
-  p_Warning: {fileID: 9013366387470994794, guid: afbd1451b6e92324ab01d4f76477c865, type: 3}
+  spawneePrefab: {fileID: 0}
+  spawnsEnemy: 0
+  enemyElement: 0
+  pWarning: {fileID: 0}
 --- !u!1 &1127301913078522628
 GameObject:
   m_ObjectHideFlags: 0
@@ -1345,10 +1345,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 018b788d1a60a254fa651c1f680e51a0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SpawneePrefab: {fileID: 0}
-  SpawnsEnemy: 0
-  EnemyElement: 0
-  p_Warning: {fileID: 9013366387470994794, guid: afbd1451b6e92324ab01d4f76477c865, type: 3}
+  spawneePrefab: {fileID: 0}
+  spawnsEnemy: 0
+  enemyElement: 0
+  pWarning: {fileID: 0}
 --- !u!114 &1719236834150288782
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1361,10 +1361,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 018b788d1a60a254fa651c1f680e51a0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SpawneePrefab: {fileID: 0}
-  SpawnsEnemy: 0
-  EnemyElement: 0
-  p_Warning: {fileID: 9013366387470994794, guid: afbd1451b6e92324ab01d4f76477c865, type: 3}
+  spawneePrefab: {fileID: 0}
+  spawnsEnemy: 0
+  enemyElement: 0
+  pWarning: {fileID: 0}
 --- !u!1 &1750056443963794703
 GameObject:
   m_ObjectHideFlags: 0
@@ -1444,10 +1444,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 018b788d1a60a254fa651c1f680e51a0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SpawneePrefab: {fileID: 0}
-  SpawnsEnemy: 0
-  EnemyElement: 0
-  p_Warning: {fileID: 9013366387470994794, guid: afbd1451b6e92324ab01d4f76477c865, type: 3}
+  spawneePrefab: {fileID: 0}
+  spawnsEnemy: 0
+  enemyElement: 0
+  pWarning: {fileID: 0}
 --- !u!4 &2530019107116502249
 Transform:
   m_ObjectHideFlags: 0
@@ -1938,10 +1938,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 018b788d1a60a254fa651c1f680e51a0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SpawneePrefab: {fileID: 0}
-  SpawnsEnemy: 0
-  EnemyElement: 0
-  p_Warning: {fileID: 9013366387470994794, guid: afbd1451b6e92324ab01d4f76477c865, type: 3}
+  spawneePrefab: {fileID: 0}
+  spawnsEnemy: 0
+  enemyElement: 0
+  pWarning: {fileID: 0}
 --- !u!212 &4389719685464874731
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -2141,10 +2141,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 018b788d1a60a254fa651c1f680e51a0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SpawneePrefab: {fileID: 0}
-  SpawnsEnemy: 0
-  EnemyElement: 0
-  p_Warning: {fileID: 9013366387470994794, guid: afbd1451b6e92324ab01d4f76477c865, type: 3}
+  spawneePrefab: {fileID: 0}
+  spawnsEnemy: 0
+  enemyElement: 0
+  pWarning: {fileID: 0}
 --- !u!4 &5519038439351017719
 Transform:
   m_ObjectHideFlags: 0
@@ -2374,10 +2374,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 018b788d1a60a254fa651c1f680e51a0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SpawneePrefab: {fileID: 0}
-  SpawnsEnemy: 0
-  EnemyElement: 0
-  p_Warning: {fileID: 9013366387470994794, guid: afbd1451b6e92324ab01d4f76477c865, type: 3}
+  spawneePrefab: {fileID: 0}
+  spawnsEnemy: 0
+  enemyElement: 0
+  pWarning: {fileID: 0}
 --- !u!212 &7357247154698409614
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -2515,10 +2515,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 018b788d1a60a254fa651c1f680e51a0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SpawneePrefab: {fileID: 0}
-  SpawnsEnemy: 0
-  EnemyElement: 0
-  p_Warning: {fileID: 9013366387470994794, guid: afbd1451b6e92324ab01d4f76477c865, type: 3}
+  spawneePrefab: {fileID: 0}
+  spawnsEnemy: 0
+  enemyElement: 0
+  pWarning: {fileID: 0}
 --- !u!114 &7559453029514496240
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2531,10 +2531,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 018b788d1a60a254fa651c1f680e51a0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SpawneePrefab: {fileID: 0}
-  SpawnsEnemy: 0
-  EnemyElement: 0
-  p_Warning: {fileID: 9013366387470994794, guid: afbd1451b6e92324ab01d4f76477c865, type: 3}
+  spawneePrefab: {fileID: 0}
+  spawnsEnemy: 0
+  enemyElement: 0
+  pWarning: {fileID: 0}
 --- !u!23 &7602493659240295453
 MeshRenderer:
   m_ObjectHideFlags: 0

@@ -4,6 +4,12 @@ using System.Collections;
 
 public class PatternFuncs : MonoBehaviour
 {
+    public static PatternFuncs Instance;
+    private void Awake()
+    {
+        Instance = this;
+    }
+
     [Header("Speed Boost (Pair)")]
     [Tooltip("The speed boost multiplier is Controller by PlayerInputManager script on the player")]
     [SerializeField] private float boostDuration = 30f;
