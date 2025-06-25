@@ -2,24 +2,14 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
-	[SerializeField]
-	private Health health;
-	[SerializeField]
-	private Transform healthBar;
-	[SerializeField]
-	public Vector3 cam_rot;
-	[SerializeField]
-	private int element;
-	[SerializeField]
-	private int num_chips;
-	[SerializeField]
-	private SpriteRenderer SR;
-
-	[SerializeField]
-	Color[] ElementColors = new Color[] { Color.yellow, Color.red, Color.cyan, Color.green };
-
-	[SerializeField]
-	private Animator anim;
+    public Vector3 CameraRotation;
+    [SerializeField] private Health health;
+	[SerializeField] private Transform healthBar;
+	[SerializeField] private int element;
+	[SerializeField] private int numChips;
+	[SerializeField] private SpriteRenderer spriteRenderer;
+	[SerializeField] private Color[] ElementColors = new Color[] { Color.yellow, Color.red, Color.cyan, Color.green };
+    [SerializeField] private Animator animator;
 
 	void Start()
 	{
@@ -32,26 +22,26 @@ public class Enemy : MonoBehaviour
 		{
 			Debug.Log($"ENEMY {gameObject.name} HAS DIED!!!");
 			LevelManager.Instance.UpdatePattern(element);
-			LevelManager.Instance.GainCoin(num_chips);
+			LevelManager.Instance.GainCoin(numChips);
 			Destroy(gameObject);
 		}
-		healthBar.eulerAngles = cam_rot;
+		healthBar.eulerAngles = CameraRotation;
 	}
 
 	public void SetElement(int elem)
 	{
 		//Sets the element variable and sets animator (if exists) or sprite color
 		element = elem;
-		anim = gameObject.GetComponentInChildren<Animator>();
-		if (anim != null)
+		animator = gameObject.GetComponentInChildren<Animator>();
+		if (animator != null)
 		{
-			SR.color = Color.white;
-			anim.SetInteger("Element", elem);
-			anim.SetTrigger("SetElement");
+			spriteRenderer.color = Color.white;
+			animator.SetInteger("Element", elem);
+			animator.SetTrigger("SetElement");
 		}
 		else
 		{
-			SR.color = ElementColors[elem];
+			spriteRenderer.color = ElementColors[elem];
 		}
 	}
 }

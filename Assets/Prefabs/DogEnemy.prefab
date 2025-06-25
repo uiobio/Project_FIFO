@@ -100,7 +100,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d749d2a1eecd8d6408516107490d6fff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  angle: {x: 48.59, y: -135, z: 0}
+  Angle: {x: 48.59, y: -135, z: 0}
 --- !u!1 &6162869850624354483
 GameObject:
   m_ObjectHideFlags: 0
@@ -118,7 +118,7 @@ GameObject:
   - component: {fileID: 8653533770940608036}
   - component: {fileID: 117862494893395018}
   m_Layer: 6
-  m_Name: EnemyBlock1
+  m_Name: DogEnemy
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -256,9 +256,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHealth: 40
   health: 40
-  isDead: 0
-  PB: {fileID: 376839091163493058}
-  p_dmg_msg: {fileID: 2591323535942314205, guid: 3caf79f6cc6836e4197ae5aa249feebc, type: 3}
+  IsDead: 0
+  HealthBar: {fileID: 376839091163493058}
+  DmgMessage: {fileID: 2591323535942314205, guid: 3caf79f6cc6836e4197ae5aa249feebc, type: 3}
 --- !u!114 &8653533770940608036
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -271,12 +271,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 538fc68ad65b84b2cbca659600f6642c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  detectionRadius: 5
-  lungeForce: 13
-  lungeDelay: 0.5
-  recoveryTime: 1.5
-  movementSpeed: 2
-  damage: 10
+  DetectionRadius: 5
+  LungeForce: 10
+  LungeDelay: 0.5
+  RecoveryTime: 1.5
+  MovementSpeed: 2
+  Damage: 10
 --- !u!114 &117862494893395018
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -289,12 +289,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0345e6ba32f723a49ad5f4177fe77db8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  H: {fileID: 1827355151793155155}
+  CameraRotation: {x: 0, y: 0, z: 0}
+  health: {fileID: 1827355151793155155}
   healthBar: {fileID: 8931528999131879787}
-  cam_rot: {x: 48.59, y: -135, z: 0}
   element: 0
-  num_chips: 5
-  SR: {fileID: 5929169596490969492}
+  numChips: 5
+  spriteRenderer: {fileID: 5929169596490969492}
+  ElementColors:
+  - {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
+  - {r: 1, g: 0, b: 0, a: 1}
+  - {r: 0, g: 1, b: 1, a: 1}
+  - {r: 0, g: 1, b: 0, a: 1}
+  animator: {fileID: 0}
 --- !u!1001 &2220630641750750162
 PrefabInstance:
   m_ObjectHideFlags: 0

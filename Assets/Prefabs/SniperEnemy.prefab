@@ -126,11 +126,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f8e224fc5397b4383b7d64e00f3e1067, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  projectilePrefab: {fileID: 6196591035729272416, guid: e1e198adca2e64c52bb0aa99e8a4431d, type: 3}
-  firePoint: {fileID: 6750633999525921954}
-  fireRate: 2
-  projectileSpeed: 1
-  detectionRange: 30
+  ProjectilePrefab: {fileID: 6196591035729272416, guid: e1e198adca2e64c52bb0aa99e8a4431d, type: 3}
+  FirePoint: {fileID: 6750633999525921954}
+  FireRate: 2
+  ProjectileSpeed: 50
+  DetectionRange: 30
 --- !u!114 &-486015466407655673
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -143,18 +143,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0345e6ba32f723a49ad5f4177fe77db8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  H: {fileID: 5580215127657636561}
+  CameraRotation: {x: 0, y: 0, z: 0}
+  health: {fileID: 5580215127657636561}
   healthBar: {fileID: 8741535053493870743}
-  cam_rot: {x: 48.59, y: -135, z: 0}
   element: 0
-  num_chips: 5
-  SR: {fileID: 6695979395531378825}
+  numChips: 5
+  spriteRenderer: {fileID: 6695979395531378825}
   ElementColors:
   - {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   - {r: 1, g: 0, b: 0, a: 1}
   - {r: 0, g: 1, b: 1, a: 1}
   - {r: 0, g: 1, b: 0, a: 1}
-  anim: {fileID: 0}
+  animator: {fileID: 0}
 --- !u!114 &5580215127657636561
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -169,9 +169,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHealth: 40
   health: 40
-  isDead: 0
-  PB: {fileID: 547693905571498814}
-  p_dmg_msg: {fileID: 2591323535942314205, guid: 3caf79f6cc6836e4197ae5aa249feebc, type: 3}
+  IsDead: 0
+  HealthBar: {fileID: 547693905571498814}
+  DmgMessage: {fileID: 2591323535942314205, guid: 3caf79f6cc6836e4197ae5aa249feebc, type: 3}
 --- !u!1 &4601289208719956107
 GameObject:
   m_ObjectHideFlags: 0
@@ -304,7 +304,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d749d2a1eecd8d6408516107490d6fff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  angle: {x: 48.59, y: -135, z: 0}
+  Angle: {x: 48.59, y: -135, z: 0}
 --- !u!95 &5711709937869632233
 Animator:
   serializedVersion: 7
