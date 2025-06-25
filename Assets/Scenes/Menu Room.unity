@@ -701,7 +701,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 07a7213a708ee2c4a91b4c7703f10649, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SR: {fileID: 0}
+  spriteRenderer: {fileID: 0}
   SpriteOptions: []
 --- !u!212 &728174727
 SpriteRenderer:
@@ -1463,7 +1463,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b3d17465a3c764e1c9531e80cb584350, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SceneName: 
+  SceneName: Basic L Room
 --- !u!1 &1832450786
 GameObject:
   m_ObjectHideFlags: 0
@@ -1659,7 +1659,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d749d2a1eecd8d6408516107490d6fff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  angle: {x: 48.59, y: -135, z: 0}
+  Angle: {x: 48.59, y: -135, z: 0}
 --- !u!114 &2066234257
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2236,7 +2236,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 07a7213a708ee2c4a91b4c7703f10649, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SR: {fileID: 0}
+  spriteRenderer: {fileID: 0}
   SpriteOptions: []
 --- !u!4 &3107456112381345320
 Transform:
@@ -2553,7 +2553,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d749d2a1eecd8d6408516107490d6fff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  angle: {x: 48.59, y: -135, z: 0}
+  Angle: {x: 48.59, y: -135, z: 0}
 --- !u!1 &4838132137027973327
 GameObject:
   m_ObjectHideFlags: 0

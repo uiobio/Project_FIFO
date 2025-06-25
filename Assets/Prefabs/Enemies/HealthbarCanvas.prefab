@@ -88,12 +88,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 53294437a32eea745ba19e382c5af2b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ProgressImage: {fileID: 8468373463656103734}
-  DefaultSpeed: 1
-  OnProgress:
+  progressImage: {fileID: 8468373463656103734}
+  defaultSpeed: 1
+  onProgress:
     m_PersistentCalls:
       m_Calls: []
-  OnCompleted:
+  onCompleted:
     m_PersistentCalls:
       m_Calls: []
 --- !u!1 &4140027754309410510

@@ -37,7 +37,7 @@ public class PlayerInputManager : MonoBehaviour
     [SerializeField]
     private GameObject slashPrefab;
     [Header("Boost")]
-    public float boostedMult = 1.5f; // 1.5x speed boost
+    public float boostedMult = 1.5f; // 1.5x Speed boost
 
     // From InputManager
     private float horizontalInput;
@@ -171,7 +171,7 @@ public class PlayerInputManager : MonoBehaviour
             rb.linearVelocity = new Vector3(0f, 0f, 0f);
         }
 
-        // Add the forces in direction specified by moveDirection and speed specified by moveSpeed
+        // Add the forces in direction specified by moveDirection and Speed specified by moveSpeed
         float speed = moveSpeed * (LevelManager.Instance.PatternAbilityManager.IsBoosted ? boostedMult : 1f);
         rb.AddForce(moveDirection.normalized * speed, ForceMode.Force);
         
@@ -179,7 +179,7 @@ public class PlayerInputManager : MonoBehaviour
 
     private void StartDash(Vector3 vect)
     {
-        // Dashes a with a speed specified by dashScalar and direction specified by orientation
+        // Dashes a with a Speed specified by dashScalar and direction specified by orientation
         CooldownManager.Instance.UpdateDashCooldown();
         rb.linearVelocity = orientation * dashSpeed;
         dashCompleteTime = Time.time + (dashDistance / dashSpeed);

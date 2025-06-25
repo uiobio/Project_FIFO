@@ -11,7 +11,7 @@ public class PatternFuncs : MonoBehaviour
     }
 
     [Header("Speed Boost (Pair)")]
-    [Tooltip("The speed boost multiplier is Controller by PlayerInputManager script on the player")]
+    [Tooltip("The Speed boost multiplier is Controller by PlayerInputManager script on the player")]
     [SerializeField] private float boostDuration = 30f;
     public bool IsBoosted = false;
     [Header("Damage Sweep (Four of a Kind)")]

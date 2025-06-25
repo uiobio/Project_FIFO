@@ -4,8 +4,8 @@ using System.Collections;
 public class PlayerController : MonoBehaviour
 {
     public static PlayerController Controller;
-    public float NormalSpeed = 5f; // Default movement speed
-    public float BoostedSpeed = 7.5f; // 1.5x speed boost
+    public float NormalSpeed = 5f; // Default movement Speed
+    public float BoostedSpeed = 7.5f; // 1.5x Speed boost
     public float BoostDuration = 30f * LevelManager.Instance.hardwareAccelUpgradeModifier; // base 30 seconds duration 
     private bool isBoosted = false;
     private Rigidbody rb;
@@ -25,7 +25,7 @@ public class PlayerController : MonoBehaviour
         Vector3 movement = (isBoosted ? BoostedSpeed : NormalSpeed) * Time.deltaTime * new Vector3(moveHorizontal, 0.0f, moveVertical);
         rb.MovePosition(rb.position + movement);
 
-        // Trigger speed boost when 'R' is pressed
+        // Trigger Speed boost when 'R' is pressed
         if (Input.GetKeyDown(KeyCode.R) && !isBoosted)
         {
             StartCoroutine(SpeedBoost());
