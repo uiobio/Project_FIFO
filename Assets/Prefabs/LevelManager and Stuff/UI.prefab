@@ -909,12 +909,20 @@ MonoBehaviour:
   - {fileID: 7894092664444487874}
   - {fileID: 6633018430067980608}
   PatternText: {fileID: 4599662623187231677}
-  SpriteUnused: []
-  SpriteUsed: []
+  SpriteUnused:
+  - {fileID: -856615811, guid: 83caad73679a3a74197dec09e9afb2b2, type: 3}
+  - {fileID: -1572519620, guid: 83caad73679a3a74197dec09e9afb2b2, type: 3}
+  - {fileID: 872628596, guid: 83caad73679a3a74197dec09e9afb2b2, type: 3}
+  - {fileID: -237742461, guid: 83caad73679a3a74197dec09e9afb2b2, type: 3}
+  SpriteUsed:
+  - {fileID: 917468380, guid: 83caad73679a3a74197dec09e9afb2b2, type: 3}
+  - {fileID: -1945734859, guid: 83caad73679a3a74197dec09e9afb2b2, type: 3}
+  - {fileID: -1308069693, guid: 83caad73679a3a74197dec09e9afb2b2, type: 3}
+  - {fileID: -1627811281, guid: 83caad73679a3a74197dec09e9afb2b2, type: 3}
   SpriteEmpty: {fileID: 21300000, guid: 8939bef908072e34780cf69814dfe86c, type: 3}
-  emptySize: {x: 0, y: 0}
-  spriteSize: {x: 0, y: 0}
-  middleDiff: 0
+  emptySize: {x: 43, y: 48}
+  spriteSize: {x: 54, y: 61}
+  middleDiff: 14
 --- !u!1 &3239809392890379957
 GameObject:
   m_ObjectHideFlags: 0
