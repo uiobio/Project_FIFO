@@ -59,10 +59,10 @@ MonoBehaviour:
   - 1.5
   - 1.5
   - 1.5
-  pedastalEmpty: {fileID: 21300000, guid: 4b80e60f1aaecb9449189a1fbee9291d, type: 3}
-  pedastalEmptyShadow: {fileID: 21300000, guid: 93071adcebe942741ab22521f1592993, type: 3}
-  pedastalUp: {fileID: 21300000, guid: a8078bf54dcc5c9458935603201c9c14, type: 3}
-  pedastalUpShadow: {fileID: 21300000, guid: 5994b18f34cd04e40a24ad4a1adfa448, type: 3}
+  PedastalEmpty: {fileID: 21300000, guid: 4b80e60f1aaecb9449189a1fbee9291d, type: 3}
+  PedastalEmptyShadow: {fileID: 21300000, guid: 93071adcebe942741ab22521f1592993, type: 3}
+  PedastalUp: {fileID: 21300000, guid: a8078bf54dcc5c9458935603201c9c14, type: 3}
+  PedastalUpShadow: {fileID: 21300000, guid: 5994b18f34cd04e40a24ad4a1adfa448, type: 3}
 --- !u!1 &2090766816062600479
 GameObject:
   m_ObjectHideFlags: 0

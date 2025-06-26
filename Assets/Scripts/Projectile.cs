@@ -6,7 +6,12 @@ public class Projectile : MonoBehaviour
     [SerializeField] private float speed;
     [SerializeField] private float lifetime;
     [SerializeField] private float damage;
-    [SerializeField] private bool indestructable = false;
+    [SerializeField] private bool isIndestructable = false;
+
+    public float Speed { get => speed; set => speed = value; }
+    public float Lifetime { get => lifetime; set => lifetime = value; }
+    public float Damage { get => damage; set => damage = value; }
+    public bool IsIndestructable { get => isIndestructable; set => isIndestructable = value; }
 
     void Start()
     {
@@ -29,7 +34,7 @@ public class Projectile : MonoBehaviour
             health.TakeDamage(damage);
         }
 
-        if (!indestructable)
+        if (!isIndestructable)
         { 
             Destroy(gameObject);
         }
@@ -47,6 +52,6 @@ public class Projectile : MonoBehaviour
 
     public void SetAsIndestructable(bool indestructable)
     {
-        this.indestructable = indestructable;
+        this.isIndestructable = indestructable;
     }
 }
