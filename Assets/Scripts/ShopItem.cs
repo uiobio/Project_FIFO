@@ -33,24 +33,24 @@ public class ShopItem : MonoBehaviour
     // The position of the center point of the top face of this ShopItem
     private Vector3 topFaceCenterPos;
 
-    // The upgrade associated with this ShopItem.
-    public Upgrade upgrade;
-
-    // The sprites associated with the pedastal
-    public Sprite pedastalEmpty;
-    public Sprite pedastalEmptyShadow;
-    public Sprite pedastalUp;
-    public Sprite pedastalUpShadow;
-
     private Transform colliderTransform;
     private Transform spriteTransform;
+
+    // The upgrade associated with this ShopItem.
+    public Upgrade Upgrade;
+
+    // The sprites associated with the pedastal
+    public Sprite PedastalEmpty;
+    public Sprite PedastalEmptyShadow;
+    public Sprite PedastalUp;
+    public Sprite PedastalUpShadow;
 
     // Start is called before the first frame update
     void Start()
     { 
         colliderTransform = transform.Find("Collider");
         label = Instantiate(labelPrefab, colliderTransform.position, Quaternion.identity);
-        label.name = "Upgrade ShopItem Label " + upgrade.Name;
+        label.name = "Upgrade ShopItem Label " + Upgrade.Name;
         
         label.transform.rotation = Quaternion.Euler(labelRotationXYZ[0], labelRotationXYZ[1], labelRotationXYZ[2]);
         label.transform.position += new Vector3(labelPositionOffsetXYZ[0], labelPositionOffsetXYZ[1], labelPositionOffsetXYZ[2]);
@@ -72,32 +72,32 @@ public class ShopItem : MonoBehaviour
 
         // Assign the pedastal sprite
         spriteTransform = transform.Find("Sprite");
-        spriteTransform.GetComponent<SpriteRenderer>().sprite = pedastalUp;
+        spriteTransform.GetComponent<SpriteRenderer>().sprite = PedastalUp;
 
         // Make the label invisible
-        label.GetComponent<UpgradeLabel>().Initialize(upgrade);
-        label.GetComponent<UpgradeLabel>().ChangeLabelTextBasedOnGameState(upgrade);
+        label.GetComponent<UpgradeLabel>().Initialize(Upgrade);
+        label.GetComponent<UpgradeLabel>().ChangeLabelTextBasedOnGameState(Upgrade);
         MakeFullFormattedTextString();
         label.SetActive(false);
     }
 
-    // Called when the player interacts with this instance's gameObject
-    public void buy()
+    // Called when the player interacts with this Instance's gameObject
+    public void Buy()
     {
         // Attempts to add the upgrade to the player's list. If this fails, cancel the buy.
-        if (!Level_manager.instance.AddPlayerUpgrade(upgrade, gameObject))
+        if (!LevelManager.Instance.AddPlayerUpgrade(Upgrade, gameObject))
         {
             return;
         }
-        destroyChildren();
+        DestroyChildren();
     }
 
-    public void destroyChildren()
+    public void DestroyChildren()
     {
         // Stops this gameObject's attempts to interact with the label
         bought = true;
         Destroy(transform.GetChild(2).gameObject);
-        spriteTransform.GetComponent<SpriteRenderer>().sprite = pedastalEmpty;
+        spriteTransform.GetComponent<SpriteRenderer>().sprite = PedastalEmpty;
         Label.SetActive(false);
     }
 
@@ -136,5 +136,9 @@ public class ShopItem : MonoBehaviour
         set { label  = value; }
     }
 
-    public bool Bought { get => bought; set => bought = value; }
+    public bool Bought
+    {
+        get => bought;
+        set => bought = value;
+    }
 }

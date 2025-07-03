@@ -4,33 +4,39 @@ using System.Collections;
 
 public class PatternFuncs : MonoBehaviour
 {
+    public static PatternFuncs Instance;
+    private void Awake()
+    {
+        Instance = this;
+    }
+
     [Header("Speed Boost (Pair)")]
-    [Tooltip("The speed boost multiplier is controller by Player_input_manager script on the player")]
-    [SerializeField]
-    float boostDuration = 30f;
-    public bool isBoosted = false;
-    [Header("Damage Sweeo (Four of a Kind)")]
+    [Tooltip("The Speed boost multiplier is Controller by PlayerInputManager script on the player")]
+    [SerializeField] private float boostDuration = 30f;
+    public bool IsBoosted = false;
+    [Header("Damage Sweep (Four of a Kind)")]
     [Tooltip("The prefab created when player uses the Four of A Kind pattern")]
-    [SerializeField]
-    GameObject DamageSweepPrefab;
+    [SerializeField] private GameObject DamageSweepPrefab;
 
     //Speed Boost Function
-    public void StartSpeedBoost(){
+    public void StartSpeedBoost()
+    {
         StartCoroutine(SpeedBoost());
     }
 
     IEnumerator SpeedBoost()
     {
-        isBoosted = true;
+        IsBoosted = true;
         Debug.Log("Speed Boost Activated!");
 
         yield return new WaitForSeconds(boostDuration); // Wait for 30 seconds
 
-        isBoosted = false;
+        IsBoosted = false;
         Debug.Log("Speed Boost Ended!");
     }
 
-    public void DamageSweep(){
-        Instantiate(DamageSweepPrefab, Level_manager.instance.Left_point.position, Quaternion.Euler(0f, -45f, 0f));
+    public void DamageSweep()
+    {
+        Instantiate(DamageSweepPrefab, LevelManager.Instance.LeftPoint.position, Quaternion.Euler(0f, -45f, 0f));
     }
 }

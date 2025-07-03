@@ -329,7 +329,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 419f4d2b4c1d5df46b83605ab370ff83, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  upgradePrefab: {fileID: 4524767290060870829}
-  upgradeIndex: 0
-  upgradeUIIcon: {fileID: 0}
+  UpgradePrefab: {fileID: 4524767290060870829}
+  UpgradeIndex: 0
+  UpgradeUIIcon: {fileID: 3144405016006255148}
   Label: {fileID: 0}

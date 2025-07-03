@@ -7,36 +7,30 @@ public class Trashcan : MonoBehaviour
     // UI label prefab that pops up when player comes near
     [SerializeField]
     private GameObject labelPrefab;
-
     // Position and rotation of UI label
     [SerializeField]
     private float[] labelRotationXYZ;
     [SerializeField]
     private float[] labelPositionOffsetXYZ;
-
     // Hitbox size of the UI label popup trigger
     [SerializeField]
     private float[] labelTriggerHitboxSize;
+    // The position of the center point of the top face of this ShopItem
+    private Vector3 topFaceCenterPos;
+    private Transform colliderTransform;
+    private Transform spriteTransform;
 
     // Instiantiated UI label object from the prefab
     [System.NonSerialized]
-    public GameObject label;
-
-    // The position of the center point of the top face of this ShopItem
-    private Vector3 topFaceCenterPos;
-
+    public GameObject UILabel;
     // The currently selected upgrade, as dictated by Level_manager's currentlySelectedUpgradeIndex
-    public Upgrade upgrade;
-
+    public Upgrade Upgrade;
     // The sprites associated with the Trashcan
-    public Sprite trashcanEmpty;
-    public Sprite trashcanGreen;
-    public Sprite trashcanPurple;
-    public Sprite trashcanRed;
-    public Sprite trashcanYellow;
-
-    private Transform colliderTransform;
-    private Transform spriteTransform;
+    public Sprite TrashcanEmpty;
+    public Sprite TrashcanGreen;
+    public Sprite TrashcanPurple;
+    public Sprite TrashcanRed;
+    public Sprite TrashcanYellow;
 
     public bool IsTrashcanActive { get; set; } = false;
 
@@ -44,13 +38,13 @@ public class Trashcan : MonoBehaviour
     void Start()
     {
         colliderTransform = transform.Find("Collider");
-        label = Instantiate(labelPrefab, colliderTransform.position, Quaternion.identity);
-        label.name = "Trashcan Label";
-        label.GetComponent<UpgradeLabel>().IsTrashcan = true;
-        label.GetComponent<UpgradeLabel>().Initialize(upgrade);
-        label.transform.rotation = Quaternion.Euler(labelRotationXYZ[0], labelRotationXYZ[1], labelRotationXYZ[2]);
-        label.transform.position += new Vector3(labelPositionOffsetXYZ[0], labelPositionOffsetXYZ[1], labelPositionOffsetXYZ[2]);
-        label.transform.SetParent(colliderTransform);
+        UILabel = Instantiate(labelPrefab, colliderTransform.position, Quaternion.identity);
+        UILabel.name = "Trashcan Label";
+        UILabel.GetComponent<UpgradeLabel>().IsTrashcan = true;
+        UILabel.GetComponent<UpgradeLabel>().Initialize(Upgrade);
+        UILabel.transform.rotation = Quaternion.Euler(labelRotationXYZ[0], labelRotationXYZ[1], labelRotationXYZ[2]);
+        UILabel.transform.position += new Vector3(labelPositionOffsetXYZ[0], labelPositionOffsetXYZ[1], labelPositionOffsetXYZ[2]);
+        UILabel.transform.SetParent(colliderTransform);
 
         // Sets the hitbox size for the UI-label-popup-trigger of this ShopItem
         BoxCollider[] colliders = colliderTransform.GetComponents<BoxCollider>();
@@ -68,12 +62,12 @@ public class Trashcan : MonoBehaviour
 
         // Assign the trashcan sprite
         spriteTransform = transform.Find("Sprite");
-        spriteTransform.GetComponent<SpriteRenderer>().sprite = trashcanEmpty;
+        spriteTransform.GetComponent<SpriteRenderer>().sprite = TrashcanEmpty;
 
-        label.SetActive(false);
+        UILabel.SetActive(false);
     }
 
-    // Called when the player interacts with this instance's gameObject
+    // Called when the player interacts with this Instance's gameObject
     public void use()
     {
     }
@@ -82,9 +76,9 @@ public class Trashcan : MonoBehaviour
     public string MakeFullFormattedTextString()
     {
         string text = "";
-        if (label != null)
+        if (UILabel != null)
         {
-            text = label.GetComponent<UpgradeLabel>().MakeFullFormattedTextString(label, true);
+            text = UILabel.GetComponent<UpgradeLabel>().MakeFullFormattedTextString(UILabel, true);
         }
         DrawLinesToLabelCorners();
         return text;
@@ -94,15 +88,15 @@ public class Trashcan : MonoBehaviour
     // Or makes them invisible, depending on whether the shop is active.
     public void DrawLinesToLabelCorners()
     {
-        if (label != null)
+        if (UILabel != null)
         {
-            label.GetComponent<UpgradeLabel>().DrawLinesToLabelCorners(true, topFaceCenterPos, topFaceCenterPos, topFaceCenterPos, topFaceCenterPos);
+            UILabel.GetComponent<UpgradeLabel>().DrawLinesToLabelCorners(true, topFaceCenterPos, topFaceCenterPos, topFaceCenterPos, topFaceCenterPos);
         }
     }
 
     public GameObject Label
     {
-        get { return label; }
-        set { label = value; }
+        get { return UILabel; }
+        set { UILabel = value; }
     }
 }

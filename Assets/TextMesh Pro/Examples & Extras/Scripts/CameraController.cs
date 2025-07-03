@@ -146,7 +146,7 @@ namespace TMPro.Examples
                     MovementSmoothing = !MovementSmoothing;
 
 
-                // Check for right mouse button to change camera follow and elevation angle
+                // Check for right mouse button to change camera follow and elevation Angle
                 if (Input.GetMouseButton(1))
                 {
                     mouseY = Input.GetAxis("Mouse Y");
@@ -155,7 +155,7 @@ namespace TMPro.Examples
                     if (mouseY > 0.01f || mouseY < -0.01f)
                     {
                         ElevationAngle -= mouseY * MoveSensitivity;
-                        // Limit Elevation angle between min & max values.
+                        // Limit Elevation Angle between min & max values.
                         ElevationAngle = Mathf.Clamp(ElevationAngle, MinElevationAngle, MaxElevationAngle);
                     }
 
@@ -178,7 +178,7 @@ namespace TMPro.Examples
                     if (deltaPosition.y > 0.01f || deltaPosition.y < -0.01f)
                     {
                         ElevationAngle -= deltaPosition.y * 0.1f;
-                        // Limit Elevation angle between min & max values.
+                        // Limit Elevation Angle between min & max values.
                         ElevationAngle = Mathf.Clamp(ElevationAngle, MinElevationAngle, MaxElevationAngle);
                     }
 

@@ -1,4 +1,3 @@
-using System.Timers;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
@@ -6,65 +5,61 @@ using UnityEngine.UI;
 
 public class ProgressBar : MonoBehaviour
 {
-    [SerializeField]
-    private Image ProgressImage;
-    [SerializeField]
-    private float DefaultSpeed = 1f;
-    [SerializeField]
-    private UnityEvent<float> OnProgress;
-    [SerializeField]
-    private UnityEvent OnCompleted;
+    [SerializeField] private Image progressImage;
+    [SerializeField] private float defaultSpeed = 1f;
+    [SerializeField] private UnityEvent<float> onProgress;
+    [SerializeField] private UnityEvent onCompleted;
 
-    private Coroutine AnimationCoroutine;
+    private Coroutine animationCoroutine;
 
     void Start()
     {
-        if(ProgressImage.type != Image.Type.Filled)
+        if (progressImage.type != Image.Type.Filled)
         {
             Debug.LogError($"{name}'s Progress Image isn't filled. Disabling progress bar.");
-            this.enabled = false;
+            enabled = false;
         }
     }
 
     public void SetProgress(float progress)
     {
-        SetProgress(progress, DefaultSpeed);
+        SetProgress(progress, defaultSpeed);
     }
 
     public void SetProgress(float progress, float speed)
     {
-        if(progress < 0 || progress > 1)
+        if (progress < 0 || progress > 1)
         {
             Debug.LogWarning("Progress not in accepted range");
             progress = Mathf.Clamp01(progress);
         }
-        if(progress != ProgressImage.fillAmount)
+        if (progress != progressImage.fillAmount)
         {
-            if(AnimationCoroutine != null)
+            if(animationCoroutine != null)
             {
-                StopCoroutine(AnimationCoroutine);
+                StopCoroutine(animationCoroutine);
             }
 
-            AnimationCoroutine = StartCoroutine(AnimateProgress(progress, speed));
+            animationCoroutine = StartCoroutine(AnimateProgress(progress, speed));
         }
     }
 
     private IEnumerator AnimateProgress(float progress, float speed)
     {
         float _time = 0;
-        float initialProgress = ProgressImage.fillAmount;
+        float initialProgress = progressImage.fillAmount;
 
-        while(_time < 1)
+        while (_time < 1)
         {
-            ProgressImage.fillAmount = Mathf.Lerp(initialProgress, progress, _time);
+            progressImage.fillAmount = Mathf.Lerp(initialProgress, progress, _time);
             _time += Time.deltaTime * speed;
 
-            OnProgress?.Invoke(ProgressImage.fillAmount);
+            onProgress?.Invoke(progressImage.fillAmount);
             yield return null;
         }
 
-        ProgressImage.fillAmount = progress;
-        OnProgress?.Invoke(progress);
-        OnCompleted?.Invoke();
+        progressImage.fillAmount = progress;
+        onProgress?.Invoke(progress);
+        onCompleted?.Invoke();
     }
 }

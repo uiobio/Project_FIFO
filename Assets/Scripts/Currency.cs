@@ -3,24 +3,26 @@ using UnityEngine;
 public class Currency : MonoBehaviour
 {
     [SerializeField]
-    int value;
+    int Value;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
-    void OnTriggerEnter(Collider c){
-        if(c.tag == "Player"){
+    void OnTriggerEnter(Collider c)
+    {
+        if (c.CompareTag("Player"))
+        {
             Debug.Log("Coin hit by player!");
-            Level_manager.instance.GainCoin(value);
+            LevelManager.Instance.GainCoin(Value);
             Destroy(gameObject);
         }
     }
