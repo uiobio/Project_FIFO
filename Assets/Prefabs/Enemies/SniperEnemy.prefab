@@ -129,7 +129,7 @@ MonoBehaviour:
   ProjectilePrefab: {fileID: 6196591035729272416, guid: e1e198adca2e64c52bb0aa99e8a4431d, type: 3}
   FirePoint: {fileID: 6750633999525921954}
   FireRate: 2
-  ProjectileSpeed: 50
+  ProjectileSpeed: 1
   DetectionRange: 30
 --- !u!114 &-486015466407655673
 MonoBehaviour:
@@ -385,19 +385,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7287503145729370809, guid: da804beb114d08e4681df2412aee8315, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.3487927
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7287503145729370809, guid: da804beb114d08e4681df2412aee8315, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.15744926
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7287503145729370809, guid: da804beb114d08e4681df2412aee8315, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0.8420601
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7287503145729370809, guid: da804beb114d08e4681df2412aee8315, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0.38011616
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7287503145729370809, guid: da804beb114d08e4681df2412aee8315, type: 3}
       propertyPath: m_AnchoredPosition.x
@@ -405,15 +405,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7287503145729370809, guid: da804beb114d08e4681df2412aee8315, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 1.2000122
+      value: 2.05
       objectReference: {fileID: 0}
     - target: {fileID: 7287503145729370809, guid: da804beb114d08e4681df2412aee8315, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
-      value: 48.59
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7287503145729370809, guid: da804beb114d08e4681df2412aee8315, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: -135
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7287503145729370809, guid: da804beb114d08e4681df2412aee8315, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
